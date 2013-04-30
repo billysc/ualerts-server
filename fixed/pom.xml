@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.ualerts</groupId>
     <artifactId>ualerts-server</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
   <artifactId>fixed</artifactId>
   <packaging>pom</packaging>
