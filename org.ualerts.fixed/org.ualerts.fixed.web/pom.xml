@@ -12,4 +12,23 @@
 
   <name>UAlerts Fixed Web</name>
   <description>Web components for the UAlerts Fixed Provisioning project</description>
+  
+  <dependencies>
+      <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-web</artifactId>
+      </dependency>
+      <dependency>
+      	<groupId>org.springframework</groupId>
+      	<artifactId>spring-webmvc</artifactId>
+      </dependency>
+      <dependency>
+      	<groupId>javax.servlet</groupId>
+      	<artifactId>jstl</artifactId>
+      </dependency>
+      <dependency>
+      	<groupId>javax.servlet.jsp</groupId>
+      	<artifactId>jsp-api</artifactId>
+      </dependency>
+  </dependencies>
 </project>
