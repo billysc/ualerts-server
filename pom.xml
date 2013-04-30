@@ -891,6 +891,6 @@
 		</profile>
 	</profiles>
 	<modules>
-		<module>fixed</module>
+		<module>org.ualerts.fixed</module>
 	</modules>
 </project>
