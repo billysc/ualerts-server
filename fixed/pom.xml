@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.ualerts</groupId>
+    <artifactId>ualerts-server</artifactId>
+    <version>0.0.2-SNAPSHOT</version>
+  </parent>
+  <artifactId>fixed</artifactId>
+  <packaging>pom</packaging>
+  <name>UAlerts Fixed child project.</name>
+  <description>Defines functionality related to UAlerts fixed assets, such as signs.</description>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-library</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>edu.vt.cns.kestrel.common</groupId>
+			<artifactId>junit-ext</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<properties>
+		<hibernate.dialect>org.hibernate.dialect.Oracle10gDialect</hibernate.dialect>
+		<persistence.unit>fixeddb</persistence.unit>
+		<persistence.dataSource>jdbc/fixedDS</persistence.dataSource>
+		<persistence.provider>org.hibernate.ejb.HibernatePersistence</persistence.provider>
+	</properties>
+</project>

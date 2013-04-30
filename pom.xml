@@ -890,4 +890,7 @@
 			</dependencies>
 		</profile>
 	</profiles>
+	<modules>
+		<module>fixed</module>
+	</modules>
 </project>
