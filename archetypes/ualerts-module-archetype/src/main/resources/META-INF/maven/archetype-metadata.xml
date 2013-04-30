@@ -19,12 +19,8 @@
 			<defaultValue>jar</defaultValue>
 		</requiredProperty>
 		
-		<requiredProperty key="name">
-			<defaultValue>A UAlerts Server Project</defaultValue>
-		</requiredProperty>
-		<requiredProperty key="description">
-			<defaultValue>The description for a new UAlerts Server Project</defaultValue>
-		</requiredProperty>
+		<requiredProperty key="name" />
+		<requiredProperty key="description" />
 		
 	</requiredProperties>
 	
@@ -33,6 +29,13 @@
 	        <directory>src</directory>
 	        <includes>
 	            <include>**/*</include>
+	        </includes>
+	    </fileSet>
+	    <fileSet filtered="true" packaged="false">
+	        <directory></directory>
+	        <includes>
+	            <include>README.md</include>
+	            <include>LICENSE</include>
 	        </includes>
 	    </fileSet>
 	</fileSets>
