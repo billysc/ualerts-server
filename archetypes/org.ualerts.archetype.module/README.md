@@ -26,7 +26,7 @@ In order to build the project, you will need to run from the command line.  The 
 1. Navigate to the location that you'd like to build the project.
 2. Run the following command, replacing **${version}** with the current version of the archetype and **${group}** and **${artifact}** with the Group ID and Artifact ID you want for the new project:
 
-   <code>mvn archetype:generate -DarchetypeGroupId=org.ualerts.server -DarchetypeArtifactId=ualerts-module-archetype -DarchetypeVersion=**${version}** -DgroupId=**${group}** -DartifactId=**${artifact}**</code>
+   <code>mvn archetype:generate -DarchetypeGroupId=org.ualerts -DarchetypeArtifactId=org.ualerts.archetype.module -DarchetypeVersion=**${version}** -DgroupId=**${group}** -DartifactId=**${artifact}**</code>
 
 3. Provide answers to the prompts for the various properties.
 4. You're done!

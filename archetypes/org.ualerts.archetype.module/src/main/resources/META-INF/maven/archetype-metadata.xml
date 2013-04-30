@@ -5,9 +5,6 @@
 	name="UAlerts Module Archetype">
 	<requiredProperties>
 		
-		<requiredProperty key="parentGroupId">
-			<defaultValue>org.ualerts</defaultValue>
-		</requiredProperty>
 		<requiredProperty key="parentArtifactId">
 			<defaultValue>ualerts-server</defaultValue>
 		</requiredProperty>

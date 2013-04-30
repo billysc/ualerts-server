@@ -2,13 +2,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-      <groupId>${parentGroupId}</groupId>
+      <groupId>org.ualerts</groupId>
       <artifactId>${parentArtifactId}</artifactId>
       <version>${parentVersion}</version>
       <packaging>jar</packaging>
   </parent>
   
-  <groupId>${groupId}</groupId>
+  <groupId>org.ualerts</groupId>
   <artifactId>${artifactId}</artifactId>
   <version>${version}</version>
   <packaging>${packaging}</packaging>
