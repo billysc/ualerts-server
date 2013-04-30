@@ -5,7 +5,6 @@
       <groupId>org.ualerts</groupId>
       <artifactId>${parentArtifactId}</artifactId>
       <version>${parentVersion}</version>
-      <packaging>jar</packaging>
   </parent>
   
   <artifactId>${artifactId}</artifactId>
