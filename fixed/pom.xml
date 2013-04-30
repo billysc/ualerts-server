@@ -37,4 +37,5 @@
 		<persistence.dataSource>jdbc/fixedDS</persistence.dataSource>
 		<persistence.provider>org.hibernate.ejb.HibernatePersistence</persistence.provider>
 	</properties>
+	<groupId>org.ualerts.server</groupId>
 </project>
