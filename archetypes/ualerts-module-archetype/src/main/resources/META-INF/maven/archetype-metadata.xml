@@ -1,0 +1,39 @@
+<archetype-descriptor
+	xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd"
+	name="UAlerts Module Archetype">
+	<requiredProperties>
+		
+		<requiredProperty key="parentGroupId">
+			<defaultValue>org.ualerts</defaultValue>
+		</requiredProperty>
+		<requiredProperty key="parentArtifactId">
+			<defaultValue>ualerts-server</defaultValue>
+		</requiredProperty>
+		<requiredProperty key="parentVersion">
+			<defaultValue>1.0.0-SNAPSHOT</defaultValue>
+		</requiredProperty>
+		
+		<requiredProperty key="packaging">
+			<defaultValue>jar</defaultValue>
+		</requiredProperty>
+		
+		<requiredProperty key="name">
+			<defaultValue>A UAlerts Server Project</defaultValue>
+		</requiredProperty>
+		<requiredProperty key="description">
+			<defaultValue>The description for a new UAlerts Server Project</defaultValue>
+		</requiredProperty>
+		
+	</requiredProperties>
+	
+	<fileSets>
+	    <fileSet filtered="false" packaged="false">
+	        <directory>src</directory>
+	        <includes>
+	            <include>**/*</include>
+	        </includes>
+	    </fileSet>
+	</fileSets>
+</archetype-descriptor>
