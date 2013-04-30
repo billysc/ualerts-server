@@ -53,7 +53,8 @@
       <connection>scm:git:git@github.com:ualerts-org/ualerts-server.git</connection>
       <developerConnection>scm:git:git@github.com:ualerts-org/ualerts-server.git</developerConnection>
       <url>https://github.com/ualerts-org/ualerts-server</url>
-    </scm>
+      <tag>REL-0.0.1</tag>
+  </scm>
 	<build>
 		<plugins>
 			<plugin>
@@ -120,6 +121,7 @@
 					<tagNameFormat>REL-@{project.version}</tagNameFormat>
 					<useReleaseProfile>false</useReleaseProfile>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
+                    <mavenExecutorId>forked-path</mavenExecutorId>
 				</configuration>
 			</plugin>
 			<plugin>
