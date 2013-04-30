@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ualerts</groupId>
   <artifactId>ualerts-server</artifactId>
-  <version>0.0.2-SNAPSHOT</version>
+  <version>0.0.2</version>
   <packaging>pom</packaging>
   <name>UAlerts Base Configuration</name>
   <description>Base project for the UAlerts server components</description>
@@ -53,7 +53,7 @@
       <connection>scm:git:git@github.com:ualerts-org/ualerts-server.git</connection>
       <developerConnection>scm:git:git@github.com:ualerts-org/ualerts-server.git</developerConnection>
       <url>https://github.com/ualerts-org/ualerts-server</url>
-      <tag>REL-0.0.1</tag>
+      <tag>REL-0.0.2</tag>
   </scm>
 	<build>
 		<plugins>
