@@ -8,9 +8,7 @@
       <packaging>jar</packaging>
   </parent>
   
-  <groupId>org.ualerts</groupId>
   <artifactId>${artifactId}</artifactId>
-  <version>${version}</version>
   <packaging>${packaging}</packaging>
 
   <name>${name}</name>
