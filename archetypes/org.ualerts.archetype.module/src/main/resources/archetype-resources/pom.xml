@@ -14,5 +14,5 @@
   <packaging>${packaging}</packaging>
 
   <name>${name}</name>
-  <description>{$description}</description>
+  <description>${description}</description>
 </project>
