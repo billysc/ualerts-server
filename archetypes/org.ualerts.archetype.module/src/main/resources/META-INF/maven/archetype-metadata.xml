@@ -5,12 +5,8 @@
 	name="UAlerts Module Archetype">
 	<requiredProperties>
 		
-		<requiredProperty key="parentArtifactId">
-			<defaultValue>ualerts-server</defaultValue>
-		</requiredProperty>
-		<requiredProperty key="parentVersion">
-			<defaultValue>1.0.0-SNAPSHOT</defaultValue>
-		</requiredProperty>
+		<requiredProperty key="parentArtifactId" />
+		<requiredProperty key="parentVersion" />
 		
 		<requiredProperty key="packaging">
 			<defaultValue>jar</defaultValue>
