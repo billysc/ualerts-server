@@ -8,7 +8,7 @@
   </parent>
   
   <artifactId>org.ualerts.fixed.web</artifactId>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
 
   <name>UAlerts Fixed Web</name>
   <description>Web components for the UAlerts Fixed Provisioning project</description>
