@@ -4,8 +4,8 @@
   <artifactId>ualerts-server</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>UAlerts Base Configuration</name>
-  <description>Base project for the UAlerts server components</description>
+  <name>UAlerts</name>
+  <description>UAlerts Emergency Alerts System</description>
 	<url>${site.homepage.baseUrl}</url>
 	<inceptionYear>2013</inceptionYear>
 	<licenses>
@@ -163,6 +163,13 @@
 				<plugin>
 					<artifactId>maven-site-plugin</artifactId>
 					<version>3.2</version>
+					<dependencies>
+						<dependency><!-- add support for ssh/scp -->
+							<groupId>org.apache.maven.wagon</groupId>
+							<artifactId>wagon-ssh</artifactId>
+							<version>2.4</version>
+						</dependency>
+          </dependencies>
 				</plugin>
 				<plugin>
 					<artifactId>maven-war-plugin</artifactId>
@@ -820,8 +827,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<springframework.version>3.2.1.RELEASE</springframework.version>
-		<site.deploy.baseUrl>dav:https://developer.cns.vt.edu/maven2/sites</site.deploy.baseUrl>
-		<site.homepage.baseUrl>https://developer.cns.vt.edu/projects/alerts</site.homepage.baseUrl>
+		<site.deploy.baseUrl>scpexe://ualerts.org/home/ceharris/ualerts.org/product-site</site.deploy.baseUrl>
+		<site.homepage.baseUrl>http://ualerts.org/product-site</site.homepage.baseUrl>
 		<hsqldb.version>2.2.9</hsqldb.version>
 		<jersey.version>1.5</jersey.version>
 		<slf4j.version>1.7.2</slf4j.version>
@@ -835,8 +842,8 @@
 	</properties>
 	<distributionManagement>
 		<site>
-			<id>developer</id>
-			<url>${site.deploy.baseUrl}/${project.groupId}/ualerts-server</url>
+			<id>ualerts.org</id>
+			<url>${site.deploy.baseUrl}</url>
 		</site>
 		<repository>
 			<id>releases</id>
