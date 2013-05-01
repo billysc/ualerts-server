@@ -98,9 +98,9 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
    */
   @Override
   protected Fixture onExecute() throws Exception {
-    Building building = repository.findBuildingById(buildingId);
     Room room = repository.findRoom(buildingId, roomNumber);
     if (room == null) {
+      Building building = repository.findBuildingById(buildingId);
       room = new Room();
       room.setBuilding(building);
       room.setRoomNumber(roomNumber);
@@ -127,6 +127,55 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
     fixture.setRoom(room);
     repository.addFixture(fixture);
     return fixture;
+  }
+
+  /**
+   * Sets the {@code roomNumber} property.
+   */
+  public void setRoomNumber(String roomNumber) {
+    this.roomNumber = roomNumber;
+  }
+
+  /**
+   * Sets the {@code buildingId} property.
+   */
+  public void setBuildingId(String buildingId) {
+    this.buildingId = buildingId;
+  }
+
+  /**
+   * Sets the {@code positionHint} property.
+   */
+  public void setPositionHint(String positionHint) {
+    this.positionHint = positionHint;
+  }
+
+  /**
+   * Sets the {@code ipAddress} property.
+   */
+  public void setIpAddress(String ipAddress) {
+    this.ipAddress = ipAddress;
+  }
+
+  /**
+   * Sets the {@code serialNumber} property.
+   */
+  public void setSerialNumber(String serialNumber) {
+    this.serialNumber = serialNumber;
+  }
+
+  /**
+   * Sets the {@code inventoryNumber} property.
+   */
+  public void setInventoryNumber(String inventoryNumber) {
+    this.inventoryNumber = inventoryNumber;
+  }
+
+  /**
+   * Sets the {@code macAddress} property.
+   */
+  public void setMacAddress(String macAddress) {
+    this.macAddress = macAddress;
   }
 
   /**
