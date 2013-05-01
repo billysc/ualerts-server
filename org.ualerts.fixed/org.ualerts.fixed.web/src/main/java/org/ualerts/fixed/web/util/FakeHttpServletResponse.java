@@ -21,80 +21,31 @@ package org.ualerts.fixed.web.util;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Collection;
-import java.util.Locale;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.HttpServletResponseWrapper;
 /**
- * A wrapper of a HttpServletResponse that writes output to an internal buffer,
- * rather than to the actual output stream to the end client.
+ * A wrapper around the HttpServletResponse that provides a local OutputStream
+ * instead of the stream from the original response, allowing for retrieval
+ * of the HTML data. 
  * 
  * Use cases include the desire to embed a rendered JSP page (html) in a JSON
- * response.
+ * response.  When the response is normally sent through the dispatcher, the
+ * output is written directly to the end user.  With this wrapper, the output
+ * is written internally.  This allows the output to be retrieved and used in
+ * another manner, such as a value in a JSON model.
  *
  * @author Michael Irwin
  */
-public class FakeHttpServletResponse implements HttpServletResponse {
+public class FakeHttpServletResponse extends HttpServletResponseWrapper {
 
-  private HttpServletResponse response;
   private StringWriter stringWriter = new StringWriter();
   private PrintWriter writer = new PrintWriter(stringWriter);
   
   public FakeHttpServletResponse(HttpServletResponse response) {
-    this.response = response;
+    super(response);
   }
   
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void flushBuffer() throws IOException {
-    response.flushBuffer();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public int getBufferSize() {
-    return response.getBufferSize();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getCharacterEncoding() {
-    return response.getCharacterEncoding();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getContentType() {
-    return response.getContentType();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Locale getLocale() {
-    return response.getLocale();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ServletOutputStream getOutputStream() throws IOException {
-    return response.getOutputStream();
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -103,243 +54,8 @@ public class FakeHttpServletResponse implements HttpServletResponse {
     return writer;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isCommitted() {
-    return response.isCommitted();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void reset() {
-    response.reset();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void resetBuffer() {
-    response.resetBuffer();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setBufferSize(int arg0) {
-    response.setBufferSize(arg0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setCharacterEncoding(String arg0) {
-    response.setCharacterEncoding(arg0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setContentLength(int arg0) {
-    response.setContentLength(arg0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setContentType(String arg0) {
-    response.setContentType(arg0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setLocale(Locale arg0) {
-    response.setLocale(arg0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addCookie(Cookie arg0) {
-    response.addCookie(arg0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addDateHeader(String arg0, long arg1) {
-    response.addDateHeader(arg0, arg1);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addHeader(String arg0, String arg1) {
-    response.addHeader(arg0, arg1);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addIntHeader(String arg0, int arg1) {
-    response.addIntHeader(arg0, arg1);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean containsHeader(String arg0) {
-    return response.containsHeader(arg0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String encodeRedirectURL(String arg0) {
-    return response.encodeRedirectURL(arg0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String encodeURL(String arg0) {
-    return response.encodeURL(arg0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void sendError(int arg0) throws IOException {
-    response.sendError(arg0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
- public void sendError(int arg0, String arg1) throws IOException {
-    response.sendError(arg0, arg1);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void sendRedirect(String arg0) throws IOException {
-    response.sendRedirect(arg0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setDateHeader(String arg0, long arg1) {
-    response.setDateHeader(arg0, arg1);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setHeader(String arg0, String arg1) {
-    response.setHeader(arg0, arg1);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setIntHeader(String arg0, int arg1) {
-    response.setIntHeader(arg0, arg1);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setStatus(int arg0) {
-    response.setStatus(arg0);
-  }
-  
   public StringWriter getStringWriter() {
     return stringWriter;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getHeader(String arg0) {
-    return response.getHeader(arg0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Collection<String> getHeaderNames() {
-    return response.getHeaderNames();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Collection<String> getHeaders(String arg0) {
-    return response.getHeaders(arg0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public int getStatus() {
-    return response.getStatus();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("deprecation")
-  @Override
-  public void setStatus(int arg0, String arg1) {
-    response.setStatus(arg0, arg1);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("deprecation")
-  @Override
-  public String encodeRedirectUrl(String arg0) {
-    return response.encodeRedirectUrl(arg0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("deprecation")
-  @Override
-  public String encodeUrl(String arg0) {
-    return response.encodeUrl(arg0);
   }
 
 }
