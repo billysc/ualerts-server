@@ -1,39 +1,55 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Manual Enrollment of Fixture</title>
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap-responsive.min.css" />
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css" />
-</head>
-<body>
-	<div class="navbar navbar-fixed-top navbar-inverse">
-		<div class="navbar-inner">
-			<div class="container">
-				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-					<span class="icon-bar"></span> 
-					<span class="icon-bar"></span> <span class="icon-bar"></span>
-				</a> 
-				<a class="brand" href="#">Fixed Provisioning</a>
-				<div class="nav-collapse collapse">
-					<ul class="nav">
-						
-					</ul>
-				</div>
-			</div>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+
+<sf:form cssClass="form-horizontal" modelAttribute="fixture" action="${pageContext.request.contextPath}/ui/enrollment">
+	<div class="control-group">
+		<sf:label path="ipAddress" cssClass="control-label">IP Address</sf:label>
+		<div class="controls">
+			<sf:input path="ipAddress" />
+			<br /><sf:errors path="ipAddress" cssClass="error" />
+		</div>
+	</div>
+	<div class="control-group">
+		<sf:label path="macAddress" cssClass="control-label">MAC Address</sf:label>
+		<div class="controls">
+			<sf:input path="macAddress" />
+			<br /><sf:errors path="macAddress" />
+		</div>
+	</div>
+	<div class="control-group">
+		<sf:label path="serialNumber" cssClass="control-label">Serial Number</sf:label>
+		<div class="controls">
+			<sf:input path="serialNumber" />
+			<br /><sf:errors path="serialNumber" />
+		</div>
+	</div>
+	<div class="control-group">
+		<sf:label path="inventoryNumber" cssClass="control-label">Inventory Number</sf:label>
+		<div class="controls">
+			<sf:input path="inventoryNumber" />
+			<br /><sf:errors path="inventoryNumber" />
+		</div>
+	</div>
+
+	<div class="control-group">
+		<sf:label path="building" cssClass="control-label">Building</sf:label>
+		<div class="controls">
+			<sf:input path="building" />
+			<br /><sf:errors path="building" />
+		</div>
+	</div>
+	<div class="control-group">
+		<sf:label path="room" cssClass="control-label">Room</sf:label>
+		<div class="controls">
+			<sf:input path="room" />
+			<br /><sf:errors path="room" />
+		</div>
+	</div>
+	<div class="control-group">
+		<sf:label path="positionHint" cssClass="control-label">Position Hint</sf:label>
+		<div class="controls">
+			<sf:input path="positionHint" />
+			<br /><sf:errors path="positionHint" />
 		</div>
 	</div>
 	
-	<div class="container">
-		<div class="row">
-			<div class="span-12">
-				<a id="addFixture" class="btn" href="#"><i class="icon-plus"></i> Add Fixture</a>
-			</div>
-		</div>
-	</div>
-	
-	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery.min.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/global.js"></script>
-</body>
-</html>
+</sf:form>
