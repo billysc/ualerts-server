@@ -18,6 +18,10 @@
  */
 package org.ualerts.fixed.web.dto;
 
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  * A Data Transfer Object representing a fixture.
  *
@@ -25,12 +29,26 @@ package org.ualerts.fixed.web.dto;
  */
 public class FixtureDTO {
 
+  @NotEmpty
   private String building;
+  
+  @NotEmpty
   private String room;
+  
+  @NotEmpty
   private String positionHint;
+  
   private String inventoryNumber;
+  
+  @NotEmpty
   private String serialNumber;
+  
+  @NotEmpty
+  @Pattern(regexp="^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$")
   private String ipAddress;
+
+  @NotEmpty
+  @Pattern(regexp="^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$")
   private String macAddress;
   
   /**
