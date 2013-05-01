@@ -18,11 +18,6 @@
 
     <context:component-scan base-package="org.ualerts.fixed.web" />
 
-    <mvc:annotation-driven />
-	<mvc:resources location="/styles/" mapping="/styles/**" />
-	<mvc:resources location="/scripts/" mapping="/scripts/**" />
-	<mvc:resources location="/images/" mapping="/images/**" />
-
 	<bean class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
 		<property name="location">
 			<jee:jndi-lookup
