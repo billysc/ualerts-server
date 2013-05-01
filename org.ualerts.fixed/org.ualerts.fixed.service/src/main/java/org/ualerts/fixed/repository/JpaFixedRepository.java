@@ -94,6 +94,79 @@ public class JpaFixedRepository extends AbstractJpaRepository implements FixedRe
    * {@inheritDoc}
    */
   @Override
+  public Asset findAssetBySerialNumber(String serialNumber) {
+    Asset result = null;
+    try {
+      result = getEntityManager()
+          .createNamedQuery("findAssetBySerialNumber", Asset.class)
+          .setParameter("serialNumber", serialNumber)
+          .getSingleResult();
+    }
+    catch (NoResultException ex) {
+      result = null;
+    }
+    return result;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Asset findAssetByInventoryNumber(String inventoryNumber) {
+    Asset result = null;
+    try {
+      result = getEntityManager()
+          .createNamedQuery("findAssetByInventoryNumber", Asset.class)
+          .setParameter("inventoryNumber", inventoryNumber)
+          .getSingleResult();
+    }
+    catch (NoResultException ex) {
+      result = null;
+    }
+    return result;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Asset findAssetByMacAddress(String macAddress) {
+    Asset result = null;
+    try {
+      result = getEntityManager()
+          .createNamedQuery("findAssetByMacAddress", Asset.class)
+          .setParameter("macAddress", macAddress)
+          .getSingleResult();
+    }
+    catch (NoResultException ex) {
+      result = null;
+    }
+    return result;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Fixture findFixtureByLocation(Long roomId, Long hintId) {
+    Fixture result = null;
+    try {
+      result = getEntityManager()
+          .createNamedQuery("findFixtureByLocation", Fixture.class)
+          .setParameter("roomId", roomId)
+          .setParameter("hintId", hintId)
+          .getSingleResult();
+    }
+    catch (NoResultException ex) {
+      result = null;
+    }
+    return result;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void addRoom(Room room) {
     getEntityManager().persist(room);
   }
