@@ -87,7 +87,7 @@ public class AddFixtureCommandTest {
     context.checking(new Expectations() {{
       oneOf(repository).findRoom("buildingId", "roomNumber");
       will(returnValue(room));
-      oneOf(repository).findHint("hint text");
+      oneOf(repository).findHint("hint");
       will(returnValue(positionHint));
       oneOf(repository).addAsset(with(any(Asset.class)));
       oneOf(repository).addFixture(with(any(Fixture.class)));
@@ -97,7 +97,13 @@ public class AddFixtureCommandTest {
   }
 
   private void populateCommand(AddFixtureCommand command) {
-    
+    command.setRoomNumber("roomNumber");
+    command.setBuildingId("buildingId");
+    command.setPositionHint("hint");
+    command.setIpAddress("127.0.0.1");
+    command.setMacAddress("0A-1B-2C-3D-4E-5F");
+    command.setSerialNumber("serialNumber");
+    command.setInventoryNumber("inventoryNumber");
   }
   
 }
