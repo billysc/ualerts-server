@@ -79,6 +79,22 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
     if (repository.findBuildingById(buildingId) == null) {
       throw new InvalidRequestException("Unknown building.");
     }
+    if (repository.findAssetByInventoryNumber(inventoryNumber) != null) {
+      throw new InvalidRequestException("Inventory number is already in use.");
+    }
+    if (repository.findAssetBySerialNumber(serialNumber) != null) {
+      throw new InvalidRequestException("Serial number is already in use.");
+    }
+    if (repository.findAssetByMacAddress(macAddress) != null) {
+      throw new InvalidRequestException("MAC address is already in use.");
+    }
+    Room room = repository.findRoom(buildingId, roomNumber);
+    PositionHint hint = repository.findHint(positionHint);
+    if ((room != null) && (hint != null)) {
+      if (repository.findFixtureByLocation(room.getId(), hint.getId()) != null) {
+        throw new InvalidRequestException("Location (room & position hint) is already in use.");
+      }
+    }
     try {
       InetAddress.getByAddress(ipAddress);
     }

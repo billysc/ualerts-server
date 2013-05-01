@@ -30,4 +30,37 @@
     </query>
   </named-query>
 
+  <named-query name="findAssetBySerialNumber">
+    <query>
+      select distinct asset
+      from Asset asset
+      where asset.serialNumber = :serialNumber
+    </query>
+  </named-query>
+
+  <named-query name="findAssetByInventoryNumber">
+    <query>
+      select distinct asset
+      from Asset asset
+      where asset.inventoryNumber = :inventoryNumber
+    </query>
+  </named-query>
+
+  <named-query name="findAssetByMacAddress">
+    <query>
+      select distinct asset
+      from Asset asset
+      where asset.macAddress = :macAddress
+    </query>
+  </named-query>
+
+  <named-query name="findFixtureByLocation">
+    <query>
+      select distinct fixture
+      from Fixture fixture
+      where fixture.room.id = :roomId
+      and fixture.positionHint.id = :hintId
+    </query>
+  </named-query>
+
 </entity-mappings>

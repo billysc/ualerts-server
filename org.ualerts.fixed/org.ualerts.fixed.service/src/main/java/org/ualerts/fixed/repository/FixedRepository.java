@@ -53,6 +53,35 @@ public interface FixedRepository {
   PositionHint findHint(String hintText);
   
   /**
+   * Finds an asset by its serial number.
+   * @param serialNumber the serial number to look for.
+   * @return the Asset object.  Null if it isn't found.
+   */
+  Asset findAssetBySerialNumber(String serialNumber);
+  
+  /**
+   * Finds an asset by its inventory number.
+   * @param inventoryNumber the inventory number to look for.
+   * @return the Asset object.  Null if it isn't found.
+   */
+  Asset findAssetByInventoryNumber(String inventoryNumber);
+  
+  /**
+   * Finds an asset by its MAC address.
+   * @param macAddress the MAC address to look for.
+   * @return the Asset object.  Null if it isn't found.
+   */
+  Asset findAssetByMacAddress(String macAddress);
+  
+  /**
+   * Finds a fixture by its location (room & position hint)
+   * @param roomId the ID of the room
+   * @param hintId the ID of the position hint
+   * @return the Fixture object.  Null if it isn't found.
+   */
+  Fixture findFixtureByLocation(Long roomId, Long hintId);
+  
+  /**
    * Adds a room to persistence control.
    * @param room the room to add.
    */
