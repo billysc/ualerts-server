@@ -16,36 +16,18 @@
  * limitations under the License.
  *
  */
-package org.ualerts.fixed.domain;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+package org.ualerts.fixed.service;
 
 /**
- * Entity representing a position hint.
+ * Exception that indicates the requested action was invalid, likely
+ * due to incorrect input or conditions.
  *
  * @author Brian Early
  */
-@Entity
-@Table(name = "Position_Hint")
-public class PositionHint extends AbstractEntity {
-  private static final long serialVersionUID = 626731060336569077L;
-  private String hintText;
+public class InvalidRequestException extends Exception {
+  private static final long serialVersionUID = 1L;
 
-  /**
-   * Gets the {@code hintText} property.
-   */
-  @Column(name = "hint_text", length=20)
-  public String getHintText() {
-    return hintText;
+  public InvalidRequestException(String message) {
+    super(message);
   }
-
-  /**
-   * Sets the {@code hintText} property.
-   */
-  public void setHintText(String hintText) {
-    this.hintText = hintText;
-  }
-  
 }
