@@ -30,21 +30,21 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Position_Hint")
 public class PositionHint {
-  private String hint;
+  private String hintText;
 
   /**
-   * Gets the {@code hint} property.
+   * Gets the {@code hintText} property.
    */
   @Column(name = "hint_text", length=20)
-  public String getHint() {
-    return hint;
+  public String getHintText() {
+    return hintText;
   }
 
   /**
-   * Sets the {@code hint} property.
+   * Sets the {@code hintText} property.
    */
-  public void setHint(String hint) {
-    this.hint = hint;
+  public void setHintText(String hintText) {
+    this.hintText = hintText;
   }
   
 }
