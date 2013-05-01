@@ -20,6 +20,7 @@ package org.ualerts.fixed.repository;
 
 import javax.persistence.NoResultException;
 
+import org.springframework.stereotype.Repository;
 import org.ualerts.fixed.domain.Asset;
 import org.ualerts.fixed.domain.Building;
 import org.ualerts.fixed.domain.Fixture;
@@ -31,6 +32,7 @@ import org.ualerts.fixed.domain.Room;
  *
  * @author Brian Early
  */
+@Repository("fixedRepository")
 public class JpaFixedRepository extends AbstractJpaRepository implements FixedRepository {
 
   /**
