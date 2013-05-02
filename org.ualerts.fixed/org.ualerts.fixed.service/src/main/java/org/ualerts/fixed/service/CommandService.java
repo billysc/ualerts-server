@@ -38,7 +38,7 @@ public interface CommandService {
   
   /**
    * Creates a new command instance given the name and class of the command 
-   * bean.  The command must be annotated with {@link CommandComponent}.
+   * bean. 
    * @param beanName the name of the bean
    * @param commandClass the class of the command
    * @param <T> the command subtype

@@ -26,12 +26,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Default implementation of {@link CommandService}.
+ * An implementation of {@link CommandService} that utilizes the Spring
+ * Framework's prototype bean concept.  Commands using this service must
+ * be annotated with {@link CommandComponent}.
  *
  * @author Carl Harris
  */
 @Service("commandService")
-public class CommandServiceImpl
+public class SpringPrototypeBeanCommandService
     implements CommandService, ApplicationContextAware {
 
   private ApplicationContext applicationContext;
@@ -64,6 +66,8 @@ public class CommandServiceImpl
 
   /**
    * {@inheritDoc}
+   * <strong>NOTE</strong>: The command must be annotated with 
+   * {@link CommandComponent}
    */
   @SuppressWarnings("rawtypes")
   public <T extends Command> T newCommand(Class<T> commandClass) 
@@ -73,13 +77,14 @@ public class CommandServiceImpl
 
   /**
    * {@inheritDoc}
+   * <strong>NOTE</strong>: The command must be annotated with 
+   * {@link CommandComponent}
    */
   @SuppressWarnings({ "rawtypes" })
   public <T extends Command> T newCommand(String beanName, 
       Class<T> commandClass) throws Exception {
     return getApplicationContext().getBean(beanName, commandClass);
   }
-
 
   /**
    * {@inheritDoc}
