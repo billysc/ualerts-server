@@ -58,18 +58,26 @@ public class MacAddress implements Serializable {
       + "\\p{XDigit}\\p{XDigit}\\p{XDigit}\\p{XDigit}"
       + "\\p{XDigit}\\p{XDigit}\\p{XDigit}\\p{XDigit}$";
 
-  private static final Pattern[] patterns = new Pattern[] {
+  private static final Pattern[] PATTERNS = new Pattern[] {
     Pattern.compile(IEEE_FORMAT), 
     Pattern.compile(DOT_FORMAT), 
     Pattern.compile(UNDELIMITED_FORMAT)
   };
 
   private static final int MAC_ADDRESS_LENGTH = 6;
+  
+  /**
+   * The delimiter used in the canonical (IEEE) form for a MAC address
+   */
   public static final char CANONICAL_DELIMITER = '-';
   
   private final String macAddress;
   private final byte[] octets;
 
+  /**
+   * Constructs a new instance.
+   * @param s string representation of a MAC address
+   */
   public MacAddress(String s) {
     Matcher matcher = getMatcher(s);
     if (matcher != null) {
@@ -81,19 +89,36 @@ public class MacAddress implements Serializable {
     }
   }
 
+  /**
+   * Determines whether a given string is a valid MAC address representation.
+   * @param s the string to test
+   * @return {@code true} if the {@code s} is a valid representation of a
+   *    MAC address
+   */
   public static boolean isValid(String s) {
     return getMatcher(s) != null;
   }
   
+  /**
+   * Gets the binary representation of a MAC address
+   * @return an array of octets representing the binary-encoded MAC address
+   */
   public byte[] getOctets() {
     return octets;
   }
   
+  /**
+   * Converts a binary-encoded MAC address to a string representation.
+   * @param octets the binary-encoded MAC address
+   * @return string representation of the {@code octets}
+   */
   public static String getCanonicalForm(byte[] octets) {
     StringBuilder sb = new StringBuilder();
+    final int mask = 0x100;
+    final int minLength = 2;
     for (int i = 0; i < octets.length; i++) {
-      String hex = Integer.toHexString(octets[i] | 0x100);
-      sb.append(hex.substring(hex.length()-2));
+      String hex = Integer.toHexString(octets[i] | mask);
+      sb.append(hex.substring(hex.length() - minLength));
       if (i < octets.length - 1) {
         sb.append(CANONICAL_DELIMITER);
       }
@@ -124,7 +149,7 @@ public class MacAddress implements Serializable {
   
   private static Matcher getMatcher(String s) {
     if (s == null) return null;
-    for (Pattern pattern : patterns) {
+    for (Pattern pattern : PATTERNS) {
       Matcher matcher = pattern.matcher(s);
       if (matcher.matches()) {
         return matcher;
@@ -133,7 +158,7 @@ public class MacAddress implements Serializable {
     return null;
   }
   
-  protected static byte[] extractOctets(Matcher matcher) {
+  private static byte[] extractOctets(Matcher matcher) {
     if (matcher.groupCount() == 0) {
       return extractUndelimitedOctets(matcher);
     }
@@ -155,9 +180,10 @@ public class MacAddress implements Serializable {
         sb.insert(0, '0');
       }
       String field = sb.toString();
+      final int radix = 16;
       for (int j = 0; j < fieldLength; j = j + 2) {
         octets[octetIndex++] = (byte) Integer.parseInt(
-            field.substring(j, j + 2), 16);
+            field.substring(j, j + 2), radix);
       }
     }
     return octets;
@@ -169,9 +195,10 @@ public class MacAddress implements Serializable {
     String field = matcher.group(0);
     int fieldLength = matcher.group(0).length();
     assert fieldLength % 2 == 0;
+    final int radix = 16;
     for (int i = 0; i < fieldLength; i = i + 2) {
       octets[octetIndex++] = (byte) 
-          Integer.parseInt(field.substring(i, i+2), 16);
+          Integer.parseInt(field.substring(i, i + 2), radix);
     }
     return octets;
   }
