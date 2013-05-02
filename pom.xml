@@ -818,6 +818,11 @@
 				<artifactId>commons-fileupload</artifactId>
 				<version>1.2.1</version>
 			</dependency>
+			<dependency>
+				<groupId>org.ualerts</groupId>
+				<artifactId>org.ualerts.fixed.service</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<properties>
