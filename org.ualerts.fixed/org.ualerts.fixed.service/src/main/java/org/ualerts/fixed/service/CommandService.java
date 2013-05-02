@@ -29,19 +29,21 @@ public interface CommandService {
    * Creates a new command instance given the class of the command.  The command
    * must have been annotated with {@link CommandComponent}.
    * @param commandClass the class of the command
+   * @param <T> the command subtype
    * @return a new instance of the command
-   * @throws Exception as needed
+   * @throws Exception
    */
   @SuppressWarnings("rawtypes")
   <T extends Command> T newCommand(Class<T> commandClass) throws Exception;
   
   /**
-   * Creates a new command instance given the name and class of the command bean.  The command
-   * must have been annotated with {@link CommandComponent}.
+   * Creates a new command instance given the name and class of the command 
+   * bean.  The command must be annotated with {@link CommandComponent}.
    * @param beanName the name of the bean
    * @param commandClass the class of the command
+   * @param <T> the command subtype
    * @return a new instance of the command
-   * @throws Exception as needed
+   * @throws Exception
    */
   @SuppressWarnings("rawtypes")
   <T extends Command> T newCommand(String beanName, Class<T> commandClass)
@@ -50,8 +52,9 @@ public interface CommandService {
   /**
    * Invokes/executes the command.
    * @param command the command to execute
-   * @return whatever object the command returns.
-   * @throws Exception as needed
+   * @param <T> identifies the return type for the command
+   * @return the value returned by {@link Command#execute()}
+   * @throws Exception
    */
   <T> T invoke(Command<T> command) throws Exception;
   
