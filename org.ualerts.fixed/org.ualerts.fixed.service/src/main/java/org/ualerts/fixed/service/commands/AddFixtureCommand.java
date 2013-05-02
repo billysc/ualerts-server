@@ -76,6 +76,18 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
     if (StringUtils.isBlank(macAddress)) {
       throw new InvalidRequestException("MAC Address is required.");
     }
+    try {
+      InetAddress.getByAddress(ipAddress);
+    }
+    catch (Exception ex) {
+      throw new InvalidRequestException("Invalid IP address.");
+    }
+    try {
+      new MacAddress(macAddress);
+    }
+    catch (Exception ex) {
+      throw new InvalidRequestException("Invalid MAC address.");
+    }
     if (repository.findBuildingById(buildingId) == null) {
       throw new InvalidRequestException("Unknown building.");
     }
@@ -94,18 +106,6 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
       if (repository.findFixtureByLocation(room.getId(), hint.getId()) != null) {
         throw new InvalidRequestException("Location (room & position hint) is already in use.");
       }
-    }
-    try {
-      InetAddress.getByAddress(ipAddress);
-    }
-    catch (Exception ex) {
-      throw new InvalidRequestException("Invalid IP address.");
-    }
-    try {
-      new MacAddress(macAddress);
-    }
-    catch (Exception ex) {
-      throw new InvalidRequestException("Invalid MAC address.");
     }
   }
 

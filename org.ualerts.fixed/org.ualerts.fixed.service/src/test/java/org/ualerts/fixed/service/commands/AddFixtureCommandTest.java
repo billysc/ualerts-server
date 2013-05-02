@@ -159,6 +159,26 @@ public class AddFixtureCommandTest {
   }
 
   /**
+   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with invalid IP address.
+   */
+  @Test(expected = InvalidRequestException.class)
+  public void testOnValidateInvalidIpAddress() throws Exception {
+    populateCommand(command);
+    command.setIpAddress("300.4.2");
+    command.onValidate();
+  }
+
+  /**
+   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with invalid MAC address.
+   */
+  @Test(expected = InvalidRequestException.class)
+  public void testOnValidateInvalidMacAddress() throws Exception {
+    populateCommand(command);
+    command.setMacAddress("0A-1B-2C-3D-4E");
+    command.onValidate();
+  }
+
+  /**
    * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with a bad building ID.
    */
   @Test
