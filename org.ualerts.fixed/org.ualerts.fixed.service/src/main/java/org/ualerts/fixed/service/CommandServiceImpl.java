@@ -39,13 +39,14 @@ public class CommandServiceImpl
   
   /**
    * Gets the {@code applicationContext} property.
+   * @return property value
    */
   public ApplicationContext getApplicationContext() {
     return applicationContext;
   }
 
   /**
-   * @inheritDoc
+   * ${@inheritDoc}
    */
   public void setApplicationContext(ApplicationContext applicationContext)
       throws BeansException {
@@ -54,6 +55,7 @@ public class CommandServiceImpl
 
   /**
    * Sets the {@code commandInvoker} property.
+   * @param commandInvoker the property value to set
    */
   @Autowired
   public void setCommandInvoker(CommandInvoker commandInvoker) {
@@ -61,7 +63,7 @@ public class CommandServiceImpl
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @SuppressWarnings("rawtypes")
   public <T extends Command> T newCommand(Class<T> commandClass) 
@@ -70,7 +72,7 @@ public class CommandServiceImpl
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @SuppressWarnings({ "rawtypes" })
   public <T extends Command> T newCommand(String beanName, 
@@ -80,12 +82,11 @@ public class CommandServiceImpl
 
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
-  @Transactional(rollbackFor={java.lang.Exception.class})
+  @Transactional(rollbackFor = { java.lang.Exception.class })
   public <T> T invoke(Command<T> command) throws Exception {
     return commandInvoker.invoke(command);
-
   }
 
 }
