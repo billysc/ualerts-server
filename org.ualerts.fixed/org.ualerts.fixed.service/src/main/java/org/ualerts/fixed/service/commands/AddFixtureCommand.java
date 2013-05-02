@@ -31,7 +31,14 @@ import org.ualerts.fixed.PositionHint;
 import org.ualerts.fixed.Room;
 import org.ualerts.fixed.repository.FixedRepository;
 import org.ualerts.fixed.service.CommandComponent;
-import org.ualerts.fixed.service.InvalidRequestException;
+import org.ualerts.fixed.service.errors.InventoryNumberConflictException;
+import org.ualerts.fixed.service.errors.LocationConflictException;
+import org.ualerts.fixed.service.errors.MacAddressConflictException;
+import org.ualerts.fixed.service.errors.MissingFieldException;
+import org.ualerts.fixed.service.errors.SerialNumberConflictException;
+import org.ualerts.fixed.service.errors.UnknownBuildingException;
+import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
+import org.ualerts.fixed.service.errors.ValidationErrorCollection;
 
 /**
  * Command to add a fixture to the UAlerts system.
@@ -49,56 +56,76 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   private String inventoryNumber;
   private MacAddress macAddress;
   private FixedRepository repository;
-  
+
   /**
    * {@inheritDoc}
    */
   @Override
   protected void onValidate() throws Exception {
     super.onValidate();
-    if (StringUtils.isBlank(roomNumber)) {
-      throw new InvalidRequestException("Room is required.");
-    }
-    if (StringUtils.isBlank(buildingName)) {
-      throw new InvalidRequestException("Building name is required.");
-    }
-    if (StringUtils.isBlank(positionHint)) {
-      throw new InvalidRequestException("Position hint is required.");
-    }
-    if (inetAddress == null) {
-      throw new InvalidRequestException("IP address is required.");
-    }
-    if (StringUtils.isBlank(serialNumber)) {
-      throw new InvalidRequestException("Serial number is required.");
-    }
-    if (StringUtils.isBlank(inventoryNumber)) {
-      throw new InvalidRequestException("Inventory number is required.");
-    }
-    if (macAddress == null) {
-      throw new InvalidRequestException("MAC Address is required.");
-    }
-    Building building = repository.findBuildingByName(buildingName);
-    if (building == null) {
-      throw new InvalidRequestException("Unknown building.");
-    }
-    if (repository.findAssetByInventoryNumber(inventoryNumber) != null) {
-      throw new InvalidRequestException("Inventory number is already in use.");
-    }
-    if (repository.findAssetBySerialNumber(serialNumber) != null) {
-      throw new InvalidRequestException("Serial number is already in use.");
-    }
-    if (repository.findAssetByMacAddress(macAddress.toString()) != null) {
-      throw new InvalidRequestException("MAC address is already in use.");
-    }
-    Room room = repository.findRoom(building.getId(), roomNumber);
-    PositionHint hint = repository.findHint(positionHint);
-    if ((room != null) && (hint != null)) {
-      if (repository.findFixtureByLocation(room.getId(),
-          hint.getId()) != null) {
-        throw new InvalidRequestException(
-            "Location (room & position hint) is already in use.");
+    ValidationErrorCollection errors = new ValidationErrorCollection();
+    try {
+      Building building = null;
+      boolean locationComplete = true;
+      if (StringUtils.isBlank(roomNumber)) {
+        errors.addError(new MissingFieldException("roomNumber"));
+        locationComplete = false;
+      }
+      if (StringUtils.isBlank(buildingName)) {
+        errors.addError(new MissingFieldException("buildingName"));
+        locationComplete = false;
+      }
+      else {
+        building = repository.findBuildingByName(buildingName);
+        if (building == null) {
+          errors.addError(new UnknownBuildingException());
+          locationComplete = false;
+        }
+      }
+      if (StringUtils.isBlank(positionHint)) {
+        errors.addError(new MissingFieldException("positionHint"));
+        locationComplete = false;
+      }
+      if (inetAddress == null) {
+        errors.addError(new MissingFieldException("inetAddress"));
+      }
+      if (StringUtils.isBlank(serialNumber)) {
+        errors.addError(new MissingFieldException("serialNumber"));
+      }
+      else if (repository.findAssetBySerialNumber(serialNumber) != null) {
+        errors.addError(new SerialNumberConflictException());
+      }
+      if (StringUtils.isBlank(inventoryNumber)) {
+        errors.addError(new MissingFieldException("inventoryNumber"));
+      }
+      else if (repository.findAssetByInventoryNumber(inventoryNumber) != null) {
+        errors.addError(new InventoryNumberConflictException());
+      }
+      if (macAddress == null) {
+        errors.addError(new MissingFieldException("macAddress"));
+      }
+      else if (repository.
+          findAssetByMacAddress(macAddress.toString()) != null) {
+        errors.addError(new MacAddressConflictException());
+      }
+      if (locationComplete) {
+        Room room = repository.findRoom(building.getId(), roomNumber);
+        PositionHint hint = repository.findHint(positionHint);
+        if ((room != null) && (hint != null)) {
+          if (repository.findFixtureByLocation(room.getId(),
+              hint.getId()) != null) {
+            errors.addError(new LocationConflictException());
+          }
+        }
       }
     }
+    catch (Exception ex) {
+      throw new UnspecifiedConstraintException(ex);
+    }
+    if (errors.hasErrors()) {
+      throw errors;
+    }
+
   }
 
   /**
@@ -106,35 +133,40 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
    */
   @Override
   protected Fixture onExecute() throws Exception {
-    Building building = repository.findBuildingByName(buildingName);
-    Room room = repository.findRoom(building.getId(), roomNumber);
-    if (room == null) {
-      room = new Room();
-      room.setBuilding(building);
-      room.setRoomNumber(roomNumber);
-      repository.addRoom(room);
+    try {
+      Building building = repository.findBuildingByName(buildingName);
+      Room room = repository.findRoom(building.getId(), roomNumber);
+      if (room == null) {
+        room = new Room();
+        room.setBuilding(building);
+        room.setRoomNumber(roomNumber);
+        repository.addRoom(room);
+      }
+      PositionHint hint = repository.findHint(positionHint);
+      if (hint == null) {
+        hint = new PositionHint();
+        hint.setHintText(positionHint);
+        repository.addPositionHint(hint);
+      }
+      Asset asset = new Asset();
+      Date creationDate = new Date();
+      asset.setDateCreated(creationDate);
+      asset.setInventoryNumber(inventoryNumber);
+      asset.setMacAddress(macAddress.toString());
+      asset.setSerialNumber(serialNumber);
+      repository.addAsset(asset);
+      Fixture fixture = new Fixture();
+      fixture.setAsset(asset);
+      fixture.setDateCreated(creationDate);
+      fixture.setIpAddress(inetAddress.toString());
+      fixture.setPositionHint(hint);
+      fixture.setRoom(room);
+      repository.addFixture(fixture);
+      return fixture;
     }
-    PositionHint hint = repository.findHint(positionHint);
-    if (hint == null) {
-      hint = new PositionHint();
-      hint.setHintText(positionHint);
-      repository.addPositionHint(hint);
+    catch (Exception ex) {
+      throw new UnspecifiedConstraintException(ex);
     }
-    Asset asset = new Asset();
-    Date creationDate = new Date();
-    asset.setDateCreated(creationDate);
-    asset.setInventoryNumber(inventoryNumber);
-    asset.setMacAddress(macAddress.toString());
-    asset.setSerialNumber(serialNumber);
-    repository.addAsset(asset);
-    Fixture fixture = new Fixture();
-    fixture.setAsset(asset);
-    fixture.setDateCreated(creationDate);
-    fixture.setIpAddress(inetAddress.toString());
-    fixture.setPositionHint(hint);
-    fixture.setRoom(room);
-    repository.addFixture(fixture);
-    return fixture;
   }
 
   /**
