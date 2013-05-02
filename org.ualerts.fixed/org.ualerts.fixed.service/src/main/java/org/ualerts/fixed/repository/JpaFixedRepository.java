@@ -33,7 +33,8 @@ import org.ualerts.fixed.Room;
  * @author Brian Early
  */
 @Repository("fixedRepository")
-public class JpaFixedRepository extends AbstractJpaRepository implements FixedRepository {
+public class JpaFixedRepository extends AbstractJpaRepository
+  implements FixedRepository {
 
   /**
    * {@inheritDoc}

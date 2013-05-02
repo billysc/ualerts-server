@@ -66,14 +66,15 @@ public class AddFixtureCommandTest {
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   * Test method for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidate() throws Exception {
     final Building building = new Building();
     building.setId("buildingId");
     populateCommand(command);
-    context.checking(new Expectations() {{
+    context.checking(new Expectations() { {
       oneOf(repository).findBuildingByName("buildingName");
       will(returnValue(building));
       oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
@@ -86,13 +87,14 @@ public class AddFixtureCommandTest {
       will(returnValue(null));
       oneOf(repository).findHint("hint");
       will(returnValue(null));
-    }});
+    } });
     command.onValidate();
     context.assertIsSatisfied();
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with missing building.
+   * Test method with missing building for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test(expected = InvalidRequestException.class)
   public void testOnValidateBlankBuilding() throws Exception {
@@ -102,7 +104,8 @@ public class AddFixtureCommandTest {
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with missing inventory number.
+   * Test method with missing inventory number for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test(expected = InvalidRequestException.class)
   public void testOnValidateBlankInventory() throws Exception {
@@ -112,7 +115,8 @@ public class AddFixtureCommandTest {
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with missing IP address.
+   * Test method with missing IP address for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test(expected = InvalidRequestException.class)
   public void testOnValidateBlankIpAddress() throws Exception {
@@ -122,7 +126,8 @@ public class AddFixtureCommandTest {
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with missing MAC address.
+   * Test method with missing MAC address for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test(expected = InvalidRequestException.class)
   public void testOnValidateBlankMacAddress() throws Exception {
@@ -132,7 +137,8 @@ public class AddFixtureCommandTest {
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with missing position hint.
+   * Test method with missing position hint for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test(expected = InvalidRequestException.class)
   public void testOnValidateBlankPositionHint() throws Exception {
@@ -142,7 +148,8 @@ public class AddFixtureCommandTest {
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with missing room.
+   * Test method with missing room for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test(expected = InvalidRequestException.class)
   public void testOnValidateBlankRoom() throws Exception {
@@ -152,7 +159,8 @@ public class AddFixtureCommandTest {
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with missing serial number.
+   * Test method with missing serial number for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test(expected = InvalidRequestException.class)
   public void testOnValidateBlankSerialNumber() throws Exception {
@@ -162,16 +170,17 @@ public class AddFixtureCommandTest {
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with a bad building ID.
+   * Test method with a bad building name for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test
-  public void testOnValidateBadBuildingId() throws Exception {
+  public void testOnValidateBadBuildingName() throws Exception {
     try {
       populateCommand(command);
-      context.checking(new Expectations() {{
+      context.checking(new Expectations() { {
         oneOf(repository).findBuildingByName("buildingName");
         will(returnValue(null));
-      }});
+      } });
       command.onValidate();
       assertTrue(false);
     }
@@ -181,7 +190,8 @@ public class AddFixtureCommandTest {
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with an inventory number conflict.
+   * Test method with an inventory number conflict for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateInventoryNumberConflict() throws Exception {
@@ -189,12 +199,12 @@ public class AddFixtureCommandTest {
     final Asset asset = new Asset();
     try {
       populateCommand(command);
-      context.checking(new Expectations() {{
+      context.checking(new Expectations() { {
         oneOf(repository).findBuildingByName("buildingName");
         will(returnValue(building));
         oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(asset));
-      }});
+      } });
       command.onValidate();
       assertTrue(false);
     }
@@ -204,7 +214,8 @@ public class AddFixtureCommandTest {
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with a serial number conflict.
+   * Test method with a serial number conflict for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateSerialNumberConflict() throws Exception {
@@ -212,14 +223,14 @@ public class AddFixtureCommandTest {
     final Asset asset = new Asset();
     try {
       populateCommand(command);
-      context.checking(new Expectations() {{
+      context.checking(new Expectations() { {
         oneOf(repository).findBuildingByName("buildingName");
         will(returnValue(building));
         oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(null));
         oneOf(repository).findAssetBySerialNumber("serialNumber");
         will(returnValue(asset));
-      }});
+      } });
       command.onValidate();
       assertTrue(false);
     }
@@ -229,7 +240,8 @@ public class AddFixtureCommandTest {
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with a MAC address conflict.
+   * Test method with a MAC address conflict for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateMacAddressConflict() throws Exception {
@@ -237,7 +249,7 @@ public class AddFixtureCommandTest {
     final Asset asset = new Asset();
     try {
       populateCommand(command);
-      context.checking(new Expectations() {{
+      context.checking(new Expectations() { {
         oneOf(repository).findBuildingByName("buildingName");
         will(returnValue(building));
         oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
@@ -246,7 +258,7 @@ public class AddFixtureCommandTest {
         will(returnValue(null));
         oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
         will(returnValue(asset));
-      }});
+      } });
       command.onValidate();
       assertTrue(false);
     }
@@ -256,7 +268,8 @@ public class AddFixtureCommandTest {
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with a location conflict.
+   * Test method with a location conflict for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateLocationConflict() throws Exception {
@@ -269,7 +282,7 @@ public class AddFixtureCommandTest {
     final Fixture fixture = new Fixture();
     try {
       populateCommand(command);
-      context.checking(new Expectations() {{
+      context.checking(new Expectations() { {
         oneOf(repository).findBuildingByName("buildingName");
         will(returnValue(building));
         oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
@@ -284,7 +297,7 @@ public class AddFixtureCommandTest {
         will(returnValue(hint));
         oneOf(repository).findFixtureByLocation(1L, 2L);
         will(returnValue(fixture));
-     }});
+     } });
       command.onValidate();
       assertTrue(false);
     }
@@ -294,7 +307,8 @@ public class AddFixtureCommandTest {
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onExecute()}.
+   * Test method for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecute() throws Exception {
@@ -304,7 +318,7 @@ public class AddFixtureCommandTest {
     final PositionHint positionHint = new PositionHint();
     populateCommand(command);
 
-    context.checking(new Expectations() {{
+    context.checking(new Expectations() { {
       oneOf(repository).findBuildingByName("buildingName");
       will(returnValue(building));
       oneOf(repository).findRoom("buildingId", "roomNumber");
@@ -313,14 +327,15 @@ public class AddFixtureCommandTest {
       will(returnValue(positionHint));
       oneOf(repository).addAsset(with(any(Asset.class)));
       oneOf(repository).addFixture(with(any(Fixture.class)));
-    }});
+    } });
     Fixture result = command.onExecute();
     context.assertIsSatisfied();
     assertTrue(result.getIpAddress().equals("127.0.0.1"));
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onExecute()} that creates a new room.
+   * Test method creating a new room for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecuteCreateNewRoom() throws Exception {
@@ -329,7 +344,7 @@ public class AddFixtureCommandTest {
     final PositionHint positionHint = new PositionHint();
     populateCommand(command);
 
-    context.checking(new Expectations() {{
+    context.checking(new Expectations() { {
       oneOf(repository).findBuildingByName("buildingName");
       will(returnValue(building));
       oneOf(repository).findRoom("buildingId", "roomNumber");
@@ -339,13 +354,14 @@ public class AddFixtureCommandTest {
       will(returnValue(positionHint));
       oneOf(repository).addAsset(with(any(Asset.class)));
       oneOf(repository).addFixture(with(any(Fixture.class)));
-    }});
+    } });
     command.onExecute();
     context.assertIsSatisfied();
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onExecute()} that creates a new position hint.
+   * Test method creating a new position hint for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecuteCreateNewPositionHint() throws Exception {
@@ -354,7 +370,7 @@ public class AddFixtureCommandTest {
     final Room room = new Room();
     populateCommand(command);
 
-    context.checking(new Expectations() {{
+    context.checking(new Expectations() { {
       oneOf(repository).findBuildingByName("buildingName");
       will(returnValue(building));
       oneOf(repository).findRoom("buildingId", "roomNumber");
@@ -364,7 +380,7 @@ public class AddFixtureCommandTest {
       oneOf(repository).addPositionHint(with(any(PositionHint.class)));
       oneOf(repository).addAsset(with(any(Asset.class)));
       oneOf(repository).addFixture(with(any(Fixture.class)));
-    }});
+    } });
     command.onExecute();
     context.assertIsSatisfied();
   }

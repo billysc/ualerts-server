@@ -25,8 +25,12 @@ package org.ualerts.fixed.service;
  * @author Brian Early
  */
 public class InvalidRequestException extends Exception {
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 8884867091373177640L;
 
+  /**
+   * Constructs a new instance.
+   * @param message the exception message to propagate
+   */
   public InvalidRequestException(String message) {
     super(message);
   }
