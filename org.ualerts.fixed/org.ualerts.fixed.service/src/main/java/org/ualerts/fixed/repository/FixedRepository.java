@@ -18,11 +18,11 @@
  */
 package org.ualerts.fixed.repository;
 
-import org.ualerts.fixed.domain.Asset;
-import org.ualerts.fixed.domain.Building;
-import org.ualerts.fixed.domain.Fixture;
-import org.ualerts.fixed.domain.PositionHint;
-import org.ualerts.fixed.domain.Room;
+import org.ualerts.fixed.Asset;
+import org.ualerts.fixed.Building;
+import org.ualerts.fixed.Fixture;
+import org.ualerts.fixed.PositionHint;
+import org.ualerts.fixed.Room;
 
 /**
  * Defines basic behavior for the repository supporting fixed services.

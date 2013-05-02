@@ -16,7 +16,7 @@
  * limitations under the License.
  *
  */
-package org.ualerts.fixed.domain;
+package org.ualerts.fixed;
 
 import java.util.Date;
 

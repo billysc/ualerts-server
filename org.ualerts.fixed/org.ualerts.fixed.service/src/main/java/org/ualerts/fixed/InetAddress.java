@@ -16,7 +16,7 @@
  * limitations under the License.
  *
  */
-package org.ualerts.fixed.service;
+package org.ualerts.fixed;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
