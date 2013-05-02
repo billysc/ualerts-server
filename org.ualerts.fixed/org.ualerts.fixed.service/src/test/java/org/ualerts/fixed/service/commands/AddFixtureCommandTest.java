@@ -31,7 +31,9 @@ import org.ualerts.fixed.domain.Fixture;
 import org.ualerts.fixed.domain.PositionHint;
 import org.ualerts.fixed.domain.Room;
 import org.ualerts.fixed.repository.FixedRepository;
+import org.ualerts.fixed.service.InetAddress;
 import org.ualerts.fixed.service.InvalidRequestException;
+import org.ualerts.fixed.service.MacAddress;
 
 /**
  * Unit tests for {@link AddFixtureCommand}.
@@ -115,7 +117,7 @@ public class AddFixtureCommandTest {
   @Test(expected = InvalidRequestException.class)
   public void testOnValidateBlankIpAddress() throws Exception {
     populateCommand(command);
-    command.setIpAddress(null);
+    command.setInetAddress(null);
     command.onValidate();
   }
 
@@ -156,26 +158,6 @@ public class AddFixtureCommandTest {
   public void testOnValidateBlankSerialNumber() throws Exception {
     populateCommand(command);
     command.setSerialNumber(null);
-    command.onValidate();
-  }
-
-  /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with invalid IP address.
-   */
-  @Test(expected = InvalidRequestException.class)
-  public void testOnValidateInvalidIpAddress() throws Exception {
-    populateCommand(command);
-    command.setIpAddress("300.4.2");
-    command.onValidate();
-  }
-
-  /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with invalid MAC address.
-   */
-  @Test(expected = InvalidRequestException.class)
-  public void testOnValidateInvalidMacAddress() throws Exception {
-    populateCommand(command);
-    command.setMacAddress("0A-1B-2C-3D-4E");
     command.onValidate();
   }
 
@@ -332,8 +314,9 @@ public class AddFixtureCommandTest {
       oneOf(repository).addAsset(with(any(Asset.class)));
       oneOf(repository).addFixture(with(any(Fixture.class)));
     }});
-    command.onExecute();
+    Fixture result = command.onExecute();
     context.assertIsSatisfied();
+    assertTrue(result.getIpAddress().equals("127.0.0.1"));
   }
 
   /**
@@ -390,8 +373,8 @@ public class AddFixtureCommandTest {
     command.setRoomNumber("roomNumber");
     command.setBuildingName("buildingName");
     command.setPositionHint("hint");
-    command.setIpAddress("127.0.0.1");
-    command.setMacAddress("0A-1B-2C-3D-4E-5F");
+    command.setInetAddress(InetAddress.getByAddress("127.0.0.1"));
+    command.setMacAddress(new MacAddress("0A-1B-2C-3D-4E-5F"));
     command.setSerialNumber("serialNumber");
     command.setInventoryNumber("inventoryNumber");
   }
