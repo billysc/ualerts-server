@@ -30,29 +30,13 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class FixtureDTO {
   
   private Long id;
-  
   private Long version;
-
-  @NotEmpty
   private String building;
-  
-  @NotEmpty
   private String room;
-  
-  @NotEmpty
   private String positionHint;
-  
   private String inventoryNumber;
-  
-  @NotEmpty
   private String serialNumber;
-  
-  @NotEmpty
-  @Pattern(regexp="^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$")
   private String ipAddress;
-
-  @NotEmpty
-  @Pattern(regexp="^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$")
   private String macAddress;
   
   /**
