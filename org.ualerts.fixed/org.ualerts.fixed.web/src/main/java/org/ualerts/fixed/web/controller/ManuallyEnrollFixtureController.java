@@ -29,6 +29,8 @@ import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,6 +39,7 @@ import org.ualerts.fixed.web.dto.FixtureDTO;
 import org.ualerts.fixed.web.service.FixtureService;
 import org.ualerts.fixed.web.util.FakeHttpServletRequest;
 import org.ualerts.fixed.web.util.FakeHttpServletResponse;
+import org.ualerts.fixed.web.validator.FixtureValidator;
 
 /**
  * Controller to handle the manual enrollment of a fixture.
@@ -47,6 +50,11 @@ import org.ualerts.fixed.web.util.FakeHttpServletResponse;
 public class ManuallyEnrollFixtureController {
   
   private FixtureService fixtureService;
+  
+  @InitBinder
+  protected void initBinder(WebDataBinder binder) {
+    binder.setValidator(new FixtureValidator());
+  }
   
   @RequestMapping(value = "/enrollment", method = RequestMethod.GET)
   public String displayForm(Model model) {
