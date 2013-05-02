@@ -22,13 +22,15 @@ package org.ualerts.fixed.service;
  * An executable command.
  *
  * @author Carl Harris
+ * @param <T> identifies the return type for the command
  */
 public interface Command<T> {
 
   /**
    * Execute the command.
-   * @return A reference to whatever object the command was operating on, as appropriate.
-   * @throws Exception as needed.
+   * @return return value defined by the command
+   * @throws Exception
    */
   T execute() throws Exception; 
+
 }
