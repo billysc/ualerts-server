@@ -18,9 +18,8 @@
  */
 package org.ualerts.fixed.web.dto;
 
-import javax.validation.constraints.Pattern;
-
-import org.hibernate.validator.constraints.NotEmpty;
+import org.ualerts.fixed.InetAddress;
+import org.ualerts.fixed.MacAddress;
 
 /**
  * A Data Transfer Object representing a fixture.
@@ -37,7 +36,9 @@ public class FixtureDTO {
   private String inventoryNumber;
   private String serialNumber;
   private String ipAddress;
+  private InetAddress ipAddressObj;
   private String macAddress;
+  private MacAddress macAddressObj;
   
   /**
    * Gets the {@code id} property.
@@ -152,6 +153,22 @@ public class FixtureDTO {
   }
   
   /**
+   * Gets the {@code ipAddressObj} property.
+   * @return property value
+   */
+  public InetAddress getIpAddressObj() {
+    return ipAddressObj;
+  }
+  
+  /**
+   * Sets the {@code ipAddressObj} property.
+   * @param ipAddressObj the value to set
+   */
+  public void setIpAddressObj(InetAddress ipAddressObj) {
+    this.ipAddressObj = ipAddressObj;
+  }
+  
+  /**
    * Gets the {@code macAddress} property.
    */
   public String getMacAddress() {
@@ -163,6 +180,22 @@ public class FixtureDTO {
    */
   public void setMacAddress(String macAddress) {
     this.macAddress = macAddress;
+  }
+ 
+  /**
+   * Gets the {@code macAddressObj} property.
+   * @return property value
+   */
+  public MacAddress getMacAddressObj() {
+    return macAddressObj;
+  }
+  
+  /**
+   * Sets the {@code macAddressObj} property.
+   * @param macAddressObj the value to set
+   */
+  public void setMacAddressObj(MacAddress macAddressObj) {
+    this.macAddressObj = macAddressObj;
   }
   
 }
