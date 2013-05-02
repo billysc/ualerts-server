@@ -6,7 +6,10 @@ function postModalDisplay_enrollFixture($modal) {
 		var requestType = "POST";
 		var responseType = "json";
 		var successCallback = function(data) {
-			$modal.modal('hide');
+			if (data.success)
+				$modal.modal('hide');
+			else
+				$modal.find(".modal-body").html(data.html);
 		};
 		var errorCallback = function() {
 			alert("Something happened");

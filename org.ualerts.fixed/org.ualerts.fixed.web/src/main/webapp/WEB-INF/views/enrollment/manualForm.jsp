@@ -1,6 +1,6 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 
-<sf:form cssClass="form-horizontal" modelAttribute="fixture" action="${pageContext.request.contextPath}/ui/enrollment">
+<sf:form cssClass="form-horizontal" commandName="fixture" action="${pageContext.request.contextPath}/ui/enrollment">
 	<div class="control-group">
 		<sf:label path="ipAddress" cssClass="control-label">IP Address</sf:label>
 		<div class="controls">
