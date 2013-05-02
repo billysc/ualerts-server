@@ -21,6 +21,7 @@ package org.ualerts.fixed.web.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.ualerts.fixed.web.dto.FixtureDTO;
+import org.ualerts.fixed.web.service.FixtureService;
 import org.ualerts.fixed.web.util.FakeHttpServletRequest;
 import org.ualerts.fixed.web.util.FakeHttpServletResponse;
 
@@ -43,6 +45,8 @@ import org.ualerts.fixed.web.util.FakeHttpServletResponse;
  */
 @Controller
 public class ManuallyEnrollFixtureController {
+  
+  private FixtureService fixtureService;
   
   @RequestMapping(value = "/enrollment", method = RequestMethod.GET)
   public String displayForm(Model model) {
@@ -63,6 +67,10 @@ public class ManuallyEnrollFixtureController {
       responseData.put("success", false);
       FakeHttpServletRequest wRequest = new FakeHttpServletRequest(request, "text/html");
       responseData.put("html", getHtmlOutput("enrollment", wRequest, response));
+    } else {
+      fixtureService.createFixture(fixture);
+      responseData.put("success", true);
+      responseData.put("fixture", fixture);
     }
     
     return responseData;
@@ -93,6 +101,15 @@ public class ManuallyEnrollFixtureController {
     }
     
     return data;
+  }
+  
+  /**
+   * Sets the {@code fixtureService} property.
+   * @param fixtureService the value to set
+   */
+  @Resource
+  public void setFixtureService(FixtureService fixtureService) {
+    this.fixtureService = fixtureService;
   }
   
 }
