@@ -42,16 +42,16 @@ import org.ualerts.fixed.web.util.FakeHttpServletResponse;
  */
 @Controller
 public class ManuallyEnrollFixtureController {
-
-  @RequestMapping(value="/enrollment", method=RequestMethod.GET)
+  
+  @RequestMapping(value = "/enrollment", method = RequestMethod.GET)
   public String displayForm(Model model) {
     model.addAttribute("fixture", new FixtureDTO());
     return "enrollment/manualForm";
   }
   
   @ResponseBody
-  @RequestMapping(value="/enrollment", method=RequestMethod.POST, 
-    produces={"application/json", "application/xml"})
+  @RequestMapping(value = "/enrollment", method = RequestMethod.POST, 
+    produces = {"application/json", "application/xml"})
   public Map<String, Object> handleFormSubmission(HttpServletRequest request,
       HttpServletResponse response,
       @Valid FixtureDTO fixture,
@@ -64,22 +64,21 @@ public class ManuallyEnrollFixtureController {
       responseData.put("html", getHtmlOutput("enrollment", wRequest, response));
     }
     
-    System.out.println("Submitted building " + fixture.getBuilding());
     return responseData;
   }
   
-  @RequestMapping(value="/enrollment", method=RequestMethod.POST, 
-      produces={"text/html"})
+  @RequestMapping(value = "/enrollment", method = RequestMethod.POST, 
+    produces = {"text/html"})
   public String handleFormSubmission_html(@Valid FixtureDTO fixture,
       BindingResult bindingResult, Model model) {
-    if (bindingResult.hasErrors())
-      System.out.println("Detecting errors in html version");
+    
     model.addAttribute("fixture", fixture);
     return "enrollment/manualForm";
   }
   
   private String getHtmlOutput(String route, HttpServletRequest request, 
       HttpServletResponse response) {
+    
     FakeHttpServletResponse wResponse = new FakeHttpServletResponse(response);
     String data;
     try {
