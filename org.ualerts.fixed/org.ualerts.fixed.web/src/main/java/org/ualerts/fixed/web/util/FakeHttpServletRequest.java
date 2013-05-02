@@ -49,12 +49,9 @@ public class FakeHttpServletRequest extends HttpServletRequestWrapper {
    */
   @Override
   public String getHeader(String name) {
-    System.out.println("Asking for header " + name);
     if (name.equals("Accept")) {
-      System.out.println("Returning " + acceptsMime);
       return acceptsMime;
     }
-    System.out.println("Returning " + super.getHeader(name));
     return super.getHeader(name);
   }
   
