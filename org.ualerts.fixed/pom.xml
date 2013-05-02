@@ -39,5 +39,6 @@
 	</properties>
 	<modules>
 		<module>org.ualerts.fixed.service</module>
+		<module>org.ualerts.fixed.web</module>
 	</modules>
 </project>
