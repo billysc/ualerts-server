@@ -1,5 +1,10 @@
 
 $(function() {
+	
+	$.ajaxSetup({
+		cache: false
+	});
+	
 	$(".modalTrigger").click(function(evt) {
 		evt.stopPropagation();
 		var $this = $(this);
@@ -10,8 +15,9 @@ $(function() {
 		var cancelButtonText = $this.data("cancelbuttontext");
 		
 		var opts = {};
-		if (typeof remote != "undefined")
+		if (typeof remote != "undefined") {
 			opts.remote = remote;
+		}
 		
 		//Remove any lingering click handlers
 		var $primaryButton = $target.find(".btn-primary").unbind("click");
@@ -34,6 +40,11 @@ $(function() {
 			window[fn]($target);
 		}
 		
+		// Destroy the modal when closed to force URL fetch
+		$target.on('hidden', function() {
+			$(this).removeData('modal');
+		});
+		
 		return false;
 	});
 });
@@ -41,6 +52,7 @@ $(function() {
 function submitForm($form, url, requestType, responseType, successCallback, errorCallback) {
 	$.ajax({
 		url: url,
+		cache: false,
 		data: $form.serialize(),
 		type: requestType,
 		dataType: responseType,
