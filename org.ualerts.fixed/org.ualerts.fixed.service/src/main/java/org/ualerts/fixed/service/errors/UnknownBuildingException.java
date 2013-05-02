@@ -1,5 +1,5 @@
 /*
- * File created on May 1, 2013 
+ * File created on May 2, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -16,26 +16,23 @@
  * limitations under the License.
  *
  */
-package org.ualerts.fixed.service;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+package org.ualerts.fixed.service.errors;
 
 /**
- * Annotation used by commands to ensure they are properly instantiated
- * and initialized.  ALL commands should be annotated with this.
+ * Validation exception for an unknown building.
  *
- * @author Brian Early
+ * @author earlyb
  */
+public class UnknownBuildingException
+    extends AbstractValidationException {
+  private static final long serialVersionUID = 6797205852027325401L;
 
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Scope("prototype")
-@Component
-public @interface CommandComponent {
+  /**
+   * Constructs a new instance.
+   */
+  public UnknownBuildingException() {
+    super("ualerts.fixed.validation.unknownBuilding");
+  }
+
 }

@@ -31,6 +31,11 @@ public class EntityNotFoundException extends Exception {
   private final Class<?> entityClass;
   private final Serializable id;
   
+  /**
+   * Constructs a new instance.
+   * @param entityClass the entity class
+   * @param id the ID of the entity.
+   */
   public EntityNotFoundException(Class<?> entityClass, Serializable id) {
     super("entity of type " + entityClass.getCanonicalName() + " with ID " 
         + id + " does not exist");
@@ -40,6 +45,7 @@ public class EntityNotFoundException extends Exception {
 
   /**
    * Gets the {@code id} property.
+   * @return the entity ID
    */
   public Serializable getId() {
     return id;
@@ -47,6 +53,7 @@ public class EntityNotFoundException extends Exception {
 
   /**
    * Gets the {@code entityClass} property.
+   * @return the entity class
    */
   public Class<?> getEntityClass() {
     return entityClass;

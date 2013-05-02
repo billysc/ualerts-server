@@ -1,5 +1,5 @@
 /*
- * File created on May 1, 2013 
+ * File created on May 2, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -16,18 +16,18 @@
  * limitations under the License.
  *
  */
-package org.ualerts.fixed.service;
+
+package org.ualerts.fixed.service.errors;
 
 /**
- * Exception that indicates the requested action was invalid, likely
- * due to incorrect input or conditions.
+ * Defines API for a validation error.
  *
- * @author Brian Early
+ * @author earlyb
  */
-public class InvalidRequestException extends Exception {
-  private static final long serialVersionUID = 1L;
-
-  public InvalidRequestException(String message) {
-    super(message);
-  }
+public interface ValidationError {
+  /**
+   * Returns the message property name of the error.
+   * @return the message property name
+   */
+  String getMessageProperty();
 }

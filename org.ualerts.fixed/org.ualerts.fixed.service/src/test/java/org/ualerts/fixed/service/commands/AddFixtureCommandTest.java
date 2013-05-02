@@ -33,7 +33,13 @@ import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.PositionHint;
 import org.ualerts.fixed.Room;
 import org.ualerts.fixed.repository.FixedRepository;
-import org.ualerts.fixed.service.InvalidRequestException;
+import org.ualerts.fixed.service.errors.InventoryNumberConflictException;
+import org.ualerts.fixed.service.errors.LocationConflictException;
+import org.ualerts.fixed.service.errors.MacAddressConflictException;
+import org.ualerts.fixed.service.errors.MissingFieldException;
+import org.ualerts.fixed.service.errors.SerialNumberConflictException;
+import org.ualerts.fixed.service.errors.UnknownBuildingException;
+import org.ualerts.fixed.service.errors.ValidationErrorCollection;
 
 /**
  * Unit tests for {@link AddFixtureCommand}.
@@ -66,197 +72,462 @@ public class AddFixtureCommandTest {
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   * Test method for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidate() throws Exception {
     final Building building = new Building();
     building.setId("buildingId");
+    final Room room = new Room();
+    room.setId(1L);
+    final PositionHint hint = new PositionHint();
+    hint.setId(2L);
     populateCommand(command);
-    context.checking(new Expectations() {{
+    context.checking(new Expectations() { {
       oneOf(repository).findBuildingByName("buildingName");
       will(returnValue(building));
-      oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
-      will(returnValue(null));
       oneOf(repository).findAssetBySerialNumber("serialNumber");
+      will(returnValue(null));
+      oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
       will(returnValue(null));
       oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
       will(returnValue(null));
       oneOf(repository).findRoom("buildingId", "roomNumber");
-      will(returnValue(null));
+      will(returnValue(room));
       oneOf(repository).findHint("hint");
+      will(returnValue(hint));
+      oneOf(repository).findFixtureByLocation(1L, 2L);
       will(returnValue(null));
-    }});
+    } });
     command.onValidate();
     context.assertIsSatisfied();
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with missing building.
-   */
-  @Test(expected = InvalidRequestException.class)
-  public void testOnValidateBlankBuilding() throws Exception {
-    populateCommand(command);
-    command.setBuildingName(null);
-    command.onValidate();
-  }
-
-  /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with missing inventory number.
-   */
-  @Test(expected = InvalidRequestException.class)
-  public void testOnValidateBlankInventory() throws Exception {
-    populateCommand(command);
-    command.setInventoryNumber(null);
-    command.onValidate();
-  }
-
-  /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with missing IP address.
-   */
-  @Test(expected = InvalidRequestException.class)
-  public void testOnValidateBlankIpAddress() throws Exception {
-    populateCommand(command);
-    command.setInetAddress(null);
-    command.onValidate();
-  }
-
-  /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with missing MAC address.
-   */
-  @Test(expected = InvalidRequestException.class)
-  public void testOnValidateBlankMacAddress() throws Exception {
-    populateCommand(command);
-    command.setMacAddress(null);
-    command.onValidate();
-  }
-
-  /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with missing position hint.
-   */
-  @Test(expected = InvalidRequestException.class)
-  public void testOnValidateBlankPositionHint() throws Exception {
-    populateCommand(command);
-    command.setPositionHint(null);
-    command.onValidate();
-  }
-
-  /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with missing room.
-   */
-  @Test(expected = InvalidRequestException.class)
-  public void testOnValidateBlankRoom() throws Exception {
-    populateCommand(command);
-    command.setRoomNumber(null);
-    command.onValidate();
-  }
-
-  /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with missing serial number.
-   */
-  @Test(expected = InvalidRequestException.class)
-  public void testOnValidateBlankSerialNumber() throws Exception {
-    populateCommand(command);
-    command.setSerialNumber(null);
-    command.onValidate();
-  }
-
-  /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with a bad building ID.
+   * Test method with missing building for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test
-  public void testOnValidateBadBuildingId() throws Exception {
+  public void testOnValidateBlankBuilding() throws Exception {
     try {
       populateCommand(command);
-      context.checking(new Expectations() {{
-        oneOf(repository).findBuildingByName("buildingName");
+      command.setBuildingName(null);
+      context.checking(new Expectations() { {
+        oneOf(repository).findAssetBySerialNumber("serialNumber");
         will(returnValue(null));
-      }});
+        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        will(returnValue(null));
+        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        will(returnValue(null));
+      } });
       command.onValidate();
       assertTrue(false);
     }
-    catch (InvalidRequestException ex) {
+    catch (ValidationErrorCollection ex) {
       context.assertIsSatisfied();
+      assertTrue(ex.getErrors().size() == 1);
+      assertTrue(((MissingFieldException) ex.getErrors().get(0)).
+          getFieldName().equals("buildingName"));
     }
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with an inventory number conflict.
+   * Test method with missing inventory number for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   */
+  @Test
+  public void testOnValidateBlankInventory() throws Exception {
+    final Building building = new Building();
+    building.setId("buildingId");
+    final Room room = new Room();
+    room.setId(1L);
+    final PositionHint hint = new PositionHint();
+    hint.setId(2L);
+    try {
+      populateCommand(command);
+      command.setInventoryNumber(null);
+      context.checking(new Expectations() { {
+        oneOf(repository).findBuildingByName("buildingName");
+        will(returnValue(building));
+        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        will(returnValue(null));
+        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        will(returnValue(null));
+        oneOf(repository).findRoom("buildingId", "roomNumber");
+        will(returnValue(room));
+        oneOf(repository).findHint("hint");
+        will(returnValue(hint));
+        oneOf(repository).findFixtureByLocation(1L, 2L);
+        will(returnValue(null));
+      } });
+      command.onValidate();
+      assertTrue(false);
+    }
+    catch (ValidationErrorCollection ex) {
+      context.assertIsSatisfied();
+      assertTrue(ex.getErrors().size() == 1);
+      assertTrue(((MissingFieldException) ex.getErrors().get(0)).
+          getFieldName().equals("inventoryNumber"));
+    }
+  }
+
+  /**
+   * Test method with missing IP address for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   */
+  @Test
+  public void testOnValidateBlankIpAddress() throws Exception {
+    final Building building = new Building();
+    building.setId("buildingId");
+    final Room room = new Room();
+    room.setId(1L);
+    final PositionHint hint = new PositionHint();
+    hint.setId(2L);
+    try {
+      populateCommand(command);
+      command.setInetAddress(null);
+      context.checking(new Expectations() { {
+        oneOf(repository).findBuildingByName("buildingName");
+        will(returnValue(building));
+        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        will(returnValue(null));
+        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        will(returnValue(null));
+        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        will(returnValue(null));
+        oneOf(repository).findRoom("buildingId", "roomNumber");
+        will(returnValue(room));
+        oneOf(repository).findHint("hint");
+        will(returnValue(hint));
+        oneOf(repository).findFixtureByLocation(1L, 2L);
+        will(returnValue(null));
+      } });
+      command.onValidate();
+      assertTrue(false);
+    }
+    catch (ValidationErrorCollection ex) {
+      context.assertIsSatisfied();
+      assertTrue(ex.getErrors().size() == 1);
+      assertTrue(((MissingFieldException) ex.getErrors().get(0)).
+          getFieldName().equals("inetAddress"));
+    }
+  }
+
+  /**
+   * Test method with missing MAC address for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   */
+  @Test
+  public void testOnValidateBlankMacAddress() throws Exception {
+    final Building building = new Building();
+    building.setId("buildingId");
+    final Room room = new Room();
+    room.setId(1L);
+    final PositionHint hint = new PositionHint();
+    hint.setId(2L);
+    try {
+      populateCommand(command);
+      command.setMacAddress(null);
+      context.checking(new Expectations() { {
+        oneOf(repository).findBuildingByName("buildingName");
+        will(returnValue(building));
+        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        will(returnValue(null));
+        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        will(returnValue(null));
+        oneOf(repository).findRoom("buildingId", "roomNumber");
+        will(returnValue(room));
+        oneOf(repository).findHint("hint");
+        will(returnValue(hint));
+        oneOf(repository).findFixtureByLocation(1L, 2L);
+        will(returnValue(null));
+      } });
+      command.onValidate();
+      assertTrue(false);
+    }
+    catch (ValidationErrorCollection ex) {
+      context.assertIsSatisfied();
+      assertTrue(ex.getErrors().size() == 1);
+      assertTrue(((MissingFieldException) ex.getErrors().get(0)).
+          getFieldName().equals("macAddress"));
+    }
+  }
+
+  /**
+   * Test method with missing position hint for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   */
+  @Test
+  public void testOnValidateBlankPositionHint() throws Exception {
+    final Building building = new Building();
+    building.setId("buildingId");
+    final Room room = new Room();
+    room.setId(1L);
+    final PositionHint hint = new PositionHint();
+    hint.setId(2L);
+    try {
+      populateCommand(command);
+      command.setPositionHint(null);
+      context.checking(new Expectations() { {
+        oneOf(repository).findBuildingByName("buildingName");
+        will(returnValue(building));
+        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        will(returnValue(null));
+        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        will(returnValue(null));
+        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        will(returnValue(null));
+      } });
+      command.onValidate();
+      assertTrue(false);
+    }
+    catch (ValidationErrorCollection ex) {
+      context.assertIsSatisfied();
+      assertTrue(ex.getErrors().size() == 1);
+      assertTrue(((MissingFieldException) ex.getErrors().get(0)).
+          getFieldName().equals("positionHint"));
+    }
+  }
+
+  /**
+   * Test method with missing room for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   */
+  @Test
+  public void testOnValidateBlankRoom() throws Exception {
+    final Building building = new Building();
+    building.setId("buildingId");
+    final Room room = new Room();
+    room.setId(1L);
+    final PositionHint hint = new PositionHint();
+    hint.setId(2L);
+    try {
+      populateCommand(command);
+      command.setRoomNumber(null);
+      context.checking(new Expectations() { {
+        oneOf(repository).findBuildingByName("buildingName");
+        will(returnValue(building));
+        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        will(returnValue(null));
+        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        will(returnValue(null));
+        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        will(returnValue(null));
+      } });
+      command.onValidate();
+      assertTrue(false);
+    }
+    catch (ValidationErrorCollection ex) {
+      context.assertIsSatisfied();
+      assertTrue(ex.getErrors().size() == 1);
+      assertTrue(((MissingFieldException) ex.getErrors().get(0)).
+          getFieldName().equals("roomNumber"));
+    }
+  }
+
+  /**
+   * Test method with missing serial number for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   */
+  @Test
+  public void testOnValidateBlankSerialNumber() throws Exception {
+    final Building building = new Building();
+    building.setId("buildingId");
+    final Room room = new Room();
+    room.setId(1L);
+    final PositionHint hint = new PositionHint();
+    hint.setId(2L);
+    try {
+      populateCommand(command);
+      command.setSerialNumber(null);
+      context.checking(new Expectations() { {
+        oneOf(repository).findBuildingByName("buildingName");
+        will(returnValue(building));
+        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        will(returnValue(null));
+        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        will(returnValue(null));
+        oneOf(repository).findRoom("buildingId", "roomNumber");
+        will(returnValue(room));
+        oneOf(repository).findHint("hint");
+        will(returnValue(hint));
+        oneOf(repository).findFixtureByLocation(1L, 2L);
+        will(returnValue(null));
+      } });
+      command.onValidate();
+      assertTrue(false);
+    }
+    catch (ValidationErrorCollection ex) {
+      context.assertIsSatisfied();
+      assertTrue(ex.getErrors().size() == 1);
+      assertTrue(((MissingFieldException) ex.getErrors().get(0)).
+          getFieldName().equals("serialNumber"));
+    }
+  }
+
+  /**
+   * Test method with a bad building name for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   */
+  @Test
+  public void testOnValidateBadBuildingName() throws Exception {
+    final Room room = new Room();
+    room.setId(1L);
+    final PositionHint hint = new PositionHint();
+    hint.setId(2L);
+    try {
+      populateCommand(command);
+      context.checking(new Expectations() { {
+        oneOf(repository).findBuildingByName("buildingName");
+        will(returnValue(null));
+        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        will(returnValue(null));
+        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        will(returnValue(null));
+        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        will(returnValue(null));
+      } });
+      command.onValidate();
+      assertTrue(false);
+    }
+    catch (ValidationErrorCollection ex) {
+      context.assertIsSatisfied();
+      assertTrue(ex.getErrors().size() == 1);
+      assertTrue(ex.getErrors().get(0).getClass().
+          equals(UnknownBuildingException.class));
+    }
+  }
+
+  /**
+   * Test method with an inventory number conflict for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateInventoryNumberConflict() throws Exception {
     final Building building = new Building();
+    building.setId("buildingId");
     final Asset asset = new Asset();
+    final Room room = new Room();
+    room.setId(1L);
+    final PositionHint hint = new PositionHint();
+    hint.setId(2L);
     try {
       populateCommand(command);
-      context.checking(new Expectations() {{
+      context.checking(new Expectations() { {
         oneOf(repository).findBuildingByName("buildingName");
         will(returnValue(building));
+        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        will(returnValue(null));
         oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(asset));
-      }});
+        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        will(returnValue(null));
+        oneOf(repository).findRoom("buildingId", "roomNumber");
+        will(returnValue(room));
+        oneOf(repository).findHint("hint");
+        will(returnValue(hint));
+        oneOf(repository).findFixtureByLocation(1L, 2L);
+        will(returnValue(null));
+      } });
       command.onValidate();
       assertTrue(false);
     }
-    catch (InvalidRequestException ex) {
+    catch (ValidationErrorCollection ex) {
       context.assertIsSatisfied();
+      assertTrue(ex.getErrors().size() == 1);
+      assertTrue(ex.getErrors().get(0).getClass()
+          .equals(InventoryNumberConflictException.class));
     }
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with a serial number conflict.
+   * Test method with a serial number conflict for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateSerialNumberConflict() throws Exception {
     final Building building = new Building();
+    building.setId("buildingId");
     final Asset asset = new Asset();
+    final Room room = new Room();
+    room.setId(1L);
+    final PositionHint hint = new PositionHint();
+    hint.setId(2L);
     try {
       populateCommand(command);
-      context.checking(new Expectations() {{
+      context.checking(new Expectations() { {
         oneOf(repository).findBuildingByName("buildingName");
         will(returnValue(building));
-        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
-        will(returnValue(null));
         oneOf(repository).findAssetBySerialNumber("serialNumber");
         will(returnValue(asset));
-      }});
+        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        will(returnValue(null));
+        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        will(returnValue(null));
+        oneOf(repository).findRoom("buildingId", "roomNumber");
+        will(returnValue(room));
+        oneOf(repository).findHint("hint");
+        will(returnValue(hint));
+        oneOf(repository).findFixtureByLocation(1L, 2L);
+        will(returnValue(null));
+      } });
       command.onValidate();
       assertTrue(false);
     }
-    catch (InvalidRequestException ex) {
+    catch (ValidationErrorCollection ex) {
       context.assertIsSatisfied();
+      assertTrue(ex.getErrors().size() == 1);
+      assertTrue(ex.getErrors().get(0).getClass()
+          .equals(SerialNumberConflictException.class));
     }
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with a MAC address conflict.
+   * Test method with a MAC address conflict for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateMacAddressConflict() throws Exception {
     final Building building = new Building();
+    building.setId("buildingId");
     final Asset asset = new Asset();
+    final Room room = new Room();
+    room.setId(1L);
+    final PositionHint hint = new PositionHint();
+    hint.setId(2L);
     try {
       populateCommand(command);
-      context.checking(new Expectations() {{
+      context.checking(new Expectations() { {
         oneOf(repository).findBuildingByName("buildingName");
         will(returnValue(building));
-        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
-        will(returnValue(null));
         oneOf(repository).findAssetBySerialNumber("serialNumber");
+        will(returnValue(null));
+        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(null));
         oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
         will(returnValue(asset));
-      }});
+        oneOf(repository).findRoom("buildingId", "roomNumber");
+        will(returnValue(room));
+        oneOf(repository).findHint("hint");
+        will(returnValue(hint));
+        oneOf(repository).findFixtureByLocation(1L, 2L);
+        will(returnValue(null));
+      } });
       command.onValidate();
       assertTrue(false);
     }
-    catch (InvalidRequestException ex) {
+    catch (ValidationErrorCollection ex) {
       context.assertIsSatisfied();
+      assertTrue(ex.getErrors().size() == 1);
+      assertTrue(ex.getErrors().get(0).getClass()
+          .equals(MacAddressConflictException.class));
     }
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()} with a location conflict.
+   * Test method with a location conflict for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateLocationConflict() throws Exception {
@@ -269,12 +540,12 @@ public class AddFixtureCommandTest {
     final Fixture fixture = new Fixture();
     try {
       populateCommand(command);
-      context.checking(new Expectations() {{
+      context.checking(new Expectations() { {
         oneOf(repository).findBuildingByName("buildingName");
         will(returnValue(building));
-        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
-        will(returnValue(null));
         oneOf(repository).findAssetBySerialNumber("serialNumber");
+        will(returnValue(null));
+        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(null));
         oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
         will(returnValue(null));
@@ -284,17 +555,21 @@ public class AddFixtureCommandTest {
         will(returnValue(hint));
         oneOf(repository).findFixtureByLocation(1L, 2L);
         will(returnValue(fixture));
-     }});
+      } });
       command.onValidate();
       assertTrue(false);
     }
-    catch (InvalidRequestException ex) {
+    catch (ValidationErrorCollection ex) {
       context.assertIsSatisfied();
+      assertTrue(ex.getErrors().size() == 1);
+      assertTrue(ex.getErrors().get(0).getClass()
+          .equals(LocationConflictException.class));
     }
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onExecute()}.
+   * Test method for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecute() throws Exception {
@@ -304,7 +579,7 @@ public class AddFixtureCommandTest {
     final PositionHint positionHint = new PositionHint();
     populateCommand(command);
 
-    context.checking(new Expectations() {{
+    context.checking(new Expectations() { {
       oneOf(repository).findBuildingByName("buildingName");
       will(returnValue(building));
       oneOf(repository).findRoom("buildingId", "roomNumber");
@@ -313,14 +588,15 @@ public class AddFixtureCommandTest {
       will(returnValue(positionHint));
       oneOf(repository).addAsset(with(any(Asset.class)));
       oneOf(repository).addFixture(with(any(Fixture.class)));
-    }});
+    } });
     Fixture result = command.onExecute();
     context.assertIsSatisfied();
     assertTrue(result.getIpAddress().equals("127.0.0.1"));
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onExecute()} that creates a new room.
+   * Test method creating a new room for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecuteCreateNewRoom() throws Exception {
@@ -329,7 +605,7 @@ public class AddFixtureCommandTest {
     final PositionHint positionHint = new PositionHint();
     populateCommand(command);
 
-    context.checking(new Expectations() {{
+    context.checking(new Expectations() { {
       oneOf(repository).findBuildingByName("buildingName");
       will(returnValue(building));
       oneOf(repository).findRoom("buildingId", "roomNumber");
@@ -339,13 +615,14 @@ public class AddFixtureCommandTest {
       will(returnValue(positionHint));
       oneOf(repository).addAsset(with(any(Asset.class)));
       oneOf(repository).addFixture(with(any(Fixture.class)));
-    }});
+    } });
     command.onExecute();
     context.assertIsSatisfied();
   }
 
   /**
-   * Test method for {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onExecute()} that creates a new position hint.
+   * Test method creating a new position hint for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecuteCreateNewPositionHint() throws Exception {
@@ -354,7 +631,7 @@ public class AddFixtureCommandTest {
     final Room room = new Room();
     populateCommand(command);
 
-    context.checking(new Expectations() {{
+    context.checking(new Expectations() { {
       oneOf(repository).findBuildingByName("buildingName");
       will(returnValue(building));
       oneOf(repository).findRoom("buildingId", "roomNumber");
@@ -364,7 +641,7 @@ public class AddFixtureCommandTest {
       oneOf(repository).addPositionHint(with(any(PositionHint.class)));
       oneOf(repository).addAsset(with(any(Asset.class)));
       oneOf(repository).addFixture(with(any(Fixture.class)));
-    }});
+    } });
     command.onExecute();
     context.assertIsSatisfied();
   }
