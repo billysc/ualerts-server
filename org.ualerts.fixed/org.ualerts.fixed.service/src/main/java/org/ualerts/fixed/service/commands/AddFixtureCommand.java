@@ -22,16 +22,16 @@ import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ualerts.fixed.domain.Asset;
-import org.ualerts.fixed.domain.Building;
-import org.ualerts.fixed.domain.Fixture;
-import org.ualerts.fixed.domain.PositionHint;
-import org.ualerts.fixed.domain.Room;
+import org.ualerts.fixed.Asset;
+import org.ualerts.fixed.Building;
+import org.ualerts.fixed.Fixture;
+import org.ualerts.fixed.InetAddress;
+import org.ualerts.fixed.MacAddress;
+import org.ualerts.fixed.PositionHint;
+import org.ualerts.fixed.Room;
 import org.ualerts.fixed.repository.FixedRepository;
 import org.ualerts.fixed.service.CommandComponent;
-import org.ualerts.fixed.service.InetAddress;
 import org.ualerts.fixed.service.InvalidRequestException;
-import org.ualerts.fixed.service.MacAddress;
 
 /**
  * Command to add a fixture to the UAlerts system.

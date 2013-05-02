@@ -16,58 +16,61 @@
  * limitations under the License.
  *
  */
-package org.ualerts.fixed.domain;
+package org.ualerts.fixed;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import java.io.Serializable;
+
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 
 /**
- * A read-only entity representing a building.
+ * An abstract base for entity classes.
  *
  * @author Brian Early
  */
-@Entity
-@Table(name = "building")
-@org.hibernate.annotations.Immutable
-public class Building {
+@MappedSuperclass
+public abstract class AbstractEntity implements Serializable {
 
-  private String id;
-  private String name;
-  
+  private static final long serialVersionUID = 4491603735551124098L;
+
+  private Long id;
+  private Long version;
+
   /**
    * Gets the {@code id} property.
    * @return property value
    */
   @Id
-  public String getId() {
+  @GeneratedValue
+  public Long getId() {
     return id;
   }
-  
+
   /**
    * Sets the {@code id} property.
    * @param id property value to set
    */
-  public void setId(String id) {
+  public void setId(Long id) {
     this.id = id;
   }
-  
+
   /**
-   * Gets the {@code name} property.
+   * Gets the {@code version} property.
    * @return property value
    */
-  @Column(name = "name")
-  public String getName() {
-    return name;
+  @Version
+  public Long getVersion() {
+    return version;
   }
-  
+
   /**
-   * Sets the {@code name} property.
-   * @param name property value to set
+   * Sets the {@code version} property.
+   * @param version property value to set
    */
-  public void setName(String name) {
-    this.name = name;
+  public void setVersion(Long version) {
+    this.version = version;
   }
 
   /**
@@ -84,9 +87,9 @@ public class Building {
    */
   @Override
   public boolean equals(Object obj) {
-    if (!(obj instanceof Building)) return false;
+    if (!(obj instanceof AbstractEntity)) return false;
     if (this.id == null) return false;
-    return this.id.equals(((Building) obj).id);
+    return this.id.equals(((AbstractEntity) obj).id);
   }
 
 }
