@@ -28,6 +28,7 @@ import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -69,10 +70,10 @@ public class ManuallyEnrollFixtureController {
   
   @RequestMapping(value = "/enrollment", method = RequestMethod.POST, 
     produces = {"text/html"})
-  public String handleFormSubmission_html(@Valid FixtureDTO fixture,
-      BindingResult bindingResult, Model model) {
+  public String handleFormSubmission_html( 
+      @ModelAttribute("fixture") @Valid FixtureDTO fixture,
+      BindingResult result) {
     
-    model.addAttribute("fixture", fixture);
     return "enrollment/manualForm";
   }
   
