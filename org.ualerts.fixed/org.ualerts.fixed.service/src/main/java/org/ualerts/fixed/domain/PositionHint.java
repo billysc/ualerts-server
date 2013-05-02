@@ -23,26 +23,29 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * Entity representing a position hint.
+ * An entity representing a position hint.
  *
  * @author Brian Early
  */
 @Entity
 @Table(name = "Position_Hint")
 public class PositionHint extends AbstractEntity {
+
   private static final long serialVersionUID = 626731060336569077L;
   private String hintText;
 
   /**
    * Gets the {@code hintText} property.
+   * @return property value
    */
-  @Column(name = "hint_text", length=20)
+  @Column(name = "hint_text")
   public String getHintText() {
     return hintText;
   }
 
   /**
    * Sets the {@code hintText} property.
+   * @param hintText property value to set
    */
   public void setHintText(String hintText) {
     this.hintText = hintText;

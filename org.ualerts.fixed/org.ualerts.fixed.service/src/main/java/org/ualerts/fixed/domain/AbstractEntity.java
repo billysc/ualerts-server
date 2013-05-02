@@ -32,6 +32,7 @@ import javax.persistence.Version;
  */
 @MappedSuperclass
 public abstract class AbstractEntity implements Serializable {
+
   private static final long serialVersionUID = 4491603735551124098L;
 
   private Long id;
@@ -39,6 +40,7 @@ public abstract class AbstractEntity implements Serializable {
 
   /**
    * Gets the {@code id} property.
+   * @return property value
    */
   @Id
   @GeneratedValue
@@ -48,6 +50,7 @@ public abstract class AbstractEntity implements Serializable {
 
   /**
    * Sets the {@code id} property.
+   * @param id property value to set
    */
   public void setId(Long id) {
     this.id = id;
@@ -55,6 +58,7 @@ public abstract class AbstractEntity implements Serializable {
 
   /**
    * Gets the {@code version} property.
+   * @return property value
    */
   @Version
   public Long getVersion() {
@@ -63,13 +67,14 @@ public abstract class AbstractEntity implements Serializable {
 
   /**
    * Sets the {@code version} property.
+   * @param version property value to set
    */
   public void setVersion(Long version) {
     this.version = version;
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public int hashCode() {
@@ -78,7 +83,7 @@ public abstract class AbstractEntity implements Serializable {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public boolean equals(Object obj) {

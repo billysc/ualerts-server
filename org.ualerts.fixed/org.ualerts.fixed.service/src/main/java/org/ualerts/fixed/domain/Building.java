@@ -32,11 +32,13 @@ import javax.persistence.Table;
 @Table(name = "building")
 @org.hibernate.annotations.Immutable
 public class Building {
+
   private String id;
   private String name;
   
   /**
    * Gets the {@code id} property.
+   * @return property value
    */
   @Id
   public String getId() {
@@ -45,6 +47,7 @@ public class Building {
   
   /**
    * Sets the {@code id} property.
+   * @param id property value to set
    */
   public void setId(String id) {
     this.id = id;
@@ -52,6 +55,7 @@ public class Building {
   
   /**
    * Gets the {@code name} property.
+   * @return property value
    */
   @Column(name = "name")
   public String getName() {
@@ -60,13 +64,14 @@ public class Building {
   
   /**
    * Sets the {@code name} property.
+   * @param name property value to set
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public int hashCode() {
@@ -75,7 +80,7 @@ public class Building {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public boolean equals(Object obj) {

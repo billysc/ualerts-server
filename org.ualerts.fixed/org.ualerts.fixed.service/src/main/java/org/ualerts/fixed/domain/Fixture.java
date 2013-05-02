@@ -30,14 +30,15 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 /**
- * Entity representing a specific ualerts fixture.
+ * Entity representing a specific alerting fixture.
  *
  * @author Brian Early
  */
 @Entity
-@Table(name = "Fixture", uniqueConstraints=
-       @UniqueConstraint(columnNames = {"room_id", "position_hint_id"}))
+@Table(name = "Fixture", uniqueConstraints =
+       @UniqueConstraint(columnNames = { "room_id", "position_hint_id" }))
 public class Fixture extends AbstractEntity {
+
   private static final long serialVersionUID = -7583794853410644355L;
   private Asset asset;
   private Room room;
@@ -48,6 +49,7 @@ public class Fixture extends AbstractEntity {
   
   /**
    * Gets the {@code asset} property.
+   * @return property value
    */
   @OneToOne(optional = false, fetch = FetchType.EAGER)
   public Asset getAsset() {
@@ -56,6 +58,7 @@ public class Fixture extends AbstractEntity {
   
   /**
    * Sets the {@code asset} property.
+   * @param asset the property value to set
    */
   public void setAsset(Asset asset) {
     this.asset = asset;
@@ -63,6 +66,7 @@ public class Fixture extends AbstractEntity {
   
   /**
    * Gets the {@code room} property.
+   * @return property value
    */
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "room_id")
@@ -72,6 +76,7 @@ public class Fixture extends AbstractEntity {
   
   /**
    * Sets the {@code room} property.
+   * @param room the property value to set
    */
   public void setRoom(Room room) {
     this.room = room;
@@ -79,6 +84,7 @@ public class Fixture extends AbstractEntity {
   
   /**
    * Gets the {@code positionHint} property.
+   * @return property value
    */
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "position_hint_id")
@@ -88,6 +94,7 @@ public class Fixture extends AbstractEntity {
   
   /**
    * Sets the {@code positionHint} property.
+   * @param positionHint the property value to set
    */
   public void setPositionHint(PositionHint positionHint) {
     this.positionHint = positionHint;
@@ -95,6 +102,7 @@ public class Fixture extends AbstractEntity {
   
   /**
    * Gets the {@code ipAddress} property.
+   * @return property value
    */
   @Column(name = "ip_address")
   public String getIpAddress() {
@@ -103,6 +111,7 @@ public class Fixture extends AbstractEntity {
   
   /**
    * Sets the {@code ipAddress} property.
+   * @param ipAddress the property value to set
    */
   public void setIpAddress(String ipAddress) {
     this.ipAddress = ipAddress;
@@ -110,6 +119,7 @@ public class Fixture extends AbstractEntity {
 
   /**
    * Gets the {@code dateCreated} property.
+   * @return property value
    */
   @Column(name = "date_created")
   public Date getDateCreated() {
@@ -118,6 +128,7 @@ public class Fixture extends AbstractEntity {
 
   /**
    * Sets the {@code dateCreated} property.
+   * @param dateCreated the property value to set
    */
   public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
@@ -125,6 +136,7 @@ public class Fixture extends AbstractEntity {
 
   /**
    * Gets the {@code dateModified} property.
+   * @return property value
    */
   @Column(name = "date_modified")
   public Date getDateModified() {
@@ -133,6 +145,7 @@ public class Fixture extends AbstractEntity {
 
   /**
    * Sets the {@code dateModified} property.
+   * @param dateModified the property value to set
    */
   public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
