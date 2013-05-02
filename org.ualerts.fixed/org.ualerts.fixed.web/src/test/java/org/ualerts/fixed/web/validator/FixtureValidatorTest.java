@@ -76,6 +76,7 @@ public class FixtureValidatorTest {
       oneOf(errors).rejectValue("ipAddress", MSG_PREFIX + "ipAddress.notValid");
     }});
     validator.validate(fixture, errors);
+    context.assertIsSatisfied();
   }
   
   @Test
@@ -86,6 +87,7 @@ public class FixtureValidatorTest {
       oneOf(errors).rejectValue("macAddress", MSG_PREFIX + "macAddress.notValid");
     }});
     validator.validate(fixture, errors);
+    context.assertIsSatisfied();
   }
   
   @Test
@@ -98,6 +100,7 @@ public class FixtureValidatorTest {
     validator.rejectIfEmpty(null, errors, key, msgProp);
     validator.rejectIfEmpty("", errors, key, msgProp);
     validator.rejectIfEmpty("should.go.through", errors, key, msgProp);
+    context.assertIsSatisfied();
   }
   
   private void setupFixture() {
