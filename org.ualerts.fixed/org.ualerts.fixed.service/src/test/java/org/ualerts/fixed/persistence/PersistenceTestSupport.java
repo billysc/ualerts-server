@@ -27,19 +27,34 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Static utility methods that provide support for unit testing persistence
  * classes.
  *
  * @author Carl Harris
  */
-public class PersistenceTestSupport {
+public final class PersistenceTestSupport {
 
+  /**
+   * The property name of the persistence unit.
+   */
   public static final String PERSISTENCE_UNIT_PROPERTY = "persistence.unit";
-  
+
+  /**
+   * The name of the persistence test properties file.
+   */
   public static final String PERSISTENCE_TEST_PROPERTIES = 
       "persistence-test.properties";
 
+  /**
+   * Constructs a new instance.
+   */
+  private PersistenceTestSupport() {
+    // Default constructor does nothing.
+  }
+  
   /**
    * Creates a new {@code EntityManagerFactory} configured using the 
    * properties specified in the given resource.
@@ -67,7 +82,8 @@ public class PersistenceTestSupport {
     catch (FileNotFoundException ex) {
       System.err.println("Cannot find resource '" 
           + propertiesResource + "' at the root of the classpath.");
-      System.err.println("Make sure the resource exists and try cleaning the project.");
+      System.err.println("Make sure the resource exists and "
+          + "try cleaning the project.");
       throw ex;
     }
     catch (PersistenceException ex) {
@@ -83,7 +99,7 @@ public class PersistenceTestSupport {
           inputStream.close();
         }
         catch (IOException ex) {
-          // oh, well
+          IOUtils.closeQuietly(inputStream);
         }
       }
     }

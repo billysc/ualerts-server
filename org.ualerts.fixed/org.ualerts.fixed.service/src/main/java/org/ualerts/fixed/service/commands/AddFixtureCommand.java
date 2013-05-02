@@ -41,7 +41,8 @@ import org.ualerts.fixed.service.InvalidRequestException;
 @CommandComponent
 public class AddFixtureCommand extends AbstractCommand<Fixture> {
   private String roomNumber;
-  private String buildingName; // TODO - This will change to buildingId in a future task
+  // TODO - This will change to buildingId in a future task
+  private String buildingName;
   private String positionHint;
   private InetAddress inetAddress;
   private String serialNumber;
@@ -92,8 +93,10 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
     Room room = repository.findRoom(building.getId(), roomNumber);
     PositionHint hint = repository.findHint(positionHint);
     if ((room != null) && (hint != null)) {
-      if (repository.findFixtureByLocation(room.getId(), hint.getId()) != null) {
-        throw new InvalidRequestException("Location (room & position hint) is already in use.");
+      if (repository.findFixtureByLocation(room.getId(),
+          hint.getId()) != null) {
+        throw new InvalidRequestException(
+            "Location (room & position hint) is already in use.");
       }
     }
   }
@@ -103,7 +106,6 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
    */
   @Override
   protected Fixture onExecute() throws Exception {
-    // TODO - Once we switch over to building Id, this fetch will be unnecessary.
     Building building = repository.findBuildingByName(buildingName);
     Room room = repository.findRoom(building.getId(), roomNumber);
     if (room == null) {
@@ -137,6 +139,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
 
   /**
    * Sets the {@code roomNumber} property.
+   * @param roomNumber the room number
    */
   public void setRoomNumber(String roomNumber) {
     this.roomNumber = roomNumber;
@@ -144,6 +147,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
 
   /**
    * Sets the {@code buildingName} property.
+   * @param buildingName the building name
    */
   public void setBuildingName(String buildingName) {
     this.buildingName = buildingName;
@@ -151,6 +155,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
 
   /**
    * Sets the {@code positionHint} property.
+   * @param positionHint the position hint
    */
   public void setPositionHint(String positionHint) {
     this.positionHint = positionHint;
@@ -158,6 +163,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
 
   /**
    * Sets the {@code inetAddress} property.
+   * @param inetAddress the Inet Address
    */
   public void setInetAddress(InetAddress inetAddress) {
     this.inetAddress = inetAddress;
@@ -165,6 +171,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
 
   /**
    * Sets the {@code serialNumber} property.
+   * @param serialNumber the serial number
    */
   public void setSerialNumber(String serialNumber) {
     this.serialNumber = serialNumber;
@@ -172,6 +179,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
 
   /**
    * Sets the {@code inventoryNumber} property.
+   * @param inventoryNumber the inventory number
    */
   public void setInventoryNumber(String inventoryNumber) {
     this.inventoryNumber = inventoryNumber;
@@ -179,6 +187,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
 
   /**
    * Sets the {@code macAddress} property.
+   * @param macAddress the MAC address
    */
   public void setMacAddress(MacAddress macAddress) {
     this.macAddress = macAddress;
@@ -186,6 +195,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
 
   /**
    * Sets the {@code repository} property.
+   * @param repository the fixed repository
    */
   @Autowired
   public void setRepository(FixedRepository repository) {

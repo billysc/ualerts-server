@@ -27,8 +27,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * Annotation used by commands to ensure they are properly instantiated and initialized.
- * ALL commands should be annotated with this.
+ * Annotation used by commands to ensure they are properly instantiated
+ * and initialized.  ALL commands should be annotated with this.
  *
  * @author Brian Early
  */

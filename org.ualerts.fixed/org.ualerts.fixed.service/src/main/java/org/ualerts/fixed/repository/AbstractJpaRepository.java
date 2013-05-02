@@ -24,8 +24,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 
 /**
- * Abstract base class for stand-alone JPA Repositories.  Takes care of auto-wiring
- * the entity manager and factory.
+ * Abstract base class for stand-alone JPA Repositories.  Takes care
+ * of auto-wiring the entity manager and factory.
  *
  * @author Brian Early
  */
@@ -35,6 +35,7 @@ public abstract class AbstractJpaRepository {
 
   /**
    * Sets the {@code entityManager} property.
+   * @param entityManager the entity manager
    */
   @PersistenceContext
   public void setEntityManager(EntityManager entityManager) {
@@ -43,6 +44,7 @@ public abstract class AbstractJpaRepository {
 
   /**
    * Gets the {@code entityManager} property.
+   * @return the entity manager
    */
   public EntityManager getEntityManager() {
     return entityManager;
@@ -50,6 +52,7 @@ public abstract class AbstractJpaRepository {
 
   /**
    * Gets the {@code entityManagerFactory} property.
+   * @return the entity manager factory
    */
   public EntityManagerFactory getEntityManagerFactory() {
     return entityManagerFactory;
@@ -57,9 +60,11 @@ public abstract class AbstractJpaRepository {
 
   /**
    * Sets the {@code entityManagerFactory} property.
+   * @param entityManagerFactory the entity manager factory
    */
   @PersistenceUnit
-  public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+  public void setEntityManagerFactory(
+      EntityManagerFactory entityManagerFactory) {
     this.entityManagerFactory = entityManagerFactory;
   }
 
