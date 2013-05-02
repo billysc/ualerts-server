@@ -11,6 +11,8 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>
       /WEB-INF/ualerts-fixed-core.xml
+      classpath:/spring/fixed-service-data.xml
+      classpath:/spring/fixed-service-service.xml
     </param-value>
   </context-param>
 
