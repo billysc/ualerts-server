@@ -19,8 +19,6 @@
 
 package org.ualerts.fixed.web.validator;
 
-import static org.springframework.validation.ValidationUtils.rejectIfEmpty;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -37,6 +35,8 @@ import org.ualerts.fixed.web.dto.FixtureDTO;
 @Component
 public class FixtureValidator implements Validator {
 
+  protected static final String MSG_PREFIX = "validation.fixture.";
+  
   /**
    * {@inheritDoc}
    */
@@ -50,22 +50,21 @@ public class FixtureValidator implements Validator {
    */
   @Override
   public void validate(Object obj, Errors errors) {
-    String errorPrefix = "validation.fixture.";
-    
-    rejectIfEmpty(errors, "building", errorPrefix + "building.empty");
-    rejectIfEmpty(errors, "room", errorPrefix + "room.empty");
-    rejectIfEmpty(errors, "positionHint", errorPrefix + "positionHint.empty");
-    rejectIfEmpty(errors, "serialNumber", errorPrefix + "serialNumber.empty");
-    rejectIfEmpty(errors, "ipAddress", errorPrefix + "ipAddress.empty");
-    rejectIfEmpty(errors, "macAddress", errorPrefix + "macAddress.empty");
-    
     FixtureDTO fixture = (FixtureDTO)obj;
+
+    rejectIfEmpty(fixture.getBuilding(), errors, "building", "building.empty");
+    rejectIfEmpty(fixture.getRoom(), errors, "room", "room.empty");
+    rejectIfEmpty(fixture.getPositionHint(), errors, "positionHint", "positionHint.empty");
+    rejectIfEmpty(fixture.getSerialNumber(), errors, "serialNumber", "serialNumber.empty");
+    rejectIfEmpty(fixture.getIpAddress(), errors, "ipAddress", "ipAddress.empty");
+    rejectIfEmpty(fixture.getMacAddress(), errors, "macAddress", "macAddress.empty");
+    
     if (StringUtils.isNotEmpty(fixture.getIpAddress())) {
       try {
         InetAddress address = InetAddress.getByAddress(fixture.getIpAddress());
         fixture.setIpAddressObj(address);
       } catch (Exception e) {
-        errors.rejectValue("ipAddress", errorPrefix + "ipAddress.notValid");
+        errors.rejectValue("ipAddress", MSG_PREFIX + "ipAddress.notValid");
       }
     }
     
@@ -74,10 +73,17 @@ public class FixtureValidator implements Validator {
         MacAddress address = new MacAddress(fixture.getMacAddress());
         fixture.setMacAddressObj(address);
       } catch (Exception e) {
-        errors.rejectValue("macAddress", errorPrefix + "macAddress.notValid");
+        errors.rejectValue("macAddress", MSG_PREFIX + "macAddress.notValid");
       }
     }
     
+  }
+  
+  protected void rejectIfEmpty(String value, Errors errors, String key, 
+      String msgProp) {
+
+    if (value == null || value.isEmpty())
+      errors.rejectValue(key, MSG_PREFIX + msgProp);
   }
     
 }
