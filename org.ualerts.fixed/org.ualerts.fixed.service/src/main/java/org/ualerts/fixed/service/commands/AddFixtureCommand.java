@@ -43,10 +43,10 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   private String roomNumber;
   private String buildingName; // TODO - This will change to buildingId in a future task
   private String positionHint;
-  private String ipAddress;
+  private InetAddress inetAddress;
   private String serialNumber;
   private String inventoryNumber;
-  private String macAddress;
+  private MacAddress macAddress;
   private FixedRepository repository;
   
   /**
@@ -64,8 +64,8 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
     if (StringUtils.isBlank(positionHint)) {
       throw new InvalidRequestException("Position hint is required.");
     }
-    if (StringUtils.isBlank(ipAddress)) {
-      throw new InvalidRequestException("IP Address is required.");
+    if (inetAddress == null) {
+      throw new InvalidRequestException("IP address is required.");
     }
     if (StringUtils.isBlank(serialNumber)) {
       throw new InvalidRequestException("Serial number is required.");
@@ -73,20 +73,8 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
     if (StringUtils.isBlank(inventoryNumber)) {
       throw new InvalidRequestException("Inventory number is required.");
     }
-    if (StringUtils.isBlank(macAddress)) {
+    if (macAddress == null) {
       throw new InvalidRequestException("MAC Address is required.");
-    }
-    try {
-      InetAddress.getByAddress(ipAddress);
-    }
-    catch (Exception ex) {
-      throw new InvalidRequestException("Invalid IP address.");
-    }
-    try {
-      new MacAddress(macAddress);
-    }
-    catch (Exception ex) {
-      throw new InvalidRequestException("Invalid MAC address.");
     }
     Building building = repository.findBuildingByName(buildingName);
     if (building == null) {
@@ -98,7 +86,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
     if (repository.findAssetBySerialNumber(serialNumber) != null) {
       throw new InvalidRequestException("Serial number is already in use.");
     }
-    if (repository.findAssetByMacAddress(macAddress) != null) {
+    if (repository.findAssetByMacAddress(macAddress.toString()) != null) {
       throw new InvalidRequestException("MAC address is already in use.");
     }
     Room room = repository.findRoom(building.getId(), roomNumber);
@@ -134,13 +122,13 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
     Date creationDate = new Date();
     asset.setDateCreated(creationDate);
     asset.setInventoryNumber(inventoryNumber);
-    asset.setMacAddress(macAddress);
+    asset.setMacAddress(macAddress.toString());
     asset.setSerialNumber(serialNumber);
     repository.addAsset(asset);
     Fixture fixture = new Fixture();
     fixture.setAsset(asset);
     fixture.setDateCreated(creationDate);
-    fixture.setIpAddress(ipAddress);
+    fixture.setIpAddress(inetAddress.toString());
     fixture.setPositionHint(hint);
     fixture.setRoom(room);
     repository.addFixture(fixture);
@@ -169,10 +157,10 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   }
 
   /**
-   * Sets the {@code ipAddress} property.
+   * Sets the {@code inetAddress} property.
    */
-  public void setIpAddress(String ipAddress) {
-    this.ipAddress = ipAddress;
+  public void setInetAddress(InetAddress inetAddress) {
+    this.inetAddress = inetAddress;
   }
 
   /**
@@ -192,7 +180,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   /**
    * Sets the {@code macAddress} property.
    */
-  public void setMacAddress(String macAddress) {
+  public void setMacAddress(MacAddress macAddress) {
     this.macAddress = macAddress;
   }
 
