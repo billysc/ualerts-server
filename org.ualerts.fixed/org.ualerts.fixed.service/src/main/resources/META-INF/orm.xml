@@ -13,6 +13,14 @@
     </query>
   </named-query>
 
+  <named-query name="findBuildingByName">
+    <query>
+      select distinct building
+      from Building building
+      where upper(building.name) = upper(:name)
+    </query>
+  </named-query>
+
   <named-query name="findRoom">
     <query>
       select distinct room

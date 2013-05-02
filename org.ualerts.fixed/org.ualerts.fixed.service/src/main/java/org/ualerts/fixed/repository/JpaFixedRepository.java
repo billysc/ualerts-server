@@ -57,6 +57,24 @@ public class JpaFixedRepository extends AbstractJpaRepository implements FixedRe
    * {@inheritDoc}
    */
   @Override
+  public Building findBuildingByName(String name) {
+    Building result = null;
+    try {
+      result = getEntityManager()
+          .createNamedQuery("findBuildingByName", Building.class)
+          .setParameter("name", name)
+          .getSingleResult();
+    }
+    catch (NoResultException ex) {
+      result = null;
+    }
+    return result;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public Room findRoom(String buildingId, String roomNumber) {
     Room result = null;
     try {

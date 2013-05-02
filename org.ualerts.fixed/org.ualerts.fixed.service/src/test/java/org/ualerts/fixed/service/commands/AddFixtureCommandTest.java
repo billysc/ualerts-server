@@ -69,9 +69,10 @@ public class AddFixtureCommandTest {
   @Test
   public void testOnValidate() throws Exception {
     final Building building = new Building();
+    building.setId("buildingId");
     populateCommand(command);
     context.checking(new Expectations() {{
-      oneOf(repository).findBuildingById("buildingId");
+      oneOf(repository).findBuildingByName("buildingName");
       will(returnValue(building));
       oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
       will(returnValue(null));
@@ -94,7 +95,7 @@ public class AddFixtureCommandTest {
   @Test(expected = InvalidRequestException.class)
   public void testOnValidateBlankBuilding() throws Exception {
     populateCommand(command);
-    command.setBuildingId(null);
+    command.setBuildingName(null);
     command.onValidate();
   }
 
@@ -186,7 +187,7 @@ public class AddFixtureCommandTest {
     try {
       populateCommand(command);
       context.checking(new Expectations() {{
-        oneOf(repository).findBuildingById("buildingId");
+        oneOf(repository).findBuildingByName("buildingName");
         will(returnValue(null));
       }});
       command.onValidate();
@@ -207,7 +208,7 @@ public class AddFixtureCommandTest {
     try {
       populateCommand(command);
       context.checking(new Expectations() {{
-        oneOf(repository).findBuildingById("buildingId");
+        oneOf(repository).findBuildingByName("buildingName");
         will(returnValue(building));
         oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(asset));
@@ -230,7 +231,7 @@ public class AddFixtureCommandTest {
     try {
       populateCommand(command);
       context.checking(new Expectations() {{
-        oneOf(repository).findBuildingById("buildingId");
+        oneOf(repository).findBuildingByName("buildingName");
         will(returnValue(building));
         oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(null));
@@ -255,7 +256,7 @@ public class AddFixtureCommandTest {
     try {
       populateCommand(command);
       context.checking(new Expectations() {{
-        oneOf(repository).findBuildingById("buildingId");
+        oneOf(repository).findBuildingByName("buildingName");
         will(returnValue(building));
         oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(null));
@@ -278,6 +279,7 @@ public class AddFixtureCommandTest {
   @Test
   public void testOnValidateLocationConflict() throws Exception {
     final Building building = new Building();
+    building.setId("buildingId");
     final Room room = new Room();
     room.setId(1L);
     final PositionHint hint = new PositionHint();
@@ -286,7 +288,7 @@ public class AddFixtureCommandTest {
     try {
       populateCommand(command);
       context.checking(new Expectations() {{
-        oneOf(repository).findBuildingById("buildingId");
+        oneOf(repository).findBuildingByName("buildingName");
         will(returnValue(building));
         oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(null));
@@ -314,11 +316,15 @@ public class AddFixtureCommandTest {
    */
   @Test
   public void testOnExecute() throws Exception {
+    final Building building = new Building();
+    building.setId("buildingId");
     final Room room = new Room();
     final PositionHint positionHint = new PositionHint();
     populateCommand(command);
 
     context.checking(new Expectations() {{
+      oneOf(repository).findBuildingByName("buildingName");
+      will(returnValue(building));
       oneOf(repository).findRoom("buildingId", "roomNumber");
       will(returnValue(room));
       oneOf(repository).findHint("hint");
@@ -336,14 +342,15 @@ public class AddFixtureCommandTest {
   @Test
   public void testOnExecuteCreateNewRoom() throws Exception {
     final Building building = new Building();
+    building.setId("buildingId");
     final PositionHint positionHint = new PositionHint();
     populateCommand(command);
 
     context.checking(new Expectations() {{
+      oneOf(repository).findBuildingByName("buildingName");
+      will(returnValue(building));
       oneOf(repository).findRoom("buildingId", "roomNumber");
       will(returnValue(null));
-      oneOf(repository).findBuildingById("buildingId");
-      will(returnValue(building));
       oneOf(repository).addRoom(with(any(Room.class)));
       oneOf(repository).findHint("hint");
       will(returnValue(positionHint));
@@ -359,10 +366,14 @@ public class AddFixtureCommandTest {
    */
   @Test
   public void testOnExecuteCreateNewPositionHint() throws Exception {
+    final Building building = new Building();
+    building.setId("buildingId");
     final Room room = new Room();
     populateCommand(command);
 
     context.checking(new Expectations() {{
+      oneOf(repository).findBuildingByName("buildingName");
+      will(returnValue(building));
       oneOf(repository).findRoom("buildingId", "roomNumber");
       will(returnValue(room));
       oneOf(repository).findHint("hint");
@@ -377,7 +388,7 @@ public class AddFixtureCommandTest {
 
   private void populateCommand(AddFixtureCommand command) {
     command.setRoomNumber("roomNumber");
-    command.setBuildingId("buildingId");
+    command.setBuildingName("buildingName");
     command.setPositionHint("hint");
     command.setIpAddress("127.0.0.1");
     command.setMacAddress("0A-1B-2C-3D-4E-5F");
