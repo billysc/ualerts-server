@@ -28,6 +28,10 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Michael Irwin
  */
 public class FixtureDTO {
+  
+  private Long id;
+  
+  private Long version;
 
   @NotEmpty
   private String building;
@@ -51,6 +55,34 @@ public class FixtureDTO {
   @Pattern(regexp="^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$")
   private String macAddress;
   
+  /**
+   * Gets the {@code id} property.
+   */
+  public Long getId() {
+    return id;
+  }
+
+  /**
+   * Sets the {@code id} property.
+   */
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  /**
+   * Gets the {@code version} property.
+   */
+  public Long getVersion() {
+    return version;
+  }
+
+  /**
+   * Sets the {@code version} property.
+   */
+  public void setVersion(Long version) {
+    this.version = version;
+  }
+
   /**
    * Gets the {@code building} property.
    */
