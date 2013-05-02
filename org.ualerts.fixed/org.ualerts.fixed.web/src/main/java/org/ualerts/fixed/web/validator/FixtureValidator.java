@@ -21,12 +21,10 @@ package org.ualerts.fixed.web.validator;
 
 import static org.springframework.validation.ValidationUtils.rejectIfEmpty;
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.ualerts.fixed.InetAddress;
+import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.web.dto.FixtureDTO;
 
 /**
@@ -58,7 +56,19 @@ public class FixtureValidator implements Validator {
     rejectIfEmpty(errors, "room", "validation.fixture.room.empty");
     
     FixtureDTO fixture = (FixtureDTO)obj;
-    // TODO Still need to validate the MAC and IP addresses
+    try {
+      InetAddress address = InetAddress.getByAddress(fixture.getIpAddress());
+      fixture.setIpAddressObj(address);
+    } catch (Exception e) {
+      errors.rejectValue("ipAddress", "validation.fixture.ipAddress.notValid");
+    }
+    
+    try {
+      MacAddress address = new MacAddress(fixture.getMacAddress());
+      fixture.setMacAddressObj(address);
+    } catch (Exception e) {
+      errors.rejectValue("macAddress", "validation.fixture.macAddress.notValid");
+    }
   }
     
 }
