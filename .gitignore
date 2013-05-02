@@ -4,6 +4,7 @@ RCS
 .project
 .classpath
 .settings
+.checkstyle
 target
 build
 
