@@ -36,6 +36,13 @@ public interface FixedRepository {
    * @return the Building object.  Null if it isn't found.
    */
   Building findBuildingById(String id);
+  
+  /**
+   * Finds a building by its name.
+   * @param name the name of the building
+   * @return the Building object.  Null if it isn't found.
+   */
+  Building findBuildingByName(String name);
 
   /**
    * Finds a room by its building ID and room.
