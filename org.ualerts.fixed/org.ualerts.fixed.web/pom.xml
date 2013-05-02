@@ -48,5 +48,9 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.ualerts</groupId>
+			<artifactId>org.ualerts.fixed.service</artifactId>
+		</dependency>
 	</dependencies>
 </project>
