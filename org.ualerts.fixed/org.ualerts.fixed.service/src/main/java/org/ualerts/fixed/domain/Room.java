@@ -33,21 +33,24 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Room")
 public class Room extends AbstractEntity {
+
   private static final long serialVersionUID = -8230988187096633342L;
   private Building building;
   private String roomNumber;
   
   /**
-   * Gets the {@code building} property.
+   * Gets the {@code building} associated with this room.
+   * @return property value
    */
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "building_id", referencedColumnName="ID")
+  @JoinColumn(name = "building_id")
   public Building getBuilding() {
     return building;
   }
   
   /**
-   * Sets the {@code building} property.
+   * Sets the {@code building} associated with this room.
+   * @param building building entity to associate with this room
    */
   public void setBuilding(Building building) {
     this.building = building;
@@ -55,14 +58,16 @@ public class Room extends AbstractEntity {
   
   /**
    * Gets the {@code roomNumber} property.
+   * @return property value
    */
-  @Column(name = "room_number", length=10)
+  @Column(name = "room_number")
   public String getRoomNumber() {
     return roomNumber;
   }
   
   /**
    * Sets the {@code roomNumber} property.
+   * @param roomNumber property value to set
    */
   public void setRoomNumber(String roomNumber) {
     this.roomNumber = roomNumber;

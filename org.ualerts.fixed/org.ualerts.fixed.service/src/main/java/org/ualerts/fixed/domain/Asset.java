@@ -25,13 +25,14 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * Entity representing an asset.
+ * An entity representing an asset.
  *
  * @author Brian Early
  */
 @Entity
 @Table(name = "fixed_asset")
 public class Asset extends AbstractEntity {
+
   private static final long serialVersionUID = -8272019373642337929L;
   private String serialNumber;
   private String inventoryNumber;
@@ -41,14 +42,16 @@ public class Asset extends AbstractEntity {
 
   /**
    * Gets the {@code serialNumber} property.
+   * @return property value
    */
-  @Column(name = "serial_number", length=20, unique=true)
+  @Column(name = "serial_number", unique = true)
   public String getSerialNumber() {
     return serialNumber;
   }
 
   /**
    * Sets the {@code serialNumber} property.
+   * @param serialNumber property value to set
    */
   public void setSerialNumber(String serialNumber) {
     this.serialNumber = serialNumber;
@@ -56,14 +59,16 @@ public class Asset extends AbstractEntity {
 
   /**
    * Gets the {@code inventoryNumber} property.
+   * @return property value
    */
-  @Column(name = "inventory_number", length=20, unique=true)
+  @Column(name = "inventory_number", unique = true)
   public String getInventoryNumber() {
     return inventoryNumber;
   }
 
   /**
    * Sets the {@code inventoryNumber} property.
+   * @param inventoryNumber property value to set
    */
   public void setInventoryNumber(String inventoryNumber) {
     this.inventoryNumber = inventoryNumber;
@@ -71,14 +76,16 @@ public class Asset extends AbstractEntity {
 
   /**
    * Gets the {@code macAddress} property.
+   * @return property value
    */
-  @Column(name = "mac_address", length=20, unique=true)
+  @Column(name = "mac_address", unique = true)
   public String getMacAddress() {
     return macAddress;
   }
 
   /**
    * Sets the {@code macAddress} property.
+   * @param macAddress property value to set
    */
   public void setMacAddress(String macAddress) {
     this.macAddress = macAddress;
@@ -86,6 +93,7 @@ public class Asset extends AbstractEntity {
 
   /**
    * Gets the {@code dateCreated} property.
+   * @return property value
    */
   @Column(name = "date_created")
   public Date getDateCreated() {
@@ -94,6 +102,7 @@ public class Asset extends AbstractEntity {
 
   /**
    * Sets the {@code dateCreated} property.
+   * @param dateCreated property value to set
    */
   public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
@@ -101,6 +110,7 @@ public class Asset extends AbstractEntity {
 
   /**
    * Gets the {@code dateModified} property.
+   * @return property value
    */
   @Column(name = "date_modified")
   public Date getDateModified() {
@@ -109,6 +119,7 @@ public class Asset extends AbstractEntity {
 
   /**
    * Sets the {@code dateModified} property.
+   * @param dateModified property value to set
    */
   public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
