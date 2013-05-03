@@ -25,15 +25,14 @@ package org.ualerts.fixed.service.errors;
  *
  * @author earlyb
  */
-public class LocationConflictException
-    extends AbstractValidationException {
+public class LocationConflictException extends ValidationError {
   private static final long serialVersionUID = -1539453602409947599L;
 
   /**
    * Constructs a new instance.
    */
   public LocationConflictException() {
-    super("ualerts.fixed.validation.locationConflict");
+    super("location.conflict");
   }
 
 }

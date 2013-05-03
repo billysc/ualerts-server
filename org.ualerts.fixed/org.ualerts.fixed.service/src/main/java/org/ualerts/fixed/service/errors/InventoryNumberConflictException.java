@@ -24,15 +24,14 @@ package org.ualerts.fixed.service.errors;
  *
  * @author earlyb
  */
-public class InventoryNumberConflictException
-    extends AbstractValidationException {
+public class InventoryNumberConflictException extends ValidationError {
   private static final long serialVersionUID = -5241508154507816581L;
 
   /**
    * Constructs a new instance.
    */
   public InventoryNumberConflictException() {
-    super("ualerts.fixed.validation.inventoryNumberConflict");
+    super("inventoryNumber.conflict");
   }
 
 }
