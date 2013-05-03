@@ -31,12 +31,6 @@ import org.ualerts.fixed.PositionHint;
 import org.ualerts.fixed.Room;
 import org.ualerts.fixed.repository.FixedRepository;
 import org.ualerts.fixed.service.CommandComponent;
-import org.ualerts.fixed.service.errors.InventoryNumberConflictException;
-import org.ualerts.fixed.service.errors.LocationConflictException;
-import org.ualerts.fixed.service.errors.MacAddressConflictException;
-import org.ualerts.fixed.service.errors.MissingFieldException;
-import org.ualerts.fixed.service.errors.SerialNumberConflictException;
-import org.ualerts.fixed.service.errors.UnknownBuildingException;
 import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
 import org.ualerts.fixed.service.errors.ValidationErrors;
 
@@ -69,45 +63,45 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
       Building building = null;
       boolean locationComplete = true;
       if (StringUtils.isBlank(roomNumber)) {
-        errors.addError(new MissingFieldException("roomNumber"));
+        errors.addError(ValidationErrors.MISSING_ROOM_FIELD);
         locationComplete = false;
       }
       if (StringUtils.isBlank(buildingName)) {
-        errors.addError(new MissingFieldException("buildingName"));
+        errors.addError(ValidationErrors.MISSING_BUILDING_FIELD);
         locationComplete = false;
       }
       else {
         building = repository.findBuildingByName(buildingName);
         if (building == null) {
-          errors.addError(new UnknownBuildingException());
+          errors.addError(ValidationErrors.UNKNOWN_BUILDING);
           locationComplete = false;
         }
       }
       if (StringUtils.isBlank(positionHint)) {
-        errors.addError(new MissingFieldException("positionHint"));
+        errors.addError(ValidationErrors.MISSING_POSITION_HINT_FIELD);
         locationComplete = false;
       }
       if (inetAddress == null) {
-        errors.addError(new MissingFieldException("inetAddress"));
+        errors.addError(ValidationErrors.MISSING_INET_ADDRESS_FIELD);
       }
       if (StringUtils.isBlank(serialNumber)) {
-        errors.addError(new MissingFieldException("serialNumber"));
+        errors.addError(ValidationErrors.MISSING_SERIAL_NUMBER_FIELD);
       }
       else if (repository.findAssetBySerialNumber(serialNumber) != null) {
-        errors.addError(new SerialNumberConflictException());
+        errors.addError(ValidationErrors.SERIAL_NUMBER_CONFLICT);
       }
       if (StringUtils.isBlank(inventoryNumber)) {
-        errors.addError(new MissingFieldException("inventoryNumber"));
+        errors.addError(ValidationErrors.MISSING_INVENTORY_NUMBER_FIELD);
       }
       else if (repository.findAssetByInventoryNumber(inventoryNumber) != null) {
-        errors.addError(new InventoryNumberConflictException());
+        errors.addError(ValidationErrors.INVENTORY_NUMBER_CONFLICT);
       }
       if (macAddress == null) {
-        errors.addError(new MissingFieldException("macAddress"));
+        errors.addError(ValidationErrors.MISSING_MAC_ADDRESS_FIELD);
       }
       else if (repository.
           findAssetByMacAddress(macAddress.toString()) != null) {
-        errors.addError(new MacAddressConflictException());
+        errors.addError(ValidationErrors.MAC_ADDRESS_CONFLICT);
       }
       if (locationComplete) {
         Room room = repository.findRoom(building.getId(), roomNumber);
@@ -115,7 +109,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
         if ((room != null) && (hint != null)) {
           if (repository.findFixtureByLocation(room.getId(),
               hint.getId()) != null) {
-            errors.addError(new LocationConflictException());
+            errors.addError(ValidationErrors.LOCATION_CONFLICT);
           }
         }
       }

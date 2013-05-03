@@ -23,20 +23,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Error exception that contains one or more {@link ValidationError}
- * objects.
+ * Error exception that contains one or more error codes.
+ * Error codes should exclusively come from {@link ErrorCodes}.
  *
  * @author Brian Early
  */
-public class ValidationErrors extends Exception {
+public class ValidationErrors extends Exception implements ErrorCodes {
   private static final long serialVersionUID = 221782850535788392L;
-  private List<ValidationError> errors = new ArrayList<ValidationError>();
+  private List<String> errors = new ArrayList<String>();
 
   /**
    * Gets the {@code errors} property.
    * @return property value
    */
-  public List<ValidationError> getErrors() {
+  public List<String> getErrors() {
     return errors;
   }
   
@@ -44,7 +44,7 @@ public class ValidationErrors extends Exception {
    * Adds a new error to the collection.
    * @param error the error to add
    */
-  public void addError(ValidationError error) {
+  public void addError(String error) {
     errors.add(error);
   }
 
