@@ -27,7 +27,7 @@ import org.ualerts.fixed.service.errors.MacAddressConflictException;
 import org.ualerts.fixed.service.errors.SerialNumberConflictException;
 import org.ualerts.fixed.service.errors.UnknownBuildingException;
 import org.ualerts.fixed.service.errors.ValidationError;
-import org.ualerts.fixed.service.errors.ValidationErrorCollection;
+import org.ualerts.fixed.service.errors.ValidationErrors;
 
 /**
  * A utility class for mapping exceptions from the CommandService to UI-level
@@ -47,7 +47,7 @@ public class ConcreteFixtureErrorHandler implements FixtureErrorHandler {
   /**
    * {@inheritDoc}
    */
-  public void applyErrors(ValidationErrorCollection validationErrors,
+  public void applyErrors(ValidationErrors validationErrors,
       Errors errors, String msgPrefix) {
 
     for (ValidationError error : validationErrors.getErrors()) {

@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
-import org.ualerts.fixed.service.errors.ValidationErrorCollection;
+import org.ualerts.fixed.service.errors.ValidationErrors;
 import org.ualerts.fixed.web.dto.FixtureDTO;
 
 /**
@@ -44,7 +44,7 @@ public class ServiceSupportedFixtureService implements FixtureService {
    */
   @Override
   public void createFixture(FixtureDTO fixture)
-      throws ValidationErrorCollection, Exception {
+      throws ValidationErrors, Exception {
 
     AddFixtureCommand command =
         commandService.newCommand(AddFixtureCommand.class);
