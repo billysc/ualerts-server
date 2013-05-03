@@ -19,8 +19,6 @@
 
 package org.ualerts.fixed.service.errors;
 
-import org.ualerts.fixed.InetAddress;
-import org.ualerts.fixed.MacAddress;
 
 /**
  * Defines all error codes defined for the service layer.
@@ -32,7 +30,7 @@ public interface ErrorCodes {
   /**
    * Preamble for all error codes.
    */
-  String CODE_BASE = "org.ualerts.";
+  String CODE_BASE = "org.ualerts.fixed.validation.";
   
   /**
    * Error code representing a duplicate inventory number conflict
