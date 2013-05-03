@@ -30,6 +30,9 @@ public class MockedFixtureService implements FixtureService {
 
   private Long lastUsedId;
   
+  /**
+   * Constructs a new instance of the mocked service.
+   */
   public MockedFixtureService() {
     lastUsedId = 1L;
   }

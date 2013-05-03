@@ -1,5 +1,5 @@
 /*
- * File created on May 1, 2013 
+ * File created on May 1, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -21,29 +21,35 @@ package org.ualerts.fixed.web.util;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-
 /**
  * A wrapper around the HttpServletRequest that allows for changing of the
  * Accepts Mime Type.
  * 
  * A use case might be sending the same request through the Dispatcher, but
- * changing the path it takes.  For example, if a Controller has one method
- * that has "produces='application/json'" and wanted to embed a rendered JSP in
- * the response, it could send its own request back through wrapped in this
- * class with a changed Accept header.  The Controller then could have another
- * method for "produces='text/html'" that will then be called to render the JSP.
- *
+ * changing the path it takes. For example, if a Controller has one method that
+ * has "produces='application/json'" and wanted to embed a rendered JSP in the
+ * response, it could send its own request back through wrapped in this class
+ * with a changed Accept header. The Controller then could have another method
+ * for "produces='text/html'" that will then be called to render the JSP.
+ * 
  * @author Michael Irwin
  */
 public class FakeHttpServletRequest extends HttpServletRequestWrapper {
-  
+
   private String acceptsMime;
-  
-  public FakeHttpServletRequest(HttpServletRequest request, String acceptsMime) {
+
+  /**
+   * Constructs a new instance, wrapping the provided request, but changing the
+   * Accept header to the provided value
+   * @param request The request that should be wrapped
+   * @param acceptsMime The new value for the Accept header
+   */
+  public FakeHttpServletRequest(HttpServletRequest request, 
+      String acceptsMime) {
     super(request);
     this.acceptsMime = acceptsMime;
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -54,5 +60,5 @@ public class FakeHttpServletRequest extends HttpServletRequestWrapper {
     }
     return super.getHeader(name);
   }
-  
+
 }

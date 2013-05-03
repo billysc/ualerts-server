@@ -1,5 +1,5 @@
 /*
- * File created on May 1, 2013 
+ * File created on May 1, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -27,8 +27,8 @@ import javax.servlet.http.HttpServletResponseWrapper;
 /**
  * A wrapper around the HttpServletResponse that provides a local OutputStream
  * instead of the stream from the original response, allowing for retrieval
- * of the HTML data. 
- * 
+ * of the HTML data.
+ *
  * Use cases include the desire to embed a rendered JSP page (html) in a JSON
  * response.  When the response is normally sent through the dispatcher, the
  * output is written directly to the end user.  With this wrapper, the output
@@ -42,6 +42,10 @@ public class FakeHttpServletResponse extends HttpServletResponseWrapper {
   private StringWriter stringWriter = new StringWriter();
   private PrintWriter writer = new PrintWriter(stringWriter);
   
+  /**
+   * Create a new wrapped response that will buffer all output
+   * @param response The response that should be wrapped
+   */
   public FakeHttpServletResponse(HttpServletResponse response) {
     super(response);
   }
@@ -54,6 +58,10 @@ public class FakeHttpServletResponse extends HttpServletResponseWrapper {
     return writer;
   }
 
+  /**
+   * Get the StringWriter that was embedded within the PrintWriter
+   * @return The StringWriter that contains the data written to the response
+   */
   public StringWriter getStringWriter() {
     return stringWriter;
   }
