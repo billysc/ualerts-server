@@ -22,7 +22,7 @@ package org.ualerts.fixed.service.errors;
 /**
  * Defines base class for all validation errors.
  *
- * @author earlyb
+ * @author Brian Early
  */
 public abstract class ValidationError extends Exception {
   private static final long serialVersionUID = -2734197137748106016L;

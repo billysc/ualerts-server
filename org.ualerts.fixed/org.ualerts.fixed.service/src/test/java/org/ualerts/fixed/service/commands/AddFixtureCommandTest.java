@@ -39,7 +39,7 @@ import org.ualerts.fixed.service.errors.MacAddressConflictException;
 import org.ualerts.fixed.service.errors.MissingFieldException;
 import org.ualerts.fixed.service.errors.SerialNumberConflictException;
 import org.ualerts.fixed.service.errors.UnknownBuildingException;
-import org.ualerts.fixed.service.errors.ValidationErrorCollection;
+import org.ualerts.fixed.service.errors.ValidationErrors;
 
 /**
  * Unit tests for {@link AddFixtureCommand}.
@@ -124,7 +124,7 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrorCollection ex) {
+    catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
       assertTrue(((MissingFieldException) ex.getErrors().get(0)).
@@ -164,7 +164,7 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrorCollection ex) {
+    catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
       assertTrue(((MissingFieldException) ex.getErrors().get(0)).
@@ -206,7 +206,7 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrorCollection ex) {
+    catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
       assertTrue(((MissingFieldException) ex.getErrors().get(0)).
@@ -246,7 +246,7 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrorCollection ex) {
+    catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
       assertTrue(((MissingFieldException) ex.getErrors().get(0)).
@@ -282,7 +282,7 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrorCollection ex) {
+    catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
       assertTrue(((MissingFieldException) ex.getErrors().get(0)).
@@ -318,7 +318,7 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrorCollection ex) {
+    catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
       assertTrue(((MissingFieldException) ex.getErrors().get(0)).
@@ -358,7 +358,7 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrorCollection ex) {
+    catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
       assertTrue(((MissingFieldException) ex.getErrors().get(0)).
@@ -391,7 +391,7 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrorCollection ex) {
+    catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
       assertTrue(ex.getErrors().get(0).getClass().
@@ -433,7 +433,7 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrorCollection ex) {
+    catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
       assertTrue(ex.getErrors().get(0).getClass()
@@ -475,7 +475,7 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrorCollection ex) {
+    catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
       assertTrue(ex.getErrors().get(0).getClass()
@@ -517,7 +517,7 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrorCollection ex) {
+    catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
       assertTrue(ex.getErrors().get(0).getClass()
@@ -559,7 +559,7 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrorCollection ex) {
+    catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
       assertTrue(ex.getErrors().get(0).getClass()

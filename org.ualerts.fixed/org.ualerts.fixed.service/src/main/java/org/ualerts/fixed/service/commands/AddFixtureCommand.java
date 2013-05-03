@@ -38,7 +38,7 @@ import org.ualerts.fixed.service.errors.MissingFieldException;
 import org.ualerts.fixed.service.errors.SerialNumberConflictException;
 import org.ualerts.fixed.service.errors.UnknownBuildingException;
 import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
-import org.ualerts.fixed.service.errors.ValidationErrorCollection;
+import org.ualerts.fixed.service.errors.ValidationErrors;
 
 /**
  * Command to add a fixture to the UAlerts system.
@@ -63,7 +63,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   @Override
   protected void onValidate() throws Exception {
     super.onValidate();
-    ValidationErrorCollection errors = new ValidationErrorCollection();
+    ValidationErrors errors = new ValidationErrors();
     try {
       Building building = null;
       boolean locationComplete = true;
