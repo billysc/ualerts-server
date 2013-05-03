@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.ualerts.fixed.service.errors.ValidationErrorCollection;
+import org.ualerts.fixed.service.errors.ValidationErrors;
 import org.ualerts.fixed.web.dto.FixtureDTO;
 import org.ualerts.fixed.web.error.FixtureErrorHandler;
 import org.ualerts.fixed.web.service.FixtureService;
@@ -97,7 +97,7 @@ public class ManuallyEnrollFixtureController {
       try {
         fixtureService.createFixture(fixture);
       }
-      catch (ValidationErrorCollection errorCollection) {
+      catch (ValidationErrors errorCollection) {
         fixtureErrorHandler.applyErrors(errorCollection, bindingResult,
             FixtureValidator.MSG_PREFIX);
       }

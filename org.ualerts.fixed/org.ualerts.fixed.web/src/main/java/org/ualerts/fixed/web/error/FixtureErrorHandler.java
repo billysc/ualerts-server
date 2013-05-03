@@ -20,7 +20,7 @@
 package org.ualerts.fixed.web.error;
 
 import org.springframework.validation.Errors;
-import org.ualerts.fixed.service.errors.ValidationErrorCollection;
+import org.ualerts.fixed.service.errors.ValidationErrors;
 
 /**
  * An error handler for handling the various errors that can be produced when
@@ -44,7 +44,7 @@ public interface FixtureErrorHandler {
    * @param msgPrefix A message property prefix to be used with the properties
    * provided in the validation errors
    */
-  void applyErrors(ValidationErrorCollection validationErrors,
+  void applyErrors(ValidationErrors validationErrors,
       Errors errors, String msgPrefix);
   
 }

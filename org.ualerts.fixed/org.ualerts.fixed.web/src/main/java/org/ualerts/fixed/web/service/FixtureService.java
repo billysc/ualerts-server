@@ -18,7 +18,7 @@
  */
 package org.ualerts.fixed.web.service;
 
-import org.ualerts.fixed.service.errors.ValidationErrorCollection;
+import org.ualerts.fixed.service.errors.ValidationErrors;
 import org.ualerts.fixed.web.dto.FixtureDTO;
 
 /**
@@ -35,10 +35,9 @@ public interface FixtureService {
    * Upon saving of the Fixture, the {@code id} and {@code version} properties 
    * of the Fixture will be updated to reflect their new values.
    * @param fixture The fixture to be saved.
-   * @throws ValidationErrorCollection An validation errors that occur
+   * @throws ValidationErrors An validation errors that occur
    * @throws Exception Any other internally-caused exception
    */
-  void createFixture(FixtureDTO fixture) 
-      throws ValidationErrorCollection, Exception;
+  void createFixture(FixtureDTO fixture) throws ValidationErrors, Exception;
   
 }
