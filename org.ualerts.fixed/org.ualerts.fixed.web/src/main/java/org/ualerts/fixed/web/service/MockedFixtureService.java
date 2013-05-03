@@ -19,7 +19,6 @@
 
 package org.ualerts.fixed.web.service;
 
-import org.springframework.stereotype.Service;
 import org.ualerts.fixed.web.dto.FixtureDTO;
 
 /**
@@ -27,7 +26,6 @@ import org.ualerts.fixed.web.dto.FixtureDTO;
  *
  * @author Michael Irwin
  */
-@Service
 public class MockedFixtureService implements FixtureService {
 
   private Long lastUsedId;

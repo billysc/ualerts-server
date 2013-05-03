@@ -1,5 +1,5 @@
 /*
- * File created on May 1, 2013 
+ * File created on May 1, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -29,6 +29,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class IndexController {
 
+  /**
+   * Display the basic start/index page
+   * @return The name of the JSP file to be rendered
+   */
   @RequestMapping("/")
   public String displayIndex() {
     return "index";
