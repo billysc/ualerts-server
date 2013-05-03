@@ -20,14 +20,27 @@
 package org.ualerts.fixed.service.errors;
 
 /**
- * Defines API for a validation error.
+ * Defines base class for all validation errors.
  *
  * @author earlyb
  */
-public interface ValidationError {
+public abstract class ValidationError extends Exception {
+  private static final long serialVersionUID = -2734197137748106016L;
+  private String messageProperty;
+  
+  /**
+   * Constructs a new instance.
+   * @param messageProperty the message property name for the error.
+   */
+  protected ValidationError(String messageProperty) {
+    this.messageProperty = messageProperty;
+  }
+  
   /**
    * Returns the message property name of the error.
    * @return the message property name
    */
-  String getMessageProperty();
+  String getMessageProperty() {
+    return messageProperty;
+  }
 }

@@ -24,15 +24,14 @@ package org.ualerts.fixed.service.errors;
  *
  * @author earlyb
  */
-public class MacAddressConflictException
-    extends AbstractValidationException {
+public class MacAddressConflictException extends ValidationError {
   private static final long serialVersionUID = -3258686627741511231L;
 
   /**
    * Constructs a new instance.
    */
   public MacAddressConflictException() {
-    super("ualerts.fixed.validation.macAddressConflict");
+    super("macAddress.conflict");
   }
 
 }

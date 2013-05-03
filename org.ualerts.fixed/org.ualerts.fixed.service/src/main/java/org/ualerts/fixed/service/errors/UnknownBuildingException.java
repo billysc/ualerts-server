@@ -24,15 +24,14 @@ package org.ualerts.fixed.service.errors;
  *
  * @author earlyb
  */
-public class UnknownBuildingException
-    extends AbstractValidationException {
+public class UnknownBuildingException extends ValidationError {
   private static final long serialVersionUID = 6797205852027325401L;
 
   /**
    * Constructs a new instance.
    */
   public UnknownBuildingException() {
-    super("ualerts.fixed.validation.unknownBuilding");
+    super("building.unknown");
   }
 
 }

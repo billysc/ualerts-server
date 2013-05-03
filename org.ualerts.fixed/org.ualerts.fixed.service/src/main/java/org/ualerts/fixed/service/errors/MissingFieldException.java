@@ -24,8 +24,7 @@ package org.ualerts.fixed.service.errors;
  *
  * @author earlyb
  */
-public class MissingFieldException
-    extends AbstractValidationException {
+public class MissingFieldException extends ValidationError {
   private static final long serialVersionUID = 4305220797715331722L;
   private String fieldName;
   
@@ -34,7 +33,7 @@ public class MissingFieldException
    * @param fieldName the name of the missing field.
    */
   public MissingFieldException(String fieldName) {
-    super("ualerts.fixed.validation.missingField");
+    super("field.missing");
     this.fieldName = fieldName;
   }
 

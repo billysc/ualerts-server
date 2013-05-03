@@ -24,15 +24,14 @@ package org.ualerts.fixed.service.errors;
  *
  * @author earlyb
  */
-public class SerialNumberConflictException
-    extends AbstractValidationException {
+public class SerialNumberConflictException extends ValidationError {
   private static final long serialVersionUID = 150696499167929985L;
 
   /**
    * Constructs a new instance.
    */
   public SerialNumberConflictException() {
-    super("ualerts.fixed.validation.serialNumberConflict");
+    super("serialNumber.conflict");
   }
 
 }
