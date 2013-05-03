@@ -26,7 +26,7 @@ import java.util.List;
  * Error exception that contains a collection of {@link ValidationError}
  * objects.
  *
- * @author earlyb
+ * @author Brian Early
  */
 public class ValidationErrorCollection extends Exception {
   private static final long serialVersionUID = 221782850535788392L;

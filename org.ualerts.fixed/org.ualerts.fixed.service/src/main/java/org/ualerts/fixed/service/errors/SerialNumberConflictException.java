@@ -22,7 +22,7 @@ package org.ualerts.fixed.service.errors;
 /**
  * Validation exception for a serial number conflict (already in use).
  *
- * @author earlyb
+ * @author Brian Early
  */
 public class SerialNumberConflictException extends ValidationError {
   private static final long serialVersionUID = 150696499167929985L;
