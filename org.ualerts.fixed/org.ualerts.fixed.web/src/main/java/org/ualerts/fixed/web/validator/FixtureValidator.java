@@ -35,7 +35,7 @@ import org.ualerts.fixed.web.dto.FixtureDTO;
 @Component
 public class FixtureValidator implements Validator {
 
-  protected static final String MSG_PREFIX = "validation.fixture.";
+  public static final String MSG_PREFIX = "validation.fixture.";
   
   /**
    * {@inheritDoc}

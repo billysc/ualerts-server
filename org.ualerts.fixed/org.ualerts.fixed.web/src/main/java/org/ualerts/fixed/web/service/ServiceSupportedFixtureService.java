@@ -21,6 +21,7 @@ package org.ualerts.fixed.web.service;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Service;
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
@@ -33,6 +34,7 @@ import org.ualerts.fixed.web.dto.FixtureDTO;
  * 
  * @author Michael Irwin
  */
+@Service
 public class ServiceSupportedFixtureService implements FixtureService {
 
   private CommandService commandService;
