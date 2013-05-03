@@ -24,7 +24,7 @@ package org.ualerts.fixed.service.errors;
  * This is a catch-all for various run-time exceptions that
  * could occur when executing a command.
  *
- * @author earlyb
+ * @author Brian Early
  */
 public class UnspecifiedConstraintException
     extends Exception {

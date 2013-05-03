@@ -22,7 +22,7 @@ package org.ualerts.fixed.service.errors;
 /**
  * Validation exception for a MAC address conflict (already in use).
  *
- * @author earlyb
+ * @author Brian Early
  */
 public class MacAddressConflictException extends ValidationError {
   private static final long serialVersionUID = -3258686627741511231L;

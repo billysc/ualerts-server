@@ -22,7 +22,7 @@ package org.ualerts.fixed.service.errors;
 /**
  * Validation exception for a missing field.
  *
- * @author earlyb
+ * @author Brian Early
  */
 public class MissingFieldException extends ValidationError {
   private static final long serialVersionUID = 4305220797715331722L;

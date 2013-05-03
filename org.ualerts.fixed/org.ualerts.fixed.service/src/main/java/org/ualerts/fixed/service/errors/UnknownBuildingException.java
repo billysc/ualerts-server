@@ -22,7 +22,7 @@ package org.ualerts.fixed.service.errors;
 /**
  * Validation exception for an unknown building.
  *
- * @author earlyb
+ * @author Brian Early
  */
 public class UnknownBuildingException extends ValidationError {
   private static final long serialVersionUID = 6797205852027325401L;

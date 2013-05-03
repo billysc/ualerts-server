@@ -23,7 +23,7 @@ package org.ualerts.fixed.service.errors;
  * Validation exception for a location conflict (room and position
  * hint combination already in use).
  *
- * @author earlyb
+ * @author Brian Early
  */
 public class LocationConflictException extends ValidationError {
   private static final long serialVersionUID = -1539453602409947599L;
