@@ -55,6 +55,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   private String serialNumber;
   private String inventoryNumber;
   private MacAddress macAddress;
+  private String installedBy;
   private FixedRepository repository;
 
   /**
@@ -158,6 +159,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
       Fixture fixture = new Fixture();
       fixture.setAsset(asset);
       fixture.setDateCreated(creationDate);
+      fixture.setInstalledBy(installedBy);
       fixture.setIpAddress(inetAddress.toString());
       fixture.setPositionHint(hint);
       fixture.setRoom(room);
@@ -223,6 +225,14 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
    */
   public void setMacAddress(MacAddress macAddress) {
     this.macAddress = macAddress;
+  }
+
+  /**
+   * Sets the {@code installedBy} property.
+   * @param installedBy the value to set
+   */
+  public void setInstalledBy(String installedBy) {
+    this.installedBy = installedBy;
   }
 
   /**

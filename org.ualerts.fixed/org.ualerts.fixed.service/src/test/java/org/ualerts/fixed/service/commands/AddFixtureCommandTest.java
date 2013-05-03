@@ -569,6 +569,42 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   */
+  @Test
+  public void testOnValidateNoInstalledBy() throws Exception {
+    // At lest currently, this field is not required, so having it null
+    // should not cause an exception.
+    final Building building = new Building();
+    building.setId("buildingId");
+    final Room room = new Room();
+    room.setId(1L);
+    final PositionHint hint = new PositionHint();
+    hint.setId(2L);
+    populateCommand(command);
+    command.setInstalledBy(null);
+    context.checking(new Expectations() { {
+      oneOf(repository).findBuildingByName("buildingName");
+      will(returnValue(building));
+      oneOf(repository).findAssetBySerialNumber("serialNumber");
+      will(returnValue(null));
+      oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+      will(returnValue(null));
+      oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+      will(returnValue(null));
+      oneOf(repository).findRoom("buildingId", "roomNumber");
+      will(returnValue(room));
+      oneOf(repository).findHint("hint");
+      will(returnValue(hint));
+      oneOf(repository).findFixtureByLocation(1L, 2L);
+      will(returnValue(null));
+    } });
+    command.onValidate();
+    context.assertIsSatisfied();
+  }
+
+  /**
+   * Test method for
    * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onExecute()}.
    */
   @Test
@@ -654,6 +690,7 @@ public class AddFixtureCommandTest {
     command.setMacAddress(new MacAddress("0A-1B-2C-3D-4E-5F"));
     command.setSerialNumber("serialNumber");
     command.setInventoryNumber("inventoryNumber");
+    command.setInstalledBy("installedBy");
   }
 
 }

@@ -44,6 +44,7 @@ public class Fixture extends AbstractEntity {
   private Room room;
   private PositionHint positionHint;
   private String ipAddress;
+  private String installedBy;
   private Date dateCreated;
   private Date dateModified;
   
@@ -115,6 +116,23 @@ public class Fixture extends AbstractEntity {
    */
   public void setIpAddress(String ipAddress) {
     this.ipAddress = ipAddress;
+  }
+
+  /**
+   * Gets the {@code installedBy} property.
+   * @return property value
+   */
+  @Column(name = "installed_by")
+  public String getInstalledBy() {
+    return installedBy;
+  }
+
+  /**
+   * Sets the {@code installedBy} property.
+   * @param installedBy the value to set
+   */
+  public void setInstalledBy(String installedBy) {
+    this.installedBy = installedBy;
   }
 
   /**
