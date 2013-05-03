@@ -40,7 +40,7 @@ public abstract class ValidationError extends Exception {
    * Returns the message property name of the error.
    * @return the message property name
    */
-  String getMessageProperty() {
+  public String getMessageProperty() {
     return messageProperty;
   }
 }
