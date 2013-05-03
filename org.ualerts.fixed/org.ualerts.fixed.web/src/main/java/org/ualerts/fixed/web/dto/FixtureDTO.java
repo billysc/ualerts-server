@@ -1,5 +1,5 @@
 /*
- * File created on May 1, 2013 
+ * File created on May 1, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -42,34 +42,39 @@ public class FixtureDTO {
   
   /**
    * Gets the {@code id} property.
+   * @return property value
    */
   public Long getId() {
     return id;
   }
-
+  
   /**
    * Sets the {@code id} property.
+   * @param id the value to set
    */
   public void setId(Long id) {
     this.id = id;
   }
-
+  
   /**
    * Gets the {@code version} property.
+   * @return property value
    */
   public Long getVersion() {
     return version;
   }
-
+  
   /**
    * Sets the {@code version} property.
+   * @param version the value to set
    */
   public void setVersion(Long version) {
     this.version = version;
   }
-
+  
   /**
    * Gets the {@code building} property.
+   * @return property value
    */
   public String getBuilding() {
     return building;
@@ -77,6 +82,7 @@ public class FixtureDTO {
   
   /**
    * Sets the {@code building} property.
+   * @param building the value to set
    */
   public void setBuilding(String building) {
     this.building = building;
@@ -84,6 +90,7 @@ public class FixtureDTO {
   
   /**
    * Gets the {@code room} property.
+   * @return property value
    */
   public String getRoom() {
     return room;
@@ -91,6 +98,7 @@ public class FixtureDTO {
   
   /**
    * Sets the {@code room} property.
+   * @param room the value to set
    */
   public void setRoom(String room) {
     this.room = room;
@@ -98,6 +106,7 @@ public class FixtureDTO {
   
   /**
    * Gets the {@code positionHint} property.
+   * @return property value
    */
   public String getPositionHint() {
     return positionHint;
@@ -105,6 +114,7 @@ public class FixtureDTO {
   
   /**
    * Sets the {@code positionHint} property.
+   * @param positionHint the value to set
    */
   public void setPositionHint(String positionHint) {
     this.positionHint = positionHint;
@@ -112,6 +122,7 @@ public class FixtureDTO {
   
   /**
    * Gets the {@code inventoryNumber} property.
+   * @return property value
    */
   public String getInventoryNumber() {
     return inventoryNumber;
@@ -119,6 +130,7 @@ public class FixtureDTO {
   
   /**
    * Sets the {@code inventoryNumber} property.
+   * @param inventoryNumber the value to set
    */
   public void setInventoryNumber(String inventoryNumber) {
     this.inventoryNumber = inventoryNumber;
@@ -126,6 +138,7 @@ public class FixtureDTO {
   
   /**
    * Gets the {@code serialNumber} property.
+   * @return property value
    */
   public String getSerialNumber() {
     return serialNumber;
@@ -133,6 +146,7 @@ public class FixtureDTO {
   
   /**
    * Sets the {@code serialNumber} property.
+   * @param serialNumber the value to set
    */
   public void setSerialNumber(String serialNumber) {
     this.serialNumber = serialNumber;
@@ -140,6 +154,7 @@ public class FixtureDTO {
   
   /**
    * Gets the {@code ipAddress} property.
+   * @return property value
    */
   public String getIpAddress() {
     return ipAddress;
@@ -147,6 +162,7 @@ public class FixtureDTO {
   
   /**
    * Sets the {@code ipAddress} property.
+   * @param ipAddress the value to set
    */
   public void setIpAddress(String ipAddress) {
     this.ipAddress = ipAddress;
@@ -170,6 +186,7 @@ public class FixtureDTO {
   
   /**
    * Gets the {@code macAddress} property.
+   * @return property value
    */
   public String getMacAddress() {
     return macAddress;
@@ -177,11 +194,12 @@ public class FixtureDTO {
   
   /**
    * Sets the {@code macAddress} property.
+   * @param macAddress the value to set
    */
   public void setMacAddress(String macAddress) {
     this.macAddress = macAddress;
   }
- 
+  
   /**
    * Gets the {@code macAddressObj} property.
    * @return property value
