@@ -41,6 +41,9 @@ public class FixtureValidatorTest {
   private FixtureValidator validator;
   private FixtureDTO fixture;
   
+  /**
+   * Setup for each test
+   */
   @Before
   public void setup() {
     context = new Mockery();
@@ -50,53 +53,86 @@ public class FixtureValidatorTest {
     fixture = new FixtureDTO();
   }
   
+  /**
+   * Validate the Validator supports the FixtureDTO class
+   */
   @Test
   public void supportsFixtureDtoObject() {
     Assert.assertTrue(validator.supports(FixtureDTO.class));
   }
   
+  /**
+   * Validate that if nothing is set on the fixture, errors are added for each
+   * of the fields that require a value.  Also validates that the fields that
+   * the IP and MAC address syntax validations do NOT occur, since there is no
+   * value.
+   */
   @Test
   public void validateEmptyChecking() {
-    context.checking(new Expectations() {{
+    context.checking(new Expectations() { {
       oneOf(errors).rejectValue("building", MSG_PREFIX + "building.empty");
       oneOf(errors).rejectValue("room", MSG_PREFIX + "room.empty");
-      oneOf(errors).rejectValue("positionHint", MSG_PREFIX + "positionHint.empty");
-      oneOf(errors).rejectValue("serialNumber", MSG_PREFIX + "serialNumber.empty");
+      oneOf(errors).rejectValue("positionHint", 
+          MSG_PREFIX + "positionHint.empty");
+      oneOf(errors).rejectValue("serialNumber", 
+          MSG_PREFIX + "serialNumber.empty");
       oneOf(errors).rejectValue("ipAddress", MSG_PREFIX + "ipAddress.empty");
       oneOf(errors).rejectValue("macAddress", MSG_PREFIX + "macAddress.empty");
-    }});
+    } });
     validator.validate(fixture, errors);
   }
   
+  /**
+   * Validate that an invalid IP address is not allowed.
+   */
   @Test
   public void shouldntAllowInvalidIpAddress() {
     setupFixture();
+    
+    context.checking(new Expectations() { {
+      exactly(2).of(errors).rejectValue("ipAddress", 
+          MSG_PREFIX + "ipAddress.notValid");
+    } });
+    
     fixture.setIpAddress("256.1.4.6");
-    context.checking(new Expectations() {{
-      oneOf(errors).rejectValue("ipAddress", MSG_PREFIX + "ipAddress.notValid");
-    }});
     validator.validate(fixture, errors);
+    
+    fixture.setIpAddress("Some other value");
+    validator.validate(fixture, errors);
+
     context.assertIsSatisfied();
   }
   
+  /**
+   * Validate that an invalid MAC address is not allowed
+   */
   @Test
   public void shouldntAllowInvalidMacAddress() {
     setupFixture();
+    context.checking(new Expectations() { {
+      exactly(2).of(errors).rejectValue("macAddress", 
+          MSG_PREFIX + "macAddress.notValid");
+    } });
+
     fixture.setMacAddress("AZ:VA:DC:12:34");
-    context.checking(new Expectations() {{
-      oneOf(errors).rejectValue("macAddress", MSG_PREFIX + "macAddress.notValid");
-    }});
     validator.validate(fixture, errors);
+
+    fixture.setMacAddress("Clearly not a mac");
+    validator.validate(fixture, errors);
+    
     context.assertIsSatisfied();
   }
   
+  /**
+   * Validate that the rejectIfEmpty method works as expected
+   */
   @Test
   public void verifyRejection() {
     final String key = "someKey";
     final String msgProp = "someProp";
-    context.checking(new Expectations() {{
+    context.checking(new Expectations() { {
       exactly(2).of(errors).rejectValue(key, MSG_PREFIX + msgProp);
-    }});
+    } });
     validator.rejectIfEmpty(null, errors, key, msgProp);
     validator.rejectIfEmpty("", errors, key, msgProp);
     validator.rejectIfEmpty("should.go.through", errors, key, msgProp);

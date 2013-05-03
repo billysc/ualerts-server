@@ -45,6 +45,9 @@ public class ServiceSupportedFixtureServiceTest {
   private CommandService commandService;
   private ServiceSupportedFixtureService service;
   
+  /**
+   * Setup for each test
+   */
   @Before
   public void setup() {
     context = new Mockery();
@@ -65,18 +68,23 @@ public class ServiceSupportedFixtureServiceTest {
     fixture.setSerialNumber("0ABCDEF123456");
   }
   
+  /**
+   * Validate that creation uses the command and sets the id and version 
+   * attributes of the Fixture upon completion, to their expected values.
+   * @throws Exception
+   */
   @Test
   public void validateFixtureCreation() throws Exception {
     final Fixture fixtureObj = new Fixture();
-    fixtureObj.setId(123L);
-    fixtureObj.setVersion(456L);
+    fixtureObj.setId(new Long(0));
+    fixtureObj.setVersion(new Long(1));
     
-    context.checking(new Expectations() {{
+    context.checking(new Expectations() { {
       oneOf(commandService).newCommand(with(AddFixtureCommand.class));
       will(returnValue(command));
       oneOf(commandService).invoke(with(command));
       will(returnValue(fixtureObj));
-    }});
+    } });
     
     service.createFixture(fixture);
     

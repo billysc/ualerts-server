@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.ualerts.fixed.web.dto.FixtureDTO;
 
 /**
- * Test case for the {@link MockedFixtureService}
+ * Test case for the {@link MockedFixtureService} class.
  *
  * @author Michael Irwin
  */
@@ -34,6 +34,9 @@ public class MockedFixtureServiceTest {
   private MockedFixtureService service;
   private FixtureDTO fixture;
   
+  /**
+   * Setup function
+   */
   @Before
   public void setup() {
     service = new MockedFixtureService();
@@ -47,6 +50,9 @@ public class MockedFixtureServiceTest {
     fixture.setSerialNumber("1234567890ABC");
   }
   
+  /**
+   * Test that creation sets the id and version attributes of the Fixture
+   */
   @Test
   public void testCreateFixture() {
     service.createFixture(fixture);
