@@ -22,7 +22,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -52,7 +51,7 @@ public class Fixture extends AbstractEntity {
    * Gets the {@code asset} property.
    * @return property value
    */
-  @OneToOne(optional = false, fetch = FetchType.EAGER)
+  @OneToOne(optional = false)
   public Asset getAsset() {
     return asset;
   }
@@ -69,7 +68,7 @@ public class Fixture extends AbstractEntity {
    * Gets the {@code room} property.
    * @return property value
    */
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne
   @JoinColumn(name = "room_id")
   public Room getRoom() {
     return room;
@@ -87,7 +86,7 @@ public class Fixture extends AbstractEntity {
    * Gets the {@code positionHint} property.
    * @return property value
    */
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne
   @JoinColumn(name = "position_hint_id")
   public PositionHint getPositionHint() {
     return positionHint;
