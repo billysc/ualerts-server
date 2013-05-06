@@ -11,7 +11,7 @@
   <packaging>jar</packaging>
 
   <name>UAlerts Fixed Service</name>
-  <description>Functionality associated with UALerts fixed services.</description>
+  <description>Functionality associated with UAlerts fixed services.</description>
 	<build>
 		<plugins>
 			<plugin>
