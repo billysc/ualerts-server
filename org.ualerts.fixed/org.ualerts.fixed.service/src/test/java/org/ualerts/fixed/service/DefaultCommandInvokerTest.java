@@ -25,13 +25,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link TransactionalCommandInvoker}.
+ * Unit tests for {@link DefaultCommandInvoker}.
  *
  * @author Brian Early
  */
-public class TransactionalCommandInvokerTest {
+public class DefaultCommandInvokerTest {
   private Mockery context;
-  private TransactionalCommandInvoker invoker;
+  private DefaultCommandInvoker invoker;
   private Command<Object> command;
 
   /**
@@ -42,7 +42,7 @@ public class TransactionalCommandInvokerTest {
   public void setUp() throws Exception {
     context = new Mockery();
     command = context.mock(Command.class);
-    invoker = new TransactionalCommandInvoker();
+    invoker = new DefaultCommandInvoker();
   }
 
   /**
@@ -56,7 +56,7 @@ public class TransactionalCommandInvokerTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.TransactionalCommandInvoker#invoke()}.
+   * {@link org.ualerts.fixed.service.DefaultCommandInvoker#invoke()}.
    */
   @Test
   public void testInvoke() throws Exception {

@@ -19,20 +19,18 @@
 package org.ualerts.fixed.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * A transactional implementation of {@link CommandInvoker}.
+ * The default implementation of {@link CommandInvoker}.
  *
  * @author Brian Early
  */
 @Service
-public class TransactionalCommandInvoker implements CommandInvoker {
+public class DefaultCommandInvoker implements CommandInvoker {
 
   /**
    * {@inheritDoc}
    */
-  @Transactional
   public <T> T invoke(Command<T> command) throws Exception {
     return command.execute();
   }
