@@ -33,12 +33,7 @@ import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.PositionHint;
 import org.ualerts.fixed.Room;
 import org.ualerts.fixed.repository.FixedRepository;
-import org.ualerts.fixed.service.errors.InventoryNumberConflictException;
-import org.ualerts.fixed.service.errors.LocationConflictException;
-import org.ualerts.fixed.service.errors.MacAddressConflictException;
-import org.ualerts.fixed.service.errors.MissingFieldException;
-import org.ualerts.fixed.service.errors.SerialNumberConflictException;
-import org.ualerts.fixed.service.errors.UnknownBuildingException;
+import org.ualerts.fixed.service.errors.ErrorCodes;
 import org.ualerts.fixed.service.errors.ValidationErrors;
 
 /**
@@ -127,8 +122,8 @@ public class AddFixtureCommandTest {
     catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
-      assertTrue(((MissingFieldException) ex.getErrors().get(0)).
-          getFieldName().equals("buildingName"));
+      assertTrue(ex.getErrors().get(0)
+          .equals(ErrorCodes.MISSING_BUILDING_FIELD));
     }
   }
 
@@ -167,17 +162,17 @@ public class AddFixtureCommandTest {
     catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
-      assertTrue(((MissingFieldException) ex.getErrors().get(0)).
-          getFieldName().equals("inventoryNumber"));
+      assertTrue(ex.getErrors().get(0)
+          .equals(ErrorCodes.MISSING_INVENTORY_NUMBER_FIELD));
     }
   }
 
   /**
-   * Test method with missing IP address for
+   * Test method with missing INET address for
    * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
    */
   @Test
-  public void testOnValidateBlankIpAddress() throws Exception {
+  public void testOnValidateBlankInetAddress() throws Exception {
     final Building building = new Building();
     building.setId("buildingId");
     final Room room = new Room();
@@ -209,8 +204,8 @@ public class AddFixtureCommandTest {
     catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
-      assertTrue(((MissingFieldException) ex.getErrors().get(0)).
-          getFieldName().equals("inetAddress"));
+      assertTrue(ex.getErrors().get(0)
+          .equals(ErrorCodes.MISSING_INET_ADDRESS_FIELD));
     }
   }
 
@@ -249,8 +244,8 @@ public class AddFixtureCommandTest {
     catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
-      assertTrue(((MissingFieldException) ex.getErrors().get(0)).
-          getFieldName().equals("macAddress"));
+      assertTrue(ex.getErrors().get(0)
+          .equals(ErrorCodes.MISSING_MAC_ADDRESS_FIELD));
     }
   }
 
@@ -285,8 +280,8 @@ public class AddFixtureCommandTest {
     catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
-      assertTrue(((MissingFieldException) ex.getErrors().get(0)).
-          getFieldName().equals("positionHint"));
+      assertTrue(ex.getErrors().get(0)
+          .equals(ErrorCodes.MISSING_POSITION_HINT_FIELD));
     }
   }
 
@@ -321,8 +316,7 @@ public class AddFixtureCommandTest {
     catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
-      assertTrue(((MissingFieldException) ex.getErrors().get(0)).
-          getFieldName().equals("roomNumber"));
+      assertTrue(ex.getErrors().get(0).equals(ErrorCodes.MISSING_ROOM_FIELD));
     }
   }
 
@@ -361,8 +355,8 @@ public class AddFixtureCommandTest {
     catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
-      assertTrue(((MissingFieldException) ex.getErrors().get(0)).
-          getFieldName().equals("serialNumber"));
+      assertTrue(ex.getErrors().get(0)
+          .equals(ErrorCodes.MISSING_SERIAL_NUMBER_FIELD));
     }
   }
 
@@ -394,8 +388,7 @@ public class AddFixtureCommandTest {
     catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0).getClass().
-          equals(UnknownBuildingException.class));
+      assertTrue(ex.getErrors().get(0).equals(ErrorCodes.UNKNOWN_BUILDING));
     }
   }
 
@@ -436,8 +429,8 @@ public class AddFixtureCommandTest {
     catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0).getClass()
-          .equals(InventoryNumberConflictException.class));
+      assertTrue(ex.getErrors().get(0)
+          .equals(ErrorCodes.INVENTORY_NUMBER_CONFLICT));
     }
   }
 
@@ -478,8 +471,8 @@ public class AddFixtureCommandTest {
     catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0).getClass()
-          .equals(SerialNumberConflictException.class));
+      assertTrue(ex.getErrors().get(0)
+          .equals(ErrorCodes.SERIAL_NUMBER_CONFLICT));
     }
   }
 
@@ -520,8 +513,7 @@ public class AddFixtureCommandTest {
     catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0).getClass()
-          .equals(MacAddressConflictException.class));
+      assertTrue(ex.getErrors().get(0).equals(ErrorCodes.MAC_ADDRESS_CONFLICT));
     }
   }
 
@@ -562,9 +554,44 @@ public class AddFixtureCommandTest {
     catch (ValidationErrors ex) {
       context.assertIsSatisfied();
       assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0).getClass()
-          .equals(LocationConflictException.class));
+      assertTrue(ex.getErrors().get(0).equals(ErrorCodes.LOCATION_CONFLICT));
     }
+  }
+
+  /**
+   * Test method for
+   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   */
+  @Test
+  public void testOnValidateNoInstalledBy() throws Exception {
+    // At lest currently, this field is not required, so having it null
+    // should not cause an exception.
+    final Building building = new Building();
+    building.setId("buildingId");
+    final Room room = new Room();
+    room.setId(1L);
+    final PositionHint hint = new PositionHint();
+    hint.setId(2L);
+    populateCommand(command);
+    command.setInstalledBy(null);
+    context.checking(new Expectations() { {
+      oneOf(repository).findBuildingByName("buildingName");
+      will(returnValue(building));
+      oneOf(repository).findAssetBySerialNumber("serialNumber");
+      will(returnValue(null));
+      oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+      will(returnValue(null));
+      oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+      will(returnValue(null));
+      oneOf(repository).findRoom("buildingId", "roomNumber");
+      will(returnValue(room));
+      oneOf(repository).findHint("hint");
+      will(returnValue(hint));
+      oneOf(repository).findFixtureByLocation(1L, 2L);
+      will(returnValue(null));
+    } });
+    command.onValidate();
+    context.assertIsSatisfied();
   }
 
   /**
@@ -654,6 +681,7 @@ public class AddFixtureCommandTest {
     command.setMacAddress(new MacAddress("0A-1B-2C-3D-4E-5F"));
     command.setSerialNumber("serialNumber");
     command.setInventoryNumber("inventoryNumber");
+    command.setInstalledBy("installedBy");
   }
 
 }
