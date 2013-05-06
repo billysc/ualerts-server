@@ -20,6 +20,8 @@ package org.ualerts.fixed.service.commands;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.Date;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
@@ -37,6 +39,7 @@ import org.ualerts.fixed.repository.BuildingRepository;
 import org.ualerts.fixed.repository.FixtureRepository;
 import org.ualerts.fixed.repository.PositionHintRepository;
 import org.ualerts.fixed.repository.RoomRepository;
+import org.ualerts.fixed.service.DateTimeService;
 import org.ualerts.fixed.service.errors.ErrorCodes;
 import org.ualerts.fixed.service.errors.ValidationErrors;
 
@@ -52,6 +55,7 @@ public class AddFixtureCommandTest {
   private RoomRepository roomRepository;
   private PositionHintRepository positionHintRepository;
   private FixtureRepository fixtureRepository;
+  private DateTimeService dateService;
   private AddFixtureCommand command;
 
   /**
@@ -65,12 +69,14 @@ public class AddFixtureCommandTest {
     roomRepository = context.mock(RoomRepository.class);
     positionHintRepository = context.mock(PositionHintRepository.class);
     fixtureRepository = context.mock(FixtureRepository.class);
+    dateService = context.mock(DateTimeService.class);
     command = new AddFixtureCommand();
     command.setFixtureRepository(fixtureRepository);
     command.setAssetRepository(assetRepository);
     command.setBuildingRepository(buildingRepository);
     command.setRoomRepository(roomRepository);
     command.setPositionHintRepository(positionHintRepository);
+    command.setDateService(dateService);
   }
 
   /**
@@ -624,6 +630,7 @@ public class AddFixtureCommandTest {
     building.setId("buildingId");
     final Room room = new Room();
     final PositionHint positionHint = new PositionHint();
+    final Date date = new Date();
     populateCommand(command);
 
     context.checking(new Expectations() { {
@@ -633,7 +640,11 @@ public class AddFixtureCommandTest {
       will(returnValue(room));
       oneOf(positionHintRepository).findHint("hint");
       will(returnValue(positionHint));
+      oneOf(dateService).getCurrentDate();
+      will(returnValue(date));
       oneOf(assetRepository).addAsset(with(any(Asset.class)));
+      oneOf(dateService).getCurrentDate();
+      will(returnValue(date));
       oneOf(fixtureRepository).addFixture(with(any(Fixture.class)));
     } });
     Fixture result = command.onExecute();
@@ -648,6 +659,7 @@ public class AddFixtureCommandTest {
   @Test
   public void testOnExecuteCreateNewRoom() throws Exception {
     final Building building = new Building();
+    final Date date = new Date();
     building.setId("buildingId");
     final PositionHint positionHint = new PositionHint();
     populateCommand(command);
@@ -660,7 +672,11 @@ public class AddFixtureCommandTest {
       oneOf(roomRepository).addRoom(with(any(Room.class)));
       oneOf(positionHintRepository).findHint("hint");
       will(returnValue(positionHint));
+      oneOf(dateService).getCurrentDate();
+      will(returnValue(date));
       oneOf(assetRepository).addAsset(with(any(Asset.class)));
+      oneOf(dateService).getCurrentDate();
+      will(returnValue(date));
       oneOf(fixtureRepository).addFixture(with(any(Fixture.class)));
     } });
     command.onExecute();
@@ -676,6 +692,7 @@ public class AddFixtureCommandTest {
     final Building building = new Building();
     building.setId("buildingId");
     final Room room = new Room();
+    final Date date = new Date();
     populateCommand(command);
 
     context.checking(new Expectations() { {
@@ -687,7 +704,11 @@ public class AddFixtureCommandTest {
       will(returnValue(null));
       oneOf(positionHintRepository)
         .addPositionHint(with(any(PositionHint.class)));
+      oneOf(dateService).getCurrentDate();
+      will(returnValue(date));
       oneOf(assetRepository).addAsset(with(any(Asset.class)));
+      oneOf(dateService).getCurrentDate();
+      will(returnValue(date));
       oneOf(fixtureRepository).addFixture(with(any(Fixture.class)));
     } });
     command.onExecute();
