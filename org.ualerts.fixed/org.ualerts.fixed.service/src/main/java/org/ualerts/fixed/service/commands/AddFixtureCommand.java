@@ -29,7 +29,11 @@ import org.ualerts.fixed.InetAddress;
 import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.PositionHint;
 import org.ualerts.fixed.Room;
-import org.ualerts.fixed.repository.FixedRepository;
+import org.ualerts.fixed.repository.AssetRepository;
+import org.ualerts.fixed.repository.BuildingRepository;
+import org.ualerts.fixed.repository.FixtureRepository;
+import org.ualerts.fixed.repository.PositionHintRepository;
+import org.ualerts.fixed.repository.RoomRepository;
 import org.ualerts.fixed.service.CommandComponent;
 import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
 import org.ualerts.fixed.service.errors.ValidationErrors;
@@ -50,7 +54,11 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   private String inventoryNumber;
   private MacAddress macAddress;
   private String installedBy;
-  private FixedRepository repository;
+  private AssetRepository assetRepository;
+  private BuildingRepository buildingRepository;
+  private RoomRepository roomRepository;
+  private PositionHintRepository positionHintRepository;
+  private FixtureRepository fixtureRepository;
 
   /**
    * {@inheritDoc}
@@ -71,7 +79,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
         locationComplete = false;
       }
       else {
-        building = repository.findBuildingByName(buildingName);
+        building = buildingRepository.findBuildingByName(buildingName);
         if (building == null) {
           errors.addError(ValidationErrors.UNKNOWN_BUILDING);
           locationComplete = false;
@@ -87,27 +95,28 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
       if (StringUtils.isBlank(serialNumber)) {
         errors.addError(ValidationErrors.MISSING_SERIAL_NUMBER_FIELD);
       }
-      else if (repository.findAssetBySerialNumber(serialNumber) != null) {
+      else if (assetRepository.findAssetBySerialNumber(serialNumber) != null) {
         errors.addError(ValidationErrors.SERIAL_NUMBER_CONFLICT);
       }
       if (StringUtils.isBlank(inventoryNumber)) {
         errors.addError(ValidationErrors.MISSING_INVENTORY_NUMBER_FIELD);
       }
-      else if (repository.findAssetByInventoryNumber(inventoryNumber) != null) {
+      else if (assetRepository
+               .findAssetByInventoryNumber(inventoryNumber) != null) {
         errors.addError(ValidationErrors.INVENTORY_NUMBER_CONFLICT);
       }
       if (macAddress == null) {
         errors.addError(ValidationErrors.MISSING_MAC_ADDRESS_FIELD);
       }
-      else if (repository.
+      else if (assetRepository.
           findAssetByMacAddress(macAddress.toString()) != null) {
         errors.addError(ValidationErrors.MAC_ADDRESS_CONFLICT);
       }
       if (locationComplete) {
-        Room room = repository.findRoom(building.getId(), roomNumber);
-        PositionHint hint = repository.findHint(positionHint);
+        Room room = roomRepository.findRoom(building.getId(), roomNumber);
+        PositionHint hint = positionHintRepository.findHint(positionHint);
         if ((room != null) && (hint != null)) {
-          if (repository.findFixtureByLocation(room.getId(),
+          if (fixtureRepository.findFixtureByLocation(room.getId(),
               hint.getId()) != null) {
             errors.addError(ValidationErrors.LOCATION_CONFLICT);
           }
@@ -129,19 +138,19 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   @Override
   protected Fixture onExecute() throws Exception {
     try {
-      Building building = repository.findBuildingByName(buildingName);
-      Room room = repository.findRoom(building.getId(), roomNumber);
+      Building building = buildingRepository.findBuildingByName(buildingName);
+      Room room = roomRepository.findRoom(building.getId(), roomNumber);
       if (room == null) {
         room = new Room();
         room.setBuilding(building);
         room.setRoomNumber(roomNumber);
-        repository.addRoom(room);
+        roomRepository.addRoom(room);
       }
-      PositionHint hint = repository.findHint(positionHint);
+      PositionHint hint = positionHintRepository.findHint(positionHint);
       if (hint == null) {
         hint = new PositionHint();
         hint.setHintText(positionHint);
-        repository.addPositionHint(hint);
+        positionHintRepository.addPositionHint(hint);
       }
       Asset asset = new Asset();
       Date creationDate = new Date();
@@ -149,7 +158,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
       asset.setInventoryNumber(inventoryNumber);
       asset.setMacAddress(macAddress.toString());
       asset.setSerialNumber(serialNumber);
-      repository.addAsset(asset);
+      assetRepository.addAsset(asset);
       Fixture fixture = new Fixture();
       fixture.setAsset(asset);
       fixture.setDateCreated(creationDate);
@@ -157,7 +166,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
       fixture.setIpAddress(inetAddress.toString());
       fixture.setPositionHint(hint);
       fixture.setRoom(room);
-      repository.addFixture(fixture);
+      fixtureRepository.addFixture(fixture);
       return fixture;
     }
     catch (Exception ex) {
@@ -230,12 +239,49 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   }
 
   /**
+   * Sets the {@code assetRepository} property.
+   * @param assetRepository the value to set
+   */
+  @Autowired
+  public void setAssetRepository(AssetRepository assetRepository) {
+    this.assetRepository = assetRepository;
+  }
+
+  /**
+   * Sets the {@code buildingRepository} property.
+   * @param buildingRepository the value to set
+   */
+  @Autowired
+  public void setBuildingRepository(BuildingRepository buildingRepository) {
+    this.buildingRepository = buildingRepository;
+  }
+
+  /**
+   * Sets the {@code roomRepository} property.
+   * @param roomRepository the value to set
+   */
+  @Autowired
+  public void setRoomRepository(RoomRepository roomRepository) {
+    this.roomRepository = roomRepository;
+  }
+
+  /**
+   * Sets the {@code positionHintRepository} property.
+   * @param positionHintRepository the value to set
+   */
+  @Autowired
+  public void setPositionHintRepository(
+      PositionHintRepository positionHintRepository) {
+    this.positionHintRepository = positionHintRepository;
+  }
+
+  /**
    * Sets the {@code repository} property.
    * @param repository the fixed repository
    */
   @Autowired
-  public void setRepository(FixedRepository repository) {
-    this.repository = repository;
+  public void setFixtureRepository(FixtureRepository repository) {
+    this.fixtureRepository = repository;
   }
 
 }
