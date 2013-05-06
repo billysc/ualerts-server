@@ -96,8 +96,8 @@ public interface ErrorCodes {
   /**
    * Error code representing a missing inventory number field.
    */
-  String MISSING_INVENTORY_NUMBER_FIELD = CODE_BASE +
-      "missingField.inventoryNumber";
+  String MISSING_INVENTORY_NUMBER_FIELD = CODE_BASE
+      + "missingField.inventoryNumber";
   
   /**
    * Error code representing a missing MAC address field.
