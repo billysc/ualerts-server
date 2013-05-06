@@ -33,11 +33,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.ualerts.fixed.service.errors.ValidationErrors;
 import org.ualerts.fixed.web.dto.FixtureDTO;
 import org.ualerts.fixed.web.error.FixtureErrorHandler;
 import org.ualerts.fixed.web.service.FixtureService;
 import org.ualerts.fixed.web.util.FakeHttpServletRequest;
 import org.ualerts.fixed.web.util.FakeHttpServletResponse;
+import org.ualerts.fixed.web.validator.FixtureValidator;
 
 /**
  * Test case for the {@link ManuallyEnrollFixtureController} class.
@@ -140,11 +142,49 @@ public class ManuallyEnrollFixtureControllerTest {
     
     Map<String, Object> response = controller.handleFormSubmission(request, 
         resp, fixture, result);
+    context.assertIsSatisfied();
+    Assert.assertNotNull(response);
+    Assert.assertFalse((Boolean) response.get("success"));
+    Assert.assertNotNull(response.get("html"));
+  }
+  
+  /**
+   * Validate that the error handler is used when errors are discovered by the
+   * FixtureService.
+   */
+  @Test
+  public void validateServiceErrorHandling() throws Exception {
+    final HttpServletRequest request = context.mock(HttpServletRequest.class);
+    final HttpServletResponse resp = context.mock(HttpServletResponse.class);
+    final FixtureDTO fixture = new FixtureDTO();
+    final BindingResult result = context.mock(BindingResult.class);
+    final RequestDispatcher dispatcher = context.mock(RequestDispatcher.class);
+    final ValidationErrors validationErrors = new ValidationErrors();
+    
+    context.checking(new Expectations() { { 
+      oneOf(result).hasErrors();
+      will(returnValue(false));
+      oneOf(fixtureService).createFixture(fixture);
+      will(throwException(validationErrors));
+      oneOf(errorHandler).applyErrors(validationErrors, result, 
+          FixtureValidator.MSG_PREFIX);
+      
+      oneOf(result).hasErrors();
+      will(returnValue(true));
+      oneOf(request).getRequestDispatcher("enrollment");
+      will(returnValue(dispatcher));
+      oneOf(dispatcher).include(with(any(FakeHttpServletRequest.class)), 
+          with(any(FakeHttpServletResponse.class)));
+    } });
+    
+
+    Map<String, Object> response = controller.handleFormSubmission(request, 
+        resp, fixture, result);
+    context.assertIsSatisfied();
     
     Assert.assertNotNull(response);
     Assert.assertFalse((Boolean) response.get("success"));
     Assert.assertNotNull(response.get("html"));
-    
   }
 
 }
