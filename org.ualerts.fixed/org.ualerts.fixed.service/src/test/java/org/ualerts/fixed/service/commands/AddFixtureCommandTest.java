@@ -32,7 +32,11 @@ import org.ualerts.fixed.InetAddress;
 import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.PositionHint;
 import org.ualerts.fixed.Room;
-import org.ualerts.fixed.repository.FixedRepository;
+import org.ualerts.fixed.repository.AssetRepository;
+import org.ualerts.fixed.repository.BuildingRepository;
+import org.ualerts.fixed.repository.FixtureRepository;
+import org.ualerts.fixed.repository.PositionHintRepository;
+import org.ualerts.fixed.repository.RoomRepository;
 import org.ualerts.fixed.service.errors.ErrorCodes;
 import org.ualerts.fixed.service.errors.ValidationErrors;
 
@@ -43,7 +47,11 @@ import org.ualerts.fixed.service.errors.ValidationErrors;
  */
 public class AddFixtureCommandTest {
   private Mockery context;
-  private FixedRepository repository;
+  private AssetRepository assetRepository;
+  private BuildingRepository buildingRepository;
+  private RoomRepository roomRepository;
+  private PositionHintRepository positionHintRepository;
+  private FixtureRepository fixtureRepository;
   private AddFixtureCommand command;
 
   /**
@@ -52,9 +60,17 @@ public class AddFixtureCommandTest {
   @Before
   public void setUp() throws Exception {
     context = new Mockery();
-    repository = context.mock(FixedRepository.class);
+    assetRepository = context.mock(AssetRepository.class);
+    buildingRepository = context.mock(BuildingRepository.class);
+    roomRepository = context.mock(RoomRepository.class);
+    positionHintRepository = context.mock(PositionHintRepository.class);
+    fixtureRepository = context.mock(FixtureRepository.class);
     command = new AddFixtureCommand();
-    command.setRepository(repository);
+    command.setFixtureRepository(fixtureRepository);
+    command.setAssetRepository(assetRepository);
+    command.setBuildingRepository(buildingRepository);
+    command.setRoomRepository(roomRepository);
+    command.setPositionHintRepository(positionHintRepository);
   }
 
   /**
@@ -63,7 +79,11 @@ public class AddFixtureCommandTest {
   @After
   public void tearDown() throws Exception {
     command = null;
-    repository = null;
+    fixtureRepository = null;
+    assetRepository = null;
+    buildingRepository = null;
+    roomRepository = null;
+    positionHintRepository = null;
   }
 
   /**
@@ -80,19 +100,19 @@ public class AddFixtureCommandTest {
     hint.setId(2L);
     populateCommand(command);
     context.checking(new Expectations() { {
-      oneOf(repository).findBuildingByName("buildingName");
+      oneOf(buildingRepository).findBuildingByName("buildingName");
       will(returnValue(building));
-      oneOf(repository).findAssetBySerialNumber("serialNumber");
+      oneOf(assetRepository).findAssetBySerialNumber("serialNumber");
       will(returnValue(null));
-      oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+      oneOf(assetRepository).findAssetByInventoryNumber("inventoryNumber");
       will(returnValue(null));
-      oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+      oneOf(assetRepository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
       will(returnValue(null));
-      oneOf(repository).findRoom("buildingId", "roomNumber");
+      oneOf(roomRepository).findRoom("buildingId", "roomNumber");
       will(returnValue(room));
-      oneOf(repository).findHint("hint");
+      oneOf(positionHintRepository).findHint("hint");
       will(returnValue(hint));
-      oneOf(repository).findFixtureByLocation(1L, 2L);
+      oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
       will(returnValue(null));
     } });
     command.onValidate();
@@ -109,11 +129,11 @@ public class AddFixtureCommandTest {
       populateCommand(command);
       command.setBuildingName(null);
       context.checking(new Expectations() { {
-        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        oneOf(assetRepository).findAssetBySerialNumber("serialNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        oneOf(assetRepository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        oneOf(assetRepository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
         will(returnValue(null));
       } });
       command.onValidate();
@@ -143,17 +163,17 @@ public class AddFixtureCommandTest {
       populateCommand(command);
       command.setInventoryNumber(null);
       context.checking(new Expectations() { {
-        oneOf(repository).findBuildingByName("buildingName");
+        oneOf(buildingRepository).findBuildingByName("buildingName");
         will(returnValue(building));
-        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        oneOf(assetRepository).findAssetBySerialNumber("serialNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        oneOf(assetRepository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
         will(returnValue(null));
-        oneOf(repository).findRoom("buildingId", "roomNumber");
+        oneOf(roomRepository).findRoom("buildingId", "roomNumber");
         will(returnValue(room));
-        oneOf(repository).findHint("hint");
+        oneOf(positionHintRepository).findHint("hint");
         will(returnValue(hint));
-        oneOf(repository).findFixtureByLocation(1L, 2L);
+        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
         will(returnValue(null));
       } });
       command.onValidate();
@@ -183,19 +203,19 @@ public class AddFixtureCommandTest {
       populateCommand(command);
       command.setInetAddress(null);
       context.checking(new Expectations() { {
-        oneOf(repository).findBuildingByName("buildingName");
+        oneOf(buildingRepository).findBuildingByName("buildingName");
         will(returnValue(building));
-        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        oneOf(assetRepository).findAssetBySerialNumber("serialNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        oneOf(assetRepository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        oneOf(assetRepository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
         will(returnValue(null));
-        oneOf(repository).findRoom("buildingId", "roomNumber");
+        oneOf(roomRepository).findRoom("buildingId", "roomNumber");
         will(returnValue(room));
-        oneOf(repository).findHint("hint");
+        oneOf(positionHintRepository).findHint("hint");
         will(returnValue(hint));
-        oneOf(repository).findFixtureByLocation(1L, 2L);
+        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
         will(returnValue(null));
       } });
       command.onValidate();
@@ -225,17 +245,17 @@ public class AddFixtureCommandTest {
       populateCommand(command);
       command.setMacAddress(null);
       context.checking(new Expectations() { {
-        oneOf(repository).findBuildingByName("buildingName");
+        oneOf(buildingRepository).findBuildingByName("buildingName");
         will(returnValue(building));
-        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        oneOf(assetRepository).findAssetBySerialNumber("serialNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        oneOf(assetRepository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(null));
-        oneOf(repository).findRoom("buildingId", "roomNumber");
+        oneOf(roomRepository).findRoom("buildingId", "roomNumber");
         will(returnValue(room));
-        oneOf(repository).findHint("hint");
+        oneOf(positionHintRepository).findHint("hint");
         will(returnValue(hint));
-        oneOf(repository).findFixtureByLocation(1L, 2L);
+        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
         will(returnValue(null));
       } });
       command.onValidate();
@@ -265,13 +285,13 @@ public class AddFixtureCommandTest {
       populateCommand(command);
       command.setPositionHint(null);
       context.checking(new Expectations() { {
-        oneOf(repository).findBuildingByName("buildingName");
+        oneOf(buildingRepository).findBuildingByName("buildingName");
         will(returnValue(building));
-        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        oneOf(assetRepository).findAssetBySerialNumber("serialNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        oneOf(assetRepository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        oneOf(assetRepository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
         will(returnValue(null));
       } });
       command.onValidate();
@@ -301,13 +321,13 @@ public class AddFixtureCommandTest {
       populateCommand(command);
       command.setRoomNumber(null);
       context.checking(new Expectations() { {
-        oneOf(repository).findBuildingByName("buildingName");
+        oneOf(buildingRepository).findBuildingByName("buildingName");
         will(returnValue(building));
-        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        oneOf(assetRepository).findAssetBySerialNumber("serialNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        oneOf(assetRepository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        oneOf(assetRepository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
         will(returnValue(null));
       } });
       command.onValidate();
@@ -336,17 +356,17 @@ public class AddFixtureCommandTest {
       populateCommand(command);
       command.setSerialNumber(null);
       context.checking(new Expectations() { {
-        oneOf(repository).findBuildingByName("buildingName");
+        oneOf(buildingRepository).findBuildingByName("buildingName");
         will(returnValue(building));
-        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        oneOf(assetRepository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        oneOf(assetRepository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
         will(returnValue(null));
-        oneOf(repository).findRoom("buildingId", "roomNumber");
+        oneOf(roomRepository).findRoom("buildingId", "roomNumber");
         will(returnValue(room));
-        oneOf(repository).findHint("hint");
+        oneOf(positionHintRepository).findHint("hint");
         will(returnValue(hint));
-        oneOf(repository).findFixtureByLocation(1L, 2L);
+        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
         will(returnValue(null));
       } });
       command.onValidate();
@@ -373,13 +393,13 @@ public class AddFixtureCommandTest {
     try {
       populateCommand(command);
       context.checking(new Expectations() { {
-        oneOf(repository).findBuildingByName("buildingName");
+        oneOf(buildingRepository).findBuildingByName("buildingName");
         will(returnValue(null));
-        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        oneOf(assetRepository).findAssetBySerialNumber("serialNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        oneOf(assetRepository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        oneOf(assetRepository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
         will(returnValue(null));
       } });
       command.onValidate();
@@ -408,19 +428,19 @@ public class AddFixtureCommandTest {
     try {
       populateCommand(command);
       context.checking(new Expectations() { {
-        oneOf(repository).findBuildingByName("buildingName");
+        oneOf(buildingRepository).findBuildingByName("buildingName");
         will(returnValue(building));
-        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        oneOf(assetRepository).findAssetBySerialNumber("serialNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        oneOf(assetRepository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(asset));
-        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        oneOf(assetRepository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
         will(returnValue(null));
-        oneOf(repository).findRoom("buildingId", "roomNumber");
+        oneOf(roomRepository).findRoom("buildingId", "roomNumber");
         will(returnValue(room));
-        oneOf(repository).findHint("hint");
+        oneOf(positionHintRepository).findHint("hint");
         will(returnValue(hint));
-        oneOf(repository).findFixtureByLocation(1L, 2L);
+        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
         will(returnValue(null));
       } });
       command.onValidate();
@@ -450,19 +470,19 @@ public class AddFixtureCommandTest {
     try {
       populateCommand(command);
       context.checking(new Expectations() { {
-        oneOf(repository).findBuildingByName("buildingName");
+        oneOf(buildingRepository).findBuildingByName("buildingName");
         will(returnValue(building));
-        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        oneOf(assetRepository).findAssetBySerialNumber("serialNumber");
         will(returnValue(asset));
-        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        oneOf(assetRepository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        oneOf(assetRepository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
         will(returnValue(null));
-        oneOf(repository).findRoom("buildingId", "roomNumber");
+        oneOf(roomRepository).findRoom("buildingId", "roomNumber");
         will(returnValue(room));
-        oneOf(repository).findHint("hint");
+        oneOf(positionHintRepository).findHint("hint");
         will(returnValue(hint));
-        oneOf(repository).findFixtureByLocation(1L, 2L);
+        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
         will(returnValue(null));
       } });
       command.onValidate();
@@ -492,19 +512,19 @@ public class AddFixtureCommandTest {
     try {
       populateCommand(command);
       context.checking(new Expectations() { {
-        oneOf(repository).findBuildingByName("buildingName");
+        oneOf(buildingRepository).findBuildingByName("buildingName");
         will(returnValue(building));
-        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        oneOf(assetRepository).findAssetBySerialNumber("serialNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        oneOf(assetRepository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        oneOf(assetRepository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
         will(returnValue(asset));
-        oneOf(repository).findRoom("buildingId", "roomNumber");
+        oneOf(roomRepository).findRoom("buildingId", "roomNumber");
         will(returnValue(room));
-        oneOf(repository).findHint("hint");
+        oneOf(positionHintRepository).findHint("hint");
         will(returnValue(hint));
-        oneOf(repository).findFixtureByLocation(1L, 2L);
+        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
         will(returnValue(null));
       } });
       command.onValidate();
@@ -533,19 +553,19 @@ public class AddFixtureCommandTest {
     try {
       populateCommand(command);
       context.checking(new Expectations() { {
-        oneOf(repository).findBuildingByName("buildingName");
+        oneOf(buildingRepository).findBuildingByName("buildingName");
         will(returnValue(building));
-        oneOf(repository).findAssetBySerialNumber("serialNumber");
+        oneOf(assetRepository).findAssetBySerialNumber("serialNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+        oneOf(assetRepository).findAssetByInventoryNumber("inventoryNumber");
         will(returnValue(null));
-        oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+        oneOf(assetRepository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
         will(returnValue(null));
-        oneOf(repository).findRoom("buildingId", "roomNumber");
+        oneOf(roomRepository).findRoom("buildingId", "roomNumber");
         will(returnValue(room));
-        oneOf(repository).findHint("hint");
+        oneOf(positionHintRepository).findHint("hint");
         will(returnValue(hint));
-        oneOf(repository).findFixtureByLocation(1L, 2L);
+        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
         will(returnValue(fixture));
       } });
       command.onValidate();
@@ -575,19 +595,19 @@ public class AddFixtureCommandTest {
     populateCommand(command);
     command.setInstalledBy(null);
     context.checking(new Expectations() { {
-      oneOf(repository).findBuildingByName("buildingName");
+      oneOf(buildingRepository).findBuildingByName("buildingName");
       will(returnValue(building));
-      oneOf(repository).findAssetBySerialNumber("serialNumber");
+      oneOf(assetRepository).findAssetBySerialNumber("serialNumber");
       will(returnValue(null));
-      oneOf(repository).findAssetByInventoryNumber("inventoryNumber");
+      oneOf(assetRepository).findAssetByInventoryNumber("inventoryNumber");
       will(returnValue(null));
-      oneOf(repository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+      oneOf(assetRepository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
       will(returnValue(null));
-      oneOf(repository).findRoom("buildingId", "roomNumber");
+      oneOf(roomRepository).findRoom("buildingId", "roomNumber");
       will(returnValue(room));
-      oneOf(repository).findHint("hint");
+      oneOf(positionHintRepository).findHint("hint");
       will(returnValue(hint));
-      oneOf(repository).findFixtureByLocation(1L, 2L);
+      oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
       will(returnValue(null));
     } });
     command.onValidate();
@@ -607,14 +627,14 @@ public class AddFixtureCommandTest {
     populateCommand(command);
 
     context.checking(new Expectations() { {
-      oneOf(repository).findBuildingByName("buildingName");
+      oneOf(buildingRepository).findBuildingByName("buildingName");
       will(returnValue(building));
-      oneOf(repository).findRoom("buildingId", "roomNumber");
+      oneOf(roomRepository).findRoom("buildingId", "roomNumber");
       will(returnValue(room));
-      oneOf(repository).findHint("hint");
+      oneOf(positionHintRepository).findHint("hint");
       will(returnValue(positionHint));
-      oneOf(repository).addAsset(with(any(Asset.class)));
-      oneOf(repository).addFixture(with(any(Fixture.class)));
+      oneOf(assetRepository).addAsset(with(any(Asset.class)));
+      oneOf(fixtureRepository).addFixture(with(any(Fixture.class)));
     } });
     Fixture result = command.onExecute();
     context.assertIsSatisfied();
@@ -633,15 +653,15 @@ public class AddFixtureCommandTest {
     populateCommand(command);
 
     context.checking(new Expectations() { {
-      oneOf(repository).findBuildingByName("buildingName");
+      oneOf(buildingRepository).findBuildingByName("buildingName");
       will(returnValue(building));
-      oneOf(repository).findRoom("buildingId", "roomNumber");
+      oneOf(roomRepository).findRoom("buildingId", "roomNumber");
       will(returnValue(null));
-      oneOf(repository).addRoom(with(any(Room.class)));
-      oneOf(repository).findHint("hint");
+      oneOf(roomRepository).addRoom(with(any(Room.class)));
+      oneOf(positionHintRepository).findHint("hint");
       will(returnValue(positionHint));
-      oneOf(repository).addAsset(with(any(Asset.class)));
-      oneOf(repository).addFixture(with(any(Fixture.class)));
+      oneOf(assetRepository).addAsset(with(any(Asset.class)));
+      oneOf(fixtureRepository).addFixture(with(any(Fixture.class)));
     } });
     command.onExecute();
     context.assertIsSatisfied();
@@ -659,15 +679,16 @@ public class AddFixtureCommandTest {
     populateCommand(command);
 
     context.checking(new Expectations() { {
-      oneOf(repository).findBuildingByName("buildingName");
+      oneOf(buildingRepository).findBuildingByName("buildingName");
       will(returnValue(building));
-      oneOf(repository).findRoom("buildingId", "roomNumber");
+      oneOf(roomRepository).findRoom("buildingId", "roomNumber");
       will(returnValue(room));
-      oneOf(repository).findHint("hint");
+      oneOf(positionHintRepository).findHint("hint");
       will(returnValue(null));
-      oneOf(repository).addPositionHint(with(any(PositionHint.class)));
-      oneOf(repository).addAsset(with(any(Asset.class)));
-      oneOf(repository).addFixture(with(any(Fixture.class)));
+      oneOf(positionHintRepository)
+        .addPositionHint(with(any(PositionHint.class)));
+      oneOf(assetRepository).addAsset(with(any(Asset.class)));
+      oneOf(fixtureRepository).addFixture(with(any(Fixture.class)));
     } });
     command.onExecute();
     context.assertIsSatisfied();
