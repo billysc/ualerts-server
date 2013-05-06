@@ -18,7 +18,7 @@
  */
 package org.ualerts.fixed.service.commands;
 
-import java.util.Date;
+import javax.persistence.PersistenceException;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,7 @@ import org.ualerts.fixed.repository.FixtureRepository;
 import org.ualerts.fixed.repository.PositionHintRepository;
 import org.ualerts.fixed.repository.RoomRepository;
 import org.ualerts.fixed.service.CommandComponent;
+import org.ualerts.fixed.service.DateTimeService;
 import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
 import org.ualerts.fixed.service.errors.ValidationErrors;
 
@@ -59,6 +60,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   private RoomRepository roomRepository;
   private PositionHintRepository positionHintRepository;
   private FixtureRepository fixtureRepository;
+  private DateTimeService dateService;
 
   /**
    * {@inheritDoc}
@@ -68,62 +70,13 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
     super.onValidate();
     ValidationErrors errors = new ValidationErrors();
     try {
-      Building building = null;
-      boolean locationComplete = true;
-      if (StringUtils.isBlank(roomNumber)) {
-        errors.addError(ValidationErrors.MISSING_ROOM_FIELD);
-        locationComplete = false;
-      }
-      if (StringUtils.isBlank(buildingName)) {
-        errors.addError(ValidationErrors.MISSING_BUILDING_FIELD);
-        locationComplete = false;
-      }
-      else {
-        building = buildingRepository.findBuildingByName(buildingName);
-        if (building == null) {
-          errors.addError(ValidationErrors.UNKNOWN_BUILDING);
-          locationComplete = false;
-        }
-      }
-      if (StringUtils.isBlank(positionHint)) {
-        errors.addError(ValidationErrors.MISSING_POSITION_HINT_FIELD);
-        locationComplete = false;
-      }
-      if (inetAddress == null) {
-        errors.addError(ValidationErrors.MISSING_INET_ADDRESS_FIELD);
-      }
-      if (StringUtils.isBlank(serialNumber)) {
-        errors.addError(ValidationErrors.MISSING_SERIAL_NUMBER_FIELD);
-      }
-      else if (assetRepository.findAssetBySerialNumber(serialNumber) != null) {
-        errors.addError(ValidationErrors.SERIAL_NUMBER_CONFLICT);
-      }
-      if (StringUtils.isBlank(inventoryNumber)) {
-        errors.addError(ValidationErrors.MISSING_INVENTORY_NUMBER_FIELD);
-      }
-      else if (assetRepository
-               .findAssetByInventoryNumber(inventoryNumber) != null) {
-        errors.addError(ValidationErrors.INVENTORY_NUMBER_CONFLICT);
-      }
-      if (macAddress == null) {
-        errors.addError(ValidationErrors.MISSING_MAC_ADDRESS_FIELD);
-      }
-      else if (assetRepository.
-          findAssetByMacAddress(macAddress.toString()) != null) {
-        errors.addError(ValidationErrors.MAC_ADDRESS_CONFLICT);
-      }
-      if (locationComplete) {
-        Room room = roomRepository.findRoom(building.getId(), roomNumber);
-        PositionHint hint = positionHintRepository.findHint(positionHint);
-        if ((room != null) && (hint != null)) {
-          if (fixtureRepository.findFixtureByLocation(room.getId(),
-              hint.getId()) != null) {
-            errors.addError(ValidationErrors.LOCATION_CONFLICT);
-          }
-        }
-      }
+      validateSerialNumber(errors);
+      validateInventoryNumber(errors);
+      validateMacAddress(errors);
+      validateInetAddress(errors);
+      validateLocation(errors);
     }
-    catch (Exception ex) {
+    catch (PersistenceException ex) {
       throw new UnspecifiedConstraintException(ex);
     }
     if (errors.hasErrors()) {
@@ -131,7 +84,76 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
     }
 
   }
+  
+  private void validateSerialNumber(ValidationErrors errors) {
+    if (StringUtils.isBlank(serialNumber)) {
+      errors.addError(ValidationErrors.MISSING_SERIAL_NUMBER_FIELD);
+    }
+    else if (assetRepository.findAssetBySerialNumber(serialNumber) != null) {
+      errors.addError(ValidationErrors.SERIAL_NUMBER_CONFLICT);
+    }
+  }
 
+  private void validateInventoryNumber(ValidationErrors errors) {
+    if (StringUtils.isBlank(inventoryNumber)) {
+      errors.addError(ValidationErrors.MISSING_INVENTORY_NUMBER_FIELD);
+    }
+    else if (assetRepository
+             .findAssetByInventoryNumber(inventoryNumber) != null) {
+      errors.addError(ValidationErrors.INVENTORY_NUMBER_CONFLICT);
+    }
+  }
+  
+  private void validateMacAddress(ValidationErrors errors) {
+    if (macAddress == null) {
+      errors.addError(ValidationErrors.MISSING_MAC_ADDRESS_FIELD);
+    }
+    else if (assetRepository.
+        findAssetByMacAddress(macAddress.toString()) != null) {
+      errors.addError(ValidationErrors.MAC_ADDRESS_CONFLICT);
+    }
+  }
+  
+  private void validateInetAddress(ValidationErrors errors) {
+    if (inetAddress == null) {
+      errors.addError(ValidationErrors.MISSING_INET_ADDRESS_FIELD);
+    }
+  }
+  
+  private void validateLocation(ValidationErrors errors) {
+    Building building = null;
+    boolean locationComplete = true;
+    if (StringUtils.isBlank(roomNumber)) {
+      errors.addError(ValidationErrors.MISSING_ROOM_FIELD);
+      locationComplete = false;
+    }
+    if (StringUtils.isBlank(buildingName)) {
+      errors.addError(ValidationErrors.MISSING_BUILDING_FIELD);
+      locationComplete = false;
+    }
+    else {
+      building = buildingRepository.findBuildingByName(buildingName);
+      if (building == null) {
+        errors.addError(ValidationErrors.UNKNOWN_BUILDING);
+        locationComplete = false;
+      }
+    }
+    if (StringUtils.isBlank(positionHint)) {
+      errors.addError(ValidationErrors.MISSING_POSITION_HINT_FIELD);
+      locationComplete = false;
+    }
+    if (locationComplete) {
+      Room room = roomRepository.findRoom(building.getId(), roomNumber);
+      PositionHint hint = positionHintRepository.findHint(positionHint);
+      if ((room != null) && (hint != null)) {
+        if (fixtureRepository.findFixtureByLocation(room.getId(),
+            hint.getId()) != null) {
+          errors.addError(ValidationErrors.LOCATION_CONFLICT);
+        }
+      }
+    }
+  }
+  
   /**
    * {@inheritDoc}
    */
@@ -139,29 +161,12 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   protected Fixture onExecute() throws Exception {
     try {
       Building building = buildingRepository.findBuildingByName(buildingName);
-      Room room = roomRepository.findRoom(building.getId(), roomNumber);
-      if (room == null) {
-        room = new Room();
-        room.setBuilding(building);
-        room.setRoomNumber(roomNumber);
-        roomRepository.addRoom(room);
-      }
-      PositionHint hint = positionHintRepository.findHint(positionHint);
-      if (hint == null) {
-        hint = new PositionHint();
-        hint.setHintText(positionHint);
-        positionHintRepository.addPositionHint(hint);
-      }
-      Asset asset = new Asset();
-      Date creationDate = new Date();
-      asset.setDateCreated(creationDate);
-      asset.setInventoryNumber(inventoryNumber);
-      asset.setMacAddress(macAddress.toString());
-      asset.setSerialNumber(serialNumber);
-      assetRepository.addAsset(asset);
+      Room room = findOrConstructRoom(building);
+      PositionHint hint = findOrConstructPositionHint();
+      Asset asset = constructAsset();
       Fixture fixture = new Fixture();
       fixture.setAsset(asset);
-      fixture.setDateCreated(creationDate);
+      fixture.setDateCreated(dateService.getCurrentDate());
       fixture.setInstalledBy(installedBy);
       fixture.setIpAddress(inetAddress.toString());
       fixture.setPositionHint(hint);
@@ -174,6 +179,37 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
     }
   }
 
+  private Room findOrConstructRoom(Building building) {
+    Room room = roomRepository.findRoom(building.getId(), roomNumber);
+    if (room == null) {
+      room = new Room();
+      room.setBuilding(building);
+      room.setRoomNumber(roomNumber);
+      roomRepository.addRoom(room);
+    }
+    return room;
+  }
+  
+  private PositionHint findOrConstructPositionHint() {
+    PositionHint hint = positionHintRepository.findHint(positionHint);
+    if (hint == null) {
+      hint = new PositionHint();
+      hint.setHintText(positionHint);
+      positionHintRepository.addPositionHint(hint);
+    }
+    return hint;
+  }
+  
+  private Asset constructAsset() {
+    Asset asset = new Asset();
+    asset.setDateCreated(dateService.getCurrentDate());
+    asset.setInventoryNumber(inventoryNumber);
+    asset.setMacAddress(macAddress.toString());
+    asset.setSerialNumber(serialNumber);
+    assetRepository.addAsset(asset);
+    return asset;
+  }
+  
   /**
    * Sets the {@code roomNumber} property.
    * @param roomNumber the room number
@@ -282,6 +318,15 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   @Autowired
   public void setFixtureRepository(FixtureRepository repository) {
     this.fixtureRepository = repository;
+  }
+
+  /**
+   * Sets the {@code dateService} property.
+   * @param dateService the value to set
+   */
+  @Autowired
+  public void setDateService(DateTimeService dateService) {
+    this.dateService = dateService;
   }
 
 }
