@@ -19,16 +19,14 @@
 
 package org.ualerts.fixed.web.error;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.Errors;
-import org.ualerts.fixed.service.errors.InventoryNumberConflictException;
-import org.ualerts.fixed.service.errors.LocationConflictException;
-import org.ualerts.fixed.service.errors.MacAddressConflictException;
-import org.ualerts.fixed.service.errors.SerialNumberConflictException;
-import org.ualerts.fixed.service.errors.UnknownBuildingException;
 import org.ualerts.fixed.service.errors.ValidationErrors;
 
 /**
@@ -43,11 +41,7 @@ public class ConcreteFixtureErrorHandlerTest {
   private ConcreteFixtureErrorHandler errorHandler;
   private ValidationErrors validationErrors;
   
-  private InventoryNumberConflictException invNumConflictException;
-  private LocationConflictException locationConflictException;
-  private MacAddressConflictException macAddConflictException;
-  private SerialNumberConflictException serialNumConflictException;
-  private UnknownBuildingException unknownBuildingException;
+  private Map<String, String> errorFieldMapping;
   
   /**
    * Setup needed for each test
@@ -55,21 +49,10 @@ public class ConcreteFixtureErrorHandlerTest {
   @Before
   public void setup() {
     context = new Mockery();
+    errorFieldMapping = new HashMap<String, String>();
     errors = context.mock(Errors.class);
     errorHandler = new ConcreteFixtureErrorHandler();
-    
-    invNumConflictException = new InventoryNumberConflictException();
-    locationConflictException = new LocationConflictException();
-    macAddConflictException = new MacAddressConflictException();
-    serialNumConflictException = new SerialNumberConflictException();
-    unknownBuildingException = new UnknownBuildingException();
-    
     validationErrors = new ValidationErrors();
-    validationErrors.addError(invNumConflictException);
-    validationErrors.addError(locationConflictException);
-    validationErrors.addError(macAddConflictException);
-    validationErrors.addError(serialNumConflictException);
-    validationErrors.addError(unknownBuildingException);
   }
   
   /**
@@ -77,18 +60,19 @@ public class ConcreteFixtureErrorHandlerTest {
    */
   @Test
   public void validateExceptionHandling() {
+    final String code1 = "ERROR_1";
+    final String code2 = "ERROR_2";
+    final String field1 = "FIELD_1";
+    
+    errorFieldMapping.put(code1, field1);
+    errorHandler.setErrorMapping(errorFieldMapping);
+    validationErrors.addError(code1);
+    validationErrors.addError(code2);
+    
     final String msgPrefix = "PREFIX_";
     context.checking(new Expectations() { {
-      oneOf(errors).rejectValue("inventoryNumber", 
-          msgPrefix + invNumConflictException.getMessageProperty());
-      oneOf(errors).reject(msgPrefix 
-          + locationConflictException.getMessageProperty());
-      oneOf(errors).rejectValue("macAddress", 
-          msgPrefix + macAddConflictException.getMessageProperty());
-      oneOf(errors).rejectValue("serialNumber", 
-          msgPrefix + serialNumConflictException.getMessageProperty());
-      oneOf(errors).rejectValue("building", 
-          msgPrefix + unknownBuildingException.getMessageProperty());
+      oneOf(errors).reject(code2);
+      oneOf(errors).rejectValue(field1, code1);
     } });
     
     errorHandler.applyErrors(validationErrors, errors, msgPrefix);

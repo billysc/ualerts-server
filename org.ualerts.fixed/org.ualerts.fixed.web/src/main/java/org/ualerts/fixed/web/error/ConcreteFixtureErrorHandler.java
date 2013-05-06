@@ -19,14 +19,12 @@
 
 package org.ualerts.fixed.web.error;
 
+import java.util.Map;
+
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.ualerts.fixed.service.errors.InventoryNumberConflictException;
-import org.ualerts.fixed.service.errors.LocationConflictException;
-import org.ualerts.fixed.service.errors.MacAddressConflictException;
-import org.ualerts.fixed.service.errors.SerialNumberConflictException;
-import org.ualerts.fixed.service.errors.UnknownBuildingException;
-import org.ualerts.fixed.service.errors.ValidationError;
 import org.ualerts.fixed.service.errors.ValidationErrors;
 
 /**
@@ -44,37 +42,32 @@ import org.ualerts.fixed.service.errors.ValidationErrors;
 @Component
 public class ConcreteFixtureErrorHandler implements FixtureErrorHandler {
 
+  private Map<String, String> errorMapping;
+  
   /**
    * {@inheritDoc}
    */
   public void applyErrors(ValidationErrors validationErrors,
       Errors errors, String msgPrefix) {
 
-    for (ValidationError error : validationErrors.getErrors()) {
-      try {
-        throw error;
+    for (String errorCode : validationErrors.getErrors()) {
+      String field = errorMapping.get(errorCode);
+      if (field == null) {
+        errors.reject(errorCode);
       }
-      catch (InventoryNumberConflictException e) {
-        errors.rejectValue("inventoryNumber",
-            msgPrefix + e.getMessageProperty());
-      }
-      catch (LocationConflictException e) {
-        errors.reject(msgPrefix + e.getMessageProperty());
-      }
-      catch (MacAddressConflictException e) {
-        errors.rejectValue("macAddress", msgPrefix + e.getMessageProperty());
-      }
-      catch (SerialNumberConflictException e) {
-        errors
-            .rejectValue("serialNumber", msgPrefix + e.getMessageProperty());
-      }
-      catch (UnknownBuildingException e) {
-        errors.rejectValue("building", msgPrefix + e.getMessageProperty());
-      }
-      catch (ValidationError e) {
-        errors.reject(msgPrefix + e.getMessageProperty());
+      else {
+        errors.rejectValue(field, errorCode);
       }
     }
+  }
+  
+  /**
+   * Sets the {@code errorMapping} property.
+   * @param errorMapping the value to set
+   */
+  @Resource(name = "errorFieldMapping")
+  public void setErrorMapping(Map<String, String> errorMapping) {
+    this.errorMapping = errorMapping;
   }
 
 }
