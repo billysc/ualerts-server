@@ -1,5 +1,5 @@
 /*
- * File created on May 6, 2013
+ * File created on May 7, 2013 
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -16,25 +16,26 @@
  * limitations under the License.
  *
  */
-package org.ualerts.fixed.service;
+package org.ualerts.fixed;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.beans.PropertyEditorSupport;
 
 /**
- * A transactional implementation of {@link CommandInvoker}.
+ * A {@code PropertyEditor} for an {@link InetAddress}.
  *
- * @author Brian Early
+ * @author Carl Harris
  */
-@Service
-public class TransactionalCommandInvoker implements CommandInvoker {
+public class InetAddressEditor extends PropertyEditorSupport {
 
-  /**
-   * {@inheritDoc}
-   */
-  @Transactional
-  public <T> T invoke(Command<T> command) throws Exception {
-    return command.execute();
+  @Override
+  public String getAsText() {
+    return (getValue() == null)
+        ? null : ((InetAddress) getValue()).getHostAddress();
+  }
+
+  @Override
+  public void setAsText(String text) throws IllegalArgumentException {
+    setValue(InetAddress.getByAddress(text));
   }
 
 }

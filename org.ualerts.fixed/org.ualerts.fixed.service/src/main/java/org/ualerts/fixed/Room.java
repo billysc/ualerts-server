@@ -20,7 +20,6 @@ package org.ualerts.fixed;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -42,7 +41,7 @@ public class Room extends AbstractEntity {
    * Gets the {@code building} associated with this room.
    * @return property value
    */
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne
   @JoinColumn(name = "building_id")
   public Building getBuilding() {
     return building;

@@ -1,5 +1,5 @@
 /*
- * File created on May 2, 2013
+ * File created on May 6, 2013 
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -16,31 +16,27 @@
  * limitations under the License.
  *
  */
+package org.ualerts.fixed.repository;
 
-package org.ualerts.fixed.service.errors;
+import org.ualerts.fixed.PositionHint;
 
 /**
- * Defines base class for all validation errors.
+ * Defines basic behavior for the repository supporting position hints.
  *
  * @author Brian Early
  */
-public abstract class ValidationError extends Exception {
-  private static final long serialVersionUID = -2734197137748106016L;
-  private String messageProperty;
+public interface PositionHintRepository {
+  /**
+   * Finds a position hint based on its text.
+   * @param hintText the text of the hint.
+   * @return the PositionHint object.  Null if it isn't found.
+   */
+  PositionHint findHint(String hintText);
   
   /**
-   * Constructs a new instance.
-   * @param messageProperty the message property name for the error.
+   * Adds a position hint to persistence control.
+   * @param hint the position hint to add.
    */
-  protected ValidationError(String messageProperty) {
-    this.messageProperty = messageProperty;
-  }
+  void addPositionHint(PositionHint hint);
   
-  /**
-   * Returns the message property name of the error.
-   * @return the message property name
-   */
-  public String getMessageProperty() {
-    return messageProperty;
-  }
 }
