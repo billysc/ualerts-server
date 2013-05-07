@@ -8,8 +8,10 @@ function postModalDisplay_enrollFixture($modal) {
 		var successCallback = function(data) {
 			if (data.success)
 				$modal.modal('hide');
-			else
-				$modal.find(".modal-body").html(data.html);
+			else {
+				displayErrorsOnForm($form, data.errors);
+				$(".modal-body").scrollTop(0);
+			}
 		};
 		var errorCallback = function() {
 			alert("Something happened");

@@ -28,14 +28,8 @@ import org.springframework.validation.Errors;
 import org.ualerts.fixed.service.errors.ValidationErrors;
 
 /**
- * A utility class for mapping exceptions from the CommandService to UI-level
- * errors.
- * 
- * The CommandService, when executing, batches all of the validation exceptions
- * into a ValidationErrorCollection. This utility iterates through each
- * contained exception and maps it back as an error on the provided Spring
- * {@link Errors} object. This allows the CommandService to be ignorant of the
- * UI implementation.
+ * An error handler that uses a map for connecting service-layer ErrorCodes to
+ * the appropiate field.
  * 
  * @author Michael Irwin
  */
