@@ -35,7 +35,12 @@
 	
 	<bean class="org.springframework.context.support.ResourceBundleMessageSource"
 		id="messageSource">
-		<property name="basename" value="messages/messages" />
+		<property name="basenames">
+		    <list>
+		        <value>spring/error_codes</value>
+		        <value>messages/messages</value>
+		    </list>
+		</property>
 	</bean>
 
 </beans>
