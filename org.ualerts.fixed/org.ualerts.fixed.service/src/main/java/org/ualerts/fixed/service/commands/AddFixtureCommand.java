@@ -22,6 +22,7 @@ import javax.persistence.PersistenceException;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
 import org.ualerts.fixed.Asset;
 import org.ualerts.fixed.Building;
@@ -70,21 +71,19 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   protected void onValidate() throws BindException,
       UnspecifiedConstraintException {
     super.onValidate();
-    
-    BindException errors = new BindException(this, "AddFixtureCommand");
-    
+    Assert.notNull(getErrors());
     try {
-      validateSerialNumber(errors);
-      validateInventoryNumber(errors);
-      validateMacAddress(errors);
-      validateInetAddress(errors);
-      validateLocation(errors);
+      validateSerialNumber(getErrors());
+      validateInventoryNumber(getErrors());
+      validateMacAddress(getErrors());
+      validateInetAddress(getErrors());
+      validateLocation(getErrors());
     }
     catch (PersistenceException ex) {
       throw new UnspecifiedConstraintException(ex);
     }
-    if (errors.hasErrors()) {
-      throw errors;
+    if (getErrors().hasErrors()) {
+      throw getErrors();
     }
   }
   

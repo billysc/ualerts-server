@@ -20,7 +20,6 @@ package org.ualerts.fixed.service.commands;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.validation.BindException;
-
 import org.ualerts.fixed.service.Command;
 import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
 
@@ -31,6 +30,9 @@ import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
  */
 public abstract class AbstractCommand<T> 
     implements Command<T>, InitializingBean {
+  // FIXME - This is to keep development moving.  This smells bad
+  // making the errors a field.  Refine or completely redo this.
+  private BindException errors;
 
   /**
    * @inheritDoc
@@ -63,4 +65,21 @@ public abstract class AbstractCommand<T>
    * @throws Exception as needed.
    */
   protected abstract T onExecute() throws Exception;
+
+  /**
+   * Gets the {@code errors} property.
+   * @return property value
+   */
+  public BindException getErrors() {
+    return errors;
+  }
+
+  /**
+   * Sets the {@code errors} property.
+   * @param errors the value to set
+   */
+  public void setErrors(BindException errors) {
+    this.errors = errors;
+  }
+  
 }
