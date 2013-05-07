@@ -86,36 +86,36 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   }
   
   private void validateSerialNumber(ValidationErrors errors) {
-    if (StringUtils.isBlank(serialNumber)) {
+    if (StringUtils.isBlank(getSerialNumber())) {
       errors.addError(ValidationErrors.MISSING_SERIAL_NUMBER_FIELD);
     }
-    else if (assetRepository.findAssetBySerialNumber(serialNumber) != null) {
+    else if (assetRepository.findAssetBySerialNumber(getSerialNumber()) != null) {
       errors.addError(ValidationErrors.SERIAL_NUMBER_CONFLICT);
     }
   }
 
   private void validateInventoryNumber(ValidationErrors errors) {
-    if (StringUtils.isBlank(inventoryNumber)) {
+    if (StringUtils.isBlank(getInventoryNumber())) {
       errors.addError(ValidationErrors.MISSING_INVENTORY_NUMBER_FIELD);
     }
     else if (assetRepository
-             .findAssetByInventoryNumber(inventoryNumber) != null) {
+             .findAssetByInventoryNumber(getInventoryNumber()) != null) {
       errors.addError(ValidationErrors.INVENTORY_NUMBER_CONFLICT);
     }
   }
   
   private void validateMacAddress(ValidationErrors errors) {
-    if (macAddress == null) {
+    if (getMacAddress() == null) {
       errors.addError(ValidationErrors.MISSING_MAC_ADDRESS_FIELD);
     }
     else if (assetRepository.
-        findAssetByMacAddress(macAddress.toString()) != null) {
+        findAssetByMacAddress(getMacAddress().toString()) != null) {
       errors.addError(ValidationErrors.MAC_ADDRESS_CONFLICT);
     }
   }
   
   private void validateInetAddress(ValidationErrors errors) {
-    if (inetAddress == null) {
+    if (getInetAddress() == null) {
       errors.addError(ValidationErrors.MISSING_INET_ADDRESS_FIELD);
     }
   }
@@ -123,28 +123,28 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   private void validateLocation(ValidationErrors errors) {
     Building building = null;
     boolean locationComplete = true;
-    if (StringUtils.isBlank(roomNumber)) {
+    if (StringUtils.isBlank(getRoomNumber())) {
       errors.addError(ValidationErrors.MISSING_ROOM_FIELD);
       locationComplete = false;
     }
-    if (StringUtils.isBlank(buildingName)) {
+    if (StringUtils.isBlank(getBuildingName())) {
       errors.addError(ValidationErrors.MISSING_BUILDING_FIELD);
       locationComplete = false;
     }
     else {
-      building = buildingRepository.findBuildingByName(buildingName);
+      building = buildingRepository.findBuildingByName(getBuildingName());
       if (building == null) {
         errors.addError(ValidationErrors.UNKNOWN_BUILDING);
         locationComplete = false;
       }
     }
-    if (StringUtils.isBlank(positionHint)) {
+    if (StringUtils.isBlank(getPositionHint())) {
       errors.addError(ValidationErrors.MISSING_POSITION_HINT_FIELD);
       locationComplete = false;
     }
     if (locationComplete) {
-      Room room = roomRepository.findRoom(building.getId(), roomNumber);
-      PositionHint hint = positionHintRepository.findHint(positionHint);
+      Room room = roomRepository.findRoom(building.getId(), getRoomNumber());
+      PositionHint hint = positionHintRepository.findHint(getPositionHint());
       if ((room != null) && (hint != null)) {
         if (fixtureRepository.findFixtureByLocation(room.getId(),
             hint.getId()) != null) {
@@ -160,15 +160,15 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   @Override
   protected Fixture onExecute() throws Exception {
     try {
-      Building building = buildingRepository.findBuildingByName(buildingName);
+      Building building = buildingRepository.findBuildingByName(getBuildingName());
       Room room = findOrConstructRoom(building);
       PositionHint hint = findOrConstructPositionHint();
       Asset asset = constructAsset();
       Fixture fixture = new Fixture();
       fixture.setAsset(asset);
       fixture.setDateCreated(dateService.getCurrentDate());
-      fixture.setInstalledBy(installedBy);
-      fixture.setIpAddress(inetAddress.toString());
+      fixture.setInstalledBy(getInstalledBy());
+      fixture.setIpAddress(getInetAddress().toString());
       fixture.setPositionHint(hint);
       fixture.setRoom(room);
       fixtureRepository.addFixture(fixture);
@@ -180,21 +180,21 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   }
 
   private Room findOrConstructRoom(Building building) {
-    Room room = roomRepository.findRoom(building.getId(), roomNumber);
+    Room room = roomRepository.findRoom(building.getId(), getRoomNumber());
     if (room == null) {
       room = new Room();
       room.setBuilding(building);
-      room.setRoomNumber(roomNumber);
+      room.setRoomNumber(getRoomNumber());
       roomRepository.addRoom(room);
     }
     return room;
   }
   
   private PositionHint findOrConstructPositionHint() {
-    PositionHint hint = positionHintRepository.findHint(positionHint);
+    PositionHint hint = positionHintRepository.findHint(getPositionHint());
     if (hint == null) {
       hint = new PositionHint();
-      hint.setHintText(positionHint);
+      hint.setHintText(getPositionHint());
       positionHintRepository.addPositionHint(hint);
     }
     return hint;
@@ -203,67 +203,131 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   private Asset constructAsset() {
     Asset asset = new Asset();
     asset.setDateCreated(dateService.getCurrentDate());
-    asset.setInventoryNumber(inventoryNumber);
-    asset.setMacAddress(macAddress.toString());
-    asset.setSerialNumber(serialNumber);
+    asset.setInventoryNumber(getInventoryNumber());
+    asset.setMacAddress(getMacAddress().toString());
+    asset.setSerialNumber(getSerialNumber());
     assetRepository.addAsset(asset);
     return asset;
   }
   
   /**
+   * Gets the {@code roomNumber} property.
+   * @return property value
+   */
+  public String getRoomNumber() {
+    return roomNumber;
+  }
+
+  /**
    * Sets the {@code roomNumber} property.
-   * @param roomNumber the room number
+   * @param roomNumber the value to set
    */
   public void setRoomNumber(String roomNumber) {
     this.roomNumber = roomNumber;
   }
 
   /**
+   * Gets the {@code buildingName} property.
+   * @return property value
+   */
+  public String getBuildingName() {
+    return buildingName;
+  }
+
+  /**
    * Sets the {@code buildingName} property.
-   * @param buildingName the building name
+   * @param buildingName the value to set
    */
   public void setBuildingName(String buildingName) {
     this.buildingName = buildingName;
   }
 
   /**
+   * Gets the {@code positionHint} property.
+   * @return property value
+   */
+  public String getPositionHint() {
+    return positionHint;
+  }
+
+  /**
    * Sets the {@code positionHint} property.
-   * @param positionHint the position hint
+   * @param positionHint the value to set
    */
   public void setPositionHint(String positionHint) {
     this.positionHint = positionHint;
   }
 
   /**
+   * Gets the {@code inetAddress} property.
+   * @return property value
+   */
+  public InetAddress getInetAddress() {
+    return inetAddress;
+  }
+
+  /**
    * Sets the {@code inetAddress} property.
-   * @param inetAddress the Inet Address
+   * @param inetAddress the value to set
    */
   public void setInetAddress(InetAddress inetAddress) {
     this.inetAddress = inetAddress;
   }
 
   /**
+   * Gets the {@code serialNumber} property.
+   * @return property value
+   */
+  public String getSerialNumber() {
+    return serialNumber;
+  }
+
+  /**
    * Sets the {@code serialNumber} property.
-   * @param serialNumber the serial number
+   * @param serialNumber the value to set
    */
   public void setSerialNumber(String serialNumber) {
     this.serialNumber = serialNumber;
   }
 
   /**
+   * Gets the {@code inventoryNumber} property.
+   * @return property value
+   */
+  public String getInventoryNumber() {
+    return inventoryNumber;
+  }
+
+  /**
    * Sets the {@code inventoryNumber} property.
-   * @param inventoryNumber the inventory number
+   * @param inventoryNumber the value to set
    */
   public void setInventoryNumber(String inventoryNumber) {
     this.inventoryNumber = inventoryNumber;
   }
 
   /**
+   * Gets the {@code macAddress} property.
+   * @return property value
+   */
+  public MacAddress getMacAddress() {
+    return macAddress;
+  }
+
+  /**
    * Sets the {@code macAddress} property.
-   * @param macAddress the MAC address
+   * @param macAddress the value to set
    */
   public void setMacAddress(MacAddress macAddress) {
     this.macAddress = macAddress;
+  }
+
+  /**
+   * Gets the {@code installedBy} property.
+   * @return property value
+   */
+  public String getInstalledBy() {
+    return installedBy;
   }
 
   /**
@@ -272,6 +336,14 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
    */
   public void setInstalledBy(String installedBy) {
     this.installedBy = installedBy;
+  }
+
+  /**
+   * Gets the {@code dateService} property.
+   * @return property value
+   */
+  public DateTimeService getDateService() {
+    return dateService;
   }
 
   /**
