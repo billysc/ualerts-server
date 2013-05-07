@@ -29,11 +29,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class IndexController {
 
+  /** Servlet path for the index resource */
+  public static final String INDEX_PATH = "/";
+  
   /**
    * Display the basic start/index page
    * @return The name of the JSP file to be rendered
    */
-  @RequestMapping("/")
+  @RequestMapping(INDEX_PATH)
   public String displayIndex() {
     return "index";
   }
