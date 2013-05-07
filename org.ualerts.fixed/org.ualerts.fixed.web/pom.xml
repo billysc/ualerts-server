@@ -14,6 +14,15 @@
 	<name>UAlerts Fixed Web</name>
 	<description>Web components for the UAlerts Fixed Provisioning project</description>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+  
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
