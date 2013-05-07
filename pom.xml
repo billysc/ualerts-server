@@ -1,11 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.ualerts</groupId>
-  <artifactId>ualerts-server</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <name>UAlerts</name>
-  <description>UAlerts Emergency Alerts System</description>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.ualerts</groupId>
+	<artifactId>ualerts-server</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>UAlerts</name>
+	<description>UAlerts Emergency Alerts System</description>
 	<url>${site.homepage.baseUrl}</url>
 	<inceptionYear>2013</inceptionYear>
 	<licenses>
@@ -50,11 +51,11 @@
 		<url>http://ualerts.org</url>
 	</organization>
 	<scm>
-      <connection>scm:git:git@github.com:ualerts-org/ualerts-server.git</connection>
-      <developerConnection>scm:git:git@github.com:ualerts-org/ualerts-server.git</developerConnection>
-      <url>https://github.com/ualerts-org/ualerts-server</url>
-      <tag>REL-0.0.1</tag>
-  </scm>
+		<connection>scm:git:git@github.com:ualerts-org/ualerts-server.git</connection>
+		<developerConnection>scm:git:git@github.com:ualerts-org/ualerts-server.git</developerConnection>
+		<url>https://github.com/ualerts-org/ualerts-server</url>
+		<tag>REL-0.0.1</tag>
+	</scm>
 	<build>
 		<plugins>
 			<plugin>
