@@ -27,6 +27,7 @@ import org.jmock.Mockery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.validation.BindException;
 import org.ualerts.fixed.Asset;
 import org.ualerts.fixed.Building;
 import org.ualerts.fixed.Fixture;
@@ -41,7 +42,6 @@ import org.ualerts.fixed.repository.PositionHintRepository;
 import org.ualerts.fixed.repository.RoomRepository;
 import org.ualerts.fixed.service.DateTimeService;
 import org.ualerts.fixed.service.errors.ErrorCodes;
-import org.ualerts.fixed.service.errors.ValidationErrors;
 
 /**
  * Unit tests for {@link AddFixtureCommand}.
@@ -145,11 +145,11 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrors ex) {
+    catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0)
-          .equals(ErrorCodes.MISSING_BUILDING_FIELD));
+      assertTrue(ex.getAllErrors().size() == 1);
+      assertTrue(ex.getAllErrors().get(0)
+          .getCode().equals(ErrorCodes.MISSING_BUILDING_FIELD));
     }
   }
 
@@ -185,11 +185,11 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrors ex) {
+    catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0)
-          .equals(ErrorCodes.MISSING_INVENTORY_NUMBER_FIELD));
+      assertTrue(ex.getAllErrors().size() == 1);
+      assertTrue(ex.getAllErrors().get(0)
+          .getCode().equals(ErrorCodes.MISSING_INVENTORY_NUMBER_FIELD));
     }
   }
 
@@ -227,11 +227,11 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrors ex) {
+    catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0)
-          .equals(ErrorCodes.MISSING_INET_ADDRESS_FIELD));
+      assertTrue(ex.getAllErrors().size() == 1);
+      assertTrue(ex.getAllErrors().get(0)
+          .getCode().equals(ErrorCodes.MISSING_INET_ADDRESS_FIELD));
     }
   }
 
@@ -267,11 +267,11 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrors ex) {
+    catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0)
-          .equals(ErrorCodes.MISSING_MAC_ADDRESS_FIELD));
+      assertTrue(ex.getAllErrors().size() == 1);
+      assertTrue(ex.getAllErrors().get(0)
+          .getCode().equals(ErrorCodes.MISSING_MAC_ADDRESS_FIELD));
     }
   }
 
@@ -303,11 +303,11 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrors ex) {
+    catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0)
-          .equals(ErrorCodes.MISSING_POSITION_HINT_FIELD));
+      assertTrue(ex.getAllErrors().size() == 1);
+      assertTrue(ex.getAllErrors().get(0)
+          .getCode().equals(ErrorCodes.MISSING_POSITION_HINT_FIELD));
     }
   }
 
@@ -339,10 +339,11 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrors ex) {
+    catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0).equals(ErrorCodes.MISSING_ROOM_FIELD));
+      assertTrue(ex.getAllErrors().size() == 1);
+      assertTrue(ex.getAllErrors().get(0)
+          .getCode().equals(ErrorCodes.MISSING_ROOM_FIELD));
     }
   }
 
@@ -378,11 +379,11 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrors ex) {
+    catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0)
-          .equals(ErrorCodes.MISSING_SERIAL_NUMBER_FIELD));
+      assertTrue(ex.getAllErrors().size() == 1);
+      assertTrue(ex.getAllErrors().get(0)
+          .getCode().equals(ErrorCodes.MISSING_SERIAL_NUMBER_FIELD));
     }
   }
 
@@ -411,10 +412,11 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrors ex) {
+    catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0).equals(ErrorCodes.UNKNOWN_BUILDING));
+      assertTrue(ex.getAllErrors().size() == 1);
+      assertTrue(ex.getAllErrors().get(0)
+          .getCode().equals(ErrorCodes.UNKNOWN_BUILDING));
     }
   }
 
@@ -452,11 +454,11 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrors ex) {
+    catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0)
-          .equals(ErrorCodes.INVENTORY_NUMBER_CONFLICT));
+      assertTrue(ex.getAllErrors().size() == 1);
+      assertTrue(ex.getAllErrors().get(0)
+          .getCode().equals(ErrorCodes.INVENTORY_NUMBER_CONFLICT));
     }
   }
 
@@ -494,11 +496,11 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrors ex) {
+    catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0)
-          .equals(ErrorCodes.SERIAL_NUMBER_CONFLICT));
+      assertTrue(ex.getAllErrors().size() == 1);
+      assertTrue(ex.getAllErrors().get(0)
+          .getCode().equals(ErrorCodes.SERIAL_NUMBER_CONFLICT));
     }
   }
 
@@ -536,10 +538,11 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrors ex) {
+    catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0).equals(ErrorCodes.MAC_ADDRESS_CONFLICT));
+      assertTrue(ex.getAllErrors().size() == 1);
+      assertTrue(ex.getAllErrors().get(0)
+          .getCode().equals(ErrorCodes.MAC_ADDRESS_CONFLICT));
     }
   }
 
@@ -577,10 +580,11 @@ public class AddFixtureCommandTest {
       command.onValidate();
       assertTrue(false);
     }
-    catch (ValidationErrors ex) {
+    catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getErrors().size() == 1);
-      assertTrue(ex.getErrors().get(0).equals(ErrorCodes.LOCATION_CONFLICT));
+      assertTrue(ex.getAllErrors().size() == 1);
+      assertTrue(ex.getAllErrors().get(0)
+          .getCode().equals(ErrorCodes.LOCATION_CONFLICT));
     }
   }
 

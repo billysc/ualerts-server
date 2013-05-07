@@ -22,21 +22,21 @@ package org.ualerts.fixed;
 import java.beans.PropertyEditorSupport;
 
 /**
-* A {@code PropertyEditor} for a {@link MacAddress}.
-*
-* @author Carl Harris
-*/
+ * A {@code PropertyEditor} for a {@link MacAddress}.
+ *
+ * @author Carl Harris
+ */
 public class MacAddressEditor extends PropertyEditorSupport {
 
- @Override
- public String getAsText() {
-   return (getValue() == null)
-       ? null : ((MacAddress) getValue()).toString();
- }
- 
- @Override
- public void setAsText(String text) throws IllegalArgumentException {
-   setValue(new MacAddress(text));
- }
- 
+  @Override
+  public String getAsText() {
+    return (getValue() == null)
+        ? null : ((MacAddress) getValue()).toString();
+  }
+
+  @Override
+  public void setAsText(String text) throws IllegalArgumentException {
+    setValue(new MacAddress(text));
+  }
+
 }

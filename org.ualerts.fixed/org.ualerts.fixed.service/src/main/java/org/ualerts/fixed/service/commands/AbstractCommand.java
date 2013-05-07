@@ -19,8 +19,10 @@
 package org.ualerts.fixed.service.commands;
 
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.validation.BindException;
 
 import org.ualerts.fixed.service.Command;
+import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
 
 /**
  * An abstract base for {@link Command} implementations.
@@ -39,18 +41,22 @@ public abstract class AbstractCommand<T>
   /**
    * @inheritDoc
    */
-  public final T execute() throws Exception {
+  public final T execute()
+      throws Exception {
     onValidate();
     return onExecute();
   }
 
   /**
    * Performs any required validation of command state and member parameters.
-   * @throws Exception if there is a validation error.
+   * @throws BindException if there are validation errors.
+   * @throws UnspecifiedConstraintException if there is an unexpected
+   *         error in the persistence layer.
    */
-  protected void onValidate() throws Exception {
+  protected void onValidate() throws BindException,
+      UnspecifiedConstraintException {
   }
-
+  
   /**
    * Performs the execution of the command.
    * @return a reference to the object the command uses, as appropriate.

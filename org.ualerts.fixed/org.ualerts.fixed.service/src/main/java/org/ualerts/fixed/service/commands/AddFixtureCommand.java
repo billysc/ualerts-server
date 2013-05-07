@@ -22,6 +22,7 @@ import javax.persistence.PersistenceException;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindException;
 import org.ualerts.fixed.Asset;
 import org.ualerts.fixed.Building;
 import org.ualerts.fixed.Fixture;
@@ -36,8 +37,8 @@ import org.ualerts.fixed.repository.PositionHintRepository;
 import org.ualerts.fixed.repository.RoomRepository;
 import org.ualerts.fixed.service.CommandComponent;
 import org.ualerts.fixed.service.DateTimeService;
+import org.ualerts.fixed.service.errors.ErrorCodes;
 import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
-import org.ualerts.fixed.service.errors.ValidationErrors;
 
 /**
  * Command to add a fixture to the UAlerts system.
@@ -66,9 +67,12 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
    * {@inheritDoc}
    */
   @Override
-  protected void onValidate() throws Exception {
+  protected void onValidate() throws BindException,
+      UnspecifiedConstraintException {
     super.onValidate();
-    ValidationErrors errors = new ValidationErrors();
+    
+    BindException errors = new BindException(this, "AddFixtureCommand");
+    
     try {
       validateSerialNumber(errors);
       validateInventoryNumber(errors);
@@ -82,64 +86,75 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
     if (errors.hasErrors()) {
       throw errors;
     }
-
   }
   
-  private void validateSerialNumber(ValidationErrors errors) {
+  private void validateSerialNumber(BindException errors) {
     if (StringUtils.isBlank(getSerialNumber())) {
-      errors.addError(ValidationErrors.MISSING_SERIAL_NUMBER_FIELD);
+      errors.rejectValue("serialNumber",
+          ErrorCodes.MISSING_SERIAL_NUMBER_FIELD);
     }
-    else if (assetRepository.findAssetBySerialNumber(getSerialNumber()) != null) {
-      errors.addError(ValidationErrors.SERIAL_NUMBER_CONFLICT);
+    else if (assetRepository
+             .findAssetBySerialNumber(getSerialNumber()) != null) {
+      errors.rejectValue("serialNumber",
+          ErrorCodes.SERIAL_NUMBER_CONFLICT);
     }
   }
 
-  private void validateInventoryNumber(ValidationErrors errors) {
+  private void validateInventoryNumber(BindException errors) {
     if (StringUtils.isBlank(getInventoryNumber())) {
-      errors.addError(ValidationErrors.MISSING_INVENTORY_NUMBER_FIELD);
+      errors.rejectValue("inventoryNumber",
+          ErrorCodes.MISSING_INVENTORY_NUMBER_FIELD);
     }
     else if (assetRepository
              .findAssetByInventoryNumber(getInventoryNumber()) != null) {
-      errors.addError(ValidationErrors.INVENTORY_NUMBER_CONFLICT);
+      errors.rejectValue("inventoryNumber",
+          ErrorCodes.INVENTORY_NUMBER_CONFLICT);
     }
   }
   
-  private void validateMacAddress(ValidationErrors errors) {
+  private void validateMacAddress(BindException errors) {
     if (getMacAddress() == null) {
-      errors.addError(ValidationErrors.MISSING_MAC_ADDRESS_FIELD);
+      errors.rejectValue("macAddress",
+          ErrorCodes.MISSING_MAC_ADDRESS_FIELD);
     }
     else if (assetRepository.
         findAssetByMacAddress(getMacAddress().toString()) != null) {
-      errors.addError(ValidationErrors.MAC_ADDRESS_CONFLICT);
+      errors.rejectValue("macAddress",
+          ErrorCodes.MAC_ADDRESS_CONFLICT);
     }
   }
   
-  private void validateInetAddress(ValidationErrors errors) {
+  private void validateInetAddress(BindException errors) {
     if (getInetAddress() == null) {
-      errors.addError(ValidationErrors.MISSING_INET_ADDRESS_FIELD);
+      errors.rejectValue("inetAddress",
+          ErrorCodes.MISSING_INET_ADDRESS_FIELD);
     }
   }
   
-  private void validateLocation(ValidationErrors errors) {
+  private void validateLocation(BindException errors) {
     Building building = null;
     boolean locationComplete = true;
     if (StringUtils.isBlank(getRoomNumber())) {
-      errors.addError(ValidationErrors.MISSING_ROOM_FIELD);
+      errors.rejectValue("roomNumber",
+          ErrorCodes.MISSING_ROOM_FIELD);
       locationComplete = false;
     }
     if (StringUtils.isBlank(getBuildingName())) {
-      errors.addError(ValidationErrors.MISSING_BUILDING_FIELD);
+      errors.rejectValue("buildingName",
+          ErrorCodes.MISSING_BUILDING_FIELD);
       locationComplete = false;
     }
     else {
       building = buildingRepository.findBuildingByName(getBuildingName());
       if (building == null) {
-        errors.addError(ValidationErrors.UNKNOWN_BUILDING);
+        errors.rejectValue("buildingName",
+            ErrorCodes.UNKNOWN_BUILDING);
         locationComplete = false;
       }
     }
     if (StringUtils.isBlank(getPositionHint())) {
-      errors.addError(ValidationErrors.MISSING_POSITION_HINT_FIELD);
+      errors.rejectValue("positionHint",
+          ErrorCodes.MISSING_POSITION_HINT_FIELD);
       locationComplete = false;
     }
     if (locationComplete) {
@@ -148,7 +163,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
       if ((room != null) && (hint != null)) {
         if (fixtureRepository.findFixtureByLocation(room.getId(),
             hint.getId()) != null) {
-          errors.addError(ValidationErrors.LOCATION_CONFLICT);
+          errors.reject(ErrorCodes.LOCATION_CONFLICT);
         }
       }
     }
@@ -158,9 +173,10 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
    * {@inheritDoc}
    */
   @Override
-  protected Fixture onExecute() throws Exception {
+  protected Fixture onExecute() throws UnspecifiedConstraintException {
     try {
-      Building building = buildingRepository.findBuildingByName(getBuildingName());
+      Building building =
+          buildingRepository.findBuildingByName(getBuildingName());
       Room room = findOrConstructRoom(building);
       PositionHint hint = findOrConstructPositionHint();
       Asset asset = constructAsset();
@@ -174,7 +190,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
       fixtureRepository.addFixture(fixture);
       return fixture;
     }
-    catch (Exception ex) {
+    catch (PersistenceException ex) {
       throw new UnspecifiedConstraintException(ex);
     }
   }
