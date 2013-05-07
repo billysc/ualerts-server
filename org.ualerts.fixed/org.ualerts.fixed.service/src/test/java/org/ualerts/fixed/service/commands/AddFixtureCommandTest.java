@@ -728,6 +728,7 @@ public class AddFixtureCommandTest {
     command.setSerialNumber("serialNumber");
     command.setInventoryNumber("inventoryNumber");
     command.setInstalledBy("installedBy");
+    command.setErrors(new BindException(command, "testCommand"));
   }
 
 }
