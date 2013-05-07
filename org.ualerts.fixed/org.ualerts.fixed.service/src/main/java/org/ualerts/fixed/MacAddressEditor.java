@@ -30,8 +30,8 @@ public class MacAddressEditor extends PropertyEditorSupport {
 
  @Override
  public String getAsText() {
-   return getValue() == null ? 
-       null : ((MacAddress) getValue()).toString();
+   return (getValue() == null)
+       ? null : ((MacAddress) getValue()).toString();
  }
  
  @Override

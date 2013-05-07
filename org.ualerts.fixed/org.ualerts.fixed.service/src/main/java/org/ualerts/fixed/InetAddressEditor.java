@@ -29,8 +29,8 @@ public class InetAddressEditor extends PropertyEditorSupport {
 
   @Override
   public String getAsText() {
-    return getValue() == null ?
-        null : ((InetAddress) getValue()).getHostAddress();
+    return (getValue() == null)
+        ? null : ((InetAddress) getValue()).getHostAddress();
   }
 
   @Override
