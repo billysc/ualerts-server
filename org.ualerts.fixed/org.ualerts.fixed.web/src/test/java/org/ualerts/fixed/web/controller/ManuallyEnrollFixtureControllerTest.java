@@ -19,9 +19,9 @@
 
 package org.ualerts.fixed.web.controller;
 
+import java.util.ArrayList;
 import java.util.Map;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,12 +33,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.ualerts.fixed.service.errors.ValidationErrors;
 import org.ualerts.fixed.web.dto.FixtureDTO;
 import org.ualerts.fixed.web.error.FixtureErrorHandler;
 import org.ualerts.fixed.web.service.FixtureService;
-import org.ualerts.fixed.web.util.FakeHttpServletRequest;
-import org.ualerts.fixed.web.util.FakeHttpServletResponse;
 import org.ualerts.fixed.web.validator.FixtureValidator;
 
 /**
@@ -96,7 +96,7 @@ public class ManuallyEnrollFixtureControllerTest {
    * Validate the data returned during a completely clean submission
    */
   @Test
-  public void validateGoodSubmittion() throws Exception {
+  public void validateGoodSubmission() throws Exception {
     final HttpServletRequest request = context.mock(HttpServletRequest.class);
     final HttpServletResponse resp = context.mock(HttpServletResponse.class);
     final FixtureDTO fixture = new FixtureDTO();
@@ -124,20 +124,25 @@ public class ManuallyEnrollFixtureControllerTest {
    * @throws Exception
    */
   @Test
-  public void validateErrorsOnSyntax() throws Exception {
+  public void validateErrorsOnSyntax() throws Exception  {
     final HttpServletRequest request = context.mock(HttpServletRequest.class);
     final HttpServletResponse resp = context.mock(HttpServletResponse.class);
     final FixtureDTO fixture = new FixtureDTO();
     final BindingResult result = context.mock(BindingResult.class);
-    final RequestDispatcher dispatcher = context.mock(RequestDispatcher.class);
     
     context.checking(new Expectations() { { 
-      exactly(2).of(result).hasErrors();
+      exactly(3).of(result).hasErrors();
       will(returnValue(true));
-      oneOf(request).getRequestDispatcher("enrollment");
-      will(returnValue(dispatcher));
-      oneOf(dispatcher).include(with(any(FakeHttpServletRequest.class)), 
-          with(any(FakeHttpServletResponse.class)));
+      
+      exactly(2).of(result).hasFieldErrors();
+      will(returnValue(true));
+      oneOf(result).getFieldErrors();
+      will(returnValue(new ArrayList<FieldError>()));
+      
+      exactly(2).of(result).hasGlobalErrors();
+      will(returnValue(true));
+      oneOf(result).getGlobalErrors();
+      will(returnValue(new ArrayList<ObjectError>()));
     } });
     
     Map<String, Object> response = controller.handleFormSubmission(request, 
@@ -145,7 +150,7 @@ public class ManuallyEnrollFixtureControllerTest {
     context.assertIsSatisfied();
     Assert.assertNotNull(response);
     Assert.assertFalse((Boolean) response.get("success"));
-    Assert.assertNotNull(response.get("html"));
+    Assert.assertNotNull(response.get("errors"));
   }
   
   /**
@@ -158,23 +163,29 @@ public class ManuallyEnrollFixtureControllerTest {
     final HttpServletResponse resp = context.mock(HttpServletResponse.class);
     final FixtureDTO fixture = new FixtureDTO();
     final BindingResult result = context.mock(BindingResult.class);
-    final RequestDispatcher dispatcher = context.mock(RequestDispatcher.class);
     final ValidationErrors validationErrors = new ValidationErrors();
     
     context.checking(new Expectations() { { 
       oneOf(result).hasErrors();
       will(returnValue(false));
+      
       oneOf(fixtureService).createFixture(fixture);
       will(throwException(validationErrors));
       oneOf(errorHandler).applyErrors(validationErrors, result, 
           FixtureValidator.MSG_PREFIX);
       
-      oneOf(result).hasErrors();
+      exactly(2).of(result).hasErrors();
       will(returnValue(true));
-      oneOf(request).getRequestDispatcher("enrollment");
-      will(returnValue(dispatcher));
-      oneOf(dispatcher).include(with(any(FakeHttpServletRequest.class)), 
-          with(any(FakeHttpServletResponse.class)));
+      
+      exactly(2).of(result).hasFieldErrors();
+      will(returnValue(true));
+      oneOf(result).getFieldErrors();
+      will(returnValue(new ArrayList<FieldError>()));
+      
+      exactly(2).of(result).hasGlobalErrors();
+      will(returnValue(true));
+      oneOf(result).getGlobalErrors();
+      will(returnValue(new ArrayList<ObjectError>()));
     } });
     
 
@@ -184,7 +195,7 @@ public class ManuallyEnrollFixtureControllerTest {
     
     Assert.assertNotNull(response);
     Assert.assertFalse((Boolean) response.get("success"));
-    Assert.assertNotNull(response.get("html"));
+    Assert.assertNotNull(response.get("errors"));
   }
 
 }

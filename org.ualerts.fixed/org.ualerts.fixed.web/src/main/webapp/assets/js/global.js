@@ -61,3 +61,17 @@ function submitForm($form, url, requestType, responseType, successCallback, erro
 	})
 }
 
+function displayErrorsOnForm($form, errors) {
+	$form.find("[data-for]").html('');
+	if (typeof errors != "object")
+		return;
+	if (typeof errors.global == "object") {
+		$form.find("[data-for='_global']").html(errors.global.join("<br />"));
+	}
+	if (typeof errors.fields == "object") {
+		for (fieldName in errors.fields) {
+			var fieldErrors = errors.fields[fieldName];
+			$form.find("[data-for='" + fieldName + "']").html(fieldErrors.join("<br />"));
+		}
+	}
+}
