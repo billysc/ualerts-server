@@ -880,21 +880,6 @@
 					</plugin>
 				</plugins>
 			</build>
-			<properties>
-				<ft.hsqldb.version>2.2.9</ft.hsqldb.version>
-				<ft.hibernate.schema>create</ft.hibernate.schema>
-				<ft.dataSource.username>sa</ft.dataSource.username>
-				<ft.dataSource.driverClassName>org.hsqldb.jdbcDriver</ft.dataSource.driverClassName>
-				<ft.dataSource.url>jdbc:hsqldb:hsql://localhost:${hsqldb.serverPort}/alertsPush</ft.dataSource.url>
-				<ft.dataSource.password />
-				<ft.hibernate.dialect>org.hibernate.dialect.HSQLDialect</ft.hibernate.dialect>
-			</properties>
-			<dependencies>
-				<dependency>
-					<groupId>org.hsqldb</groupId>
-					<artifactId>hsqldb</artifactId>
-				</dependency>
-			</dependencies>
 		</profile>
 	</profiles>
 	<modules>
