@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
+
+<Configure id="Server" class="org.eclipse.jetty.server.Server">
+  
+  <New class="org.eclipse.jetty.plus.jndi.Resource">
+    <Arg>${persistence.dataSource}</Arg>
+    <Arg>
+      <New class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <Set name="driverClassName">${ft.dataSource.driverClassName}</Set>
+        <Set name="username">${ft.dataSource.username}</Set>
+        <Set name="password">${ft.dataSource.password}</Set>
+        <Set name="url">${ft.dataSource.url}</Set>
+      </New>
+    </Arg>
+  </New>
+  
+</Configure>
