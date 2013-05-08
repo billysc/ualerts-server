@@ -778,9 +778,8 @@
       <dependency>
         <groupId>net.sourceforge.htmlunit</groupId>
         <artifactId>htmlunit</artifactId>
-        <type>jar</type>
-        <scope>compile</scope>
-        <version>2.8</version>
+        <scope>test</scope>
+        <version>2.12</version>
         <exclusions>
           <exclusion>
             <artifactId>commons-logging</artifactId>
