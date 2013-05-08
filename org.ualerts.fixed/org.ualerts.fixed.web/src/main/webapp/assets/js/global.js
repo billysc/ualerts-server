@@ -19,7 +19,7 @@ $(function() {
 			opts.remote = remote;
 		}
 		
-		//Remove any lingering click handlers
+		// Remove any lingering click handlers
 		var $primaryButton = $target.find(".btn-primary").unbind("click");
 		var $cancelButton = $target.find(".btn.cancel").unbind("click");
 		
@@ -49,6 +49,17 @@ $(function() {
 	});
 });
 
+Array.prototype.clean = function() {
+	for (var i = 0; i < this.length; i++) {
+		if (this[i] == null || this[i] == "") {         
+			this.splice(i, 1);
+			i--;
+		}
+	}
+	return this;
+};
+
+
 function submitForm($form, url, requestType, responseType, successCallback, errorCallback) {
 	$.ajax({
 		url: url,
@@ -66,12 +77,12 @@ function displayErrorsOnForm($form, errors) {
 	if (typeof errors != "object")
 		return;
 	if (typeof errors.global == "object") {
-		$form.find("[data-for='_global']").html(errors.global.join("<br />"));
+		$form.find("[data-for='_global']").html(errors.global.clean().join("<br />"));
 	}
 	if (typeof errors.fields == "object") {
 		for (fieldName in errors.fields) {
 			var fieldErrors = errors.fields[fieldName];
-			$form.find("[data-for='" + fieldName + "']").html(fieldErrors.join("<br />"));
+			$form.find("[data-for='" + fieldName + "']").html(fieldErrors.clean().join("<br />"));
 		}
 	}
 }
