@@ -75,8 +75,8 @@
     <query>
       select distinct fixture
       from Fixture fixture
-      left outer join fetch fixture.room
-      left outer join fetch fixture.room.building
+      left outer join fetch fixture.room rm
+      left outer join fetch rm.building
       left outer join fetch fixture.asset
     </query>
   </named-query>
