@@ -34,7 +34,7 @@ import javax.persistence.UniqueConstraint;
  * @author Brian Early
  */
 @Entity
-@Table(name = "Fixture", uniqueConstraints =
+@Table(name = "fixture", uniqueConstraints =
        @UniqueConstraint(columnNames = { "room_id", "position_hint_id" }))
 public class Fixture extends AbstractEntity {
 

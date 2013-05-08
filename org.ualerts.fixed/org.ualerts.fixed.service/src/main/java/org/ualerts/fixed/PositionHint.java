@@ -28,7 +28,7 @@ import javax.persistence.Table;
  * @author Brian Early
  */
 @Entity
-@Table(name = "Position_Hint")
+@Table(name = "position_hint")
 public class PositionHint extends AbstractEntity {
 
   private static final long serialVersionUID = 626731060336569077L;

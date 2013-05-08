@@ -23,7 +23,7 @@ package org.ualerts.fixed.service;
  *
  * @author Carl Harris
  */
-public interface CommandService {
+public interface CommandService extends CommandInvoker {
 
   /**
    * Creates a new command instance given the class of the command.  The command
@@ -49,13 +49,4 @@ public interface CommandService {
   <T extends Command> T newCommand(String beanName, Class<T> commandClass)
       throws Exception;
 
-  /**
-   * Invokes/executes the command.
-   * @param command the command to execute
-   * @param <T> identifies the return type for the command
-   * @return the value returned by {@link Command#execute()}
-   * @throws Exception
-   */
-  <T> T invoke(Command<T> command) throws Exception;
-  
 }
