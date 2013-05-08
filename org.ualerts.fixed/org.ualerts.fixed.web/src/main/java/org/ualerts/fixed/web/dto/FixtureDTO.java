@@ -18,6 +18,7 @@
  */
 package org.ualerts.fixed.web.dto;
 
+import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.InetAddress;
 import org.ualerts.fixed.MacAddress;
 
@@ -74,6 +75,36 @@ public class FixtureDTO {
   private InetAddress ipAddressObj;
   private String macAddress;
   private MacAddress macAddressObj;
+  
+  /**
+   * Create a new, empty instance.
+   */
+  public FixtureDTO() {
+    
+  }
+  
+  /**
+   * Create a new instance, based on a Fixture object.
+   * @param fixture The object to base construction from.
+   */
+  public FixtureDTO(Fixture fixture) {
+    if (fixture.getRoom() != null) {
+      this.building = fixture.getRoom().getBuilding().getName();
+      this.room = fixture.getRoom().getRoomNumber();
+    }
+    if (fixture.getAsset() != null) {
+      this.inventoryNumber = fixture.getAsset().getInventoryNumber();
+      this.macAddress = fixture.getAsset().getMacAddress();
+      this.serialNumber = fixture.getAsset().getSerialNumber();
+    }
+    if (fixture.getPositionHint() != null) {
+      this.positionHint = fixture.getPositionHint().getHintText();
+    }
+
+    this.id = fixture.getId();
+    this.ipAddress = fixture.getIpAddress();
+    this.version = fixture.getVersion();
+  }
   
   /**
    * Gets the {@code id} property.
