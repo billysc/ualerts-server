@@ -71,4 +71,14 @@
     </query>
   </named-query>
 
+  <named-query name="findAllFixtures">
+    <query>
+      select distinct fixture
+      from Fixture fixture
+      left outer join fetch fixture.room
+      left outer join fetch fixture.room.building
+      left outer join fetch fixture.asset
+    </query>
+  </named-query>
+
 </entity-mappings>

@@ -18,6 +18,8 @@
  */
 package org.ualerts.fixed.repository;
 
+import java.util.List;
+
 import org.ualerts.fixed.Fixture;
 
 /**
@@ -26,6 +28,12 @@ import org.ualerts.fixed.Fixture;
  * @author Brian Early
  */
 public interface FixtureRepository {
+  
+  /**
+   * Finds all fixtures currently in the repository.
+   * @return a list of all fixtures.  May be empty/null.
+   */
+  List<Fixture> findAllFixtures();
   
   /**
    * Finds a fixture by its location (room & position hint)

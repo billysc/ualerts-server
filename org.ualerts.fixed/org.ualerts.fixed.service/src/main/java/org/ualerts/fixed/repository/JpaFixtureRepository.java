@@ -18,7 +18,10 @@
  */
 package org.ualerts.fixed.repository;
 
+import java.util.List;
+
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 import org.ualerts.fixed.Fixture;
@@ -31,6 +34,16 @@ import org.ualerts.fixed.Fixture;
 @Repository("fixtureRepository")
 public class JpaFixtureRepository extends AbstractJpaRepository
   implements FixtureRepository {
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<Fixture> findAllFixtures() {
+    TypedQuery<Fixture> query =
+        getEntityManager().createNamedQuery("findAllFixtures", Fixture.class);
+    return query.getResultList();
+  }
 
   /**
    * {@inheritDoc}
