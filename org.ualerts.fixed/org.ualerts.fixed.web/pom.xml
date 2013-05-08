@@ -158,7 +158,6 @@
     <dependency>
       <groupId>org.ualerts</groupId>
       <artifactId>org.ualerts.fixed.service</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
