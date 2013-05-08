@@ -18,7 +18,9 @@
  */
 package org.ualerts.fixed.web.service;
 
-import org.ualerts.fixed.service.errors.ValidationErrors;
+import org.springframework.validation.BindException;
+import org.ualerts.fixed.service.Command;
+import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.web.dto.FixtureDTO;
 
 /**
@@ -30,14 +32,22 @@ import org.ualerts.fixed.web.dto.FixtureDTO;
 public interface FixtureService {
 
   /**
-   * Save the provided Fixture.
+   * Create a command
+   * @param commandClass The class of the command to create.
+   * @return The newly created command object
+   * @throws Exception Any exception that might throw
+   */
+  @SuppressWarnings("rawtypes")
+  <T extends Command> T newCommand(Class<T> commandClass) throws Exception;
+  
+  /**
+   * Execute the provided command and return its newly created Fixture.
    * 
-   * Upon saving of the Fixture, the {@code id} and {@code version} properties 
-   * of the Fixture will be updated to reflect their new values.
-   * @param fixture The fixture to be saved.
-   * @throws ValidationErrors An validation errors that occur
+   * @param command The command and model to be executed
+   * @throws BindException An validation errors that occur
    * @throws Exception Any other internally-caused exception
    */
-  void createFixture(FixtureDTO fixture) throws ValidationErrors, Exception;
+  FixtureDTO createFixture(AddFixtureCommand command) 
+      throws BindException, Exception;
   
 }

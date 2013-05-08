@@ -19,6 +19,9 @@
 
 package org.ualerts.fixed.web.service;
 
+import org.springframework.validation.BindException;
+import org.ualerts.fixed.service.Command;
+import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.web.dto.FixtureDTO;
 
 /**
@@ -41,9 +44,29 @@ public class MockedFixtureService implements FixtureService {
    * {@inheritDoc}
    */
   @Override
-  public void createFixture(FixtureDTO fixture) {
+  @SuppressWarnings("rawtypes")
+  public <T extends Command> T newCommand(Class<T> commandClass) 
+      throws Exception {
+    return commandClass.newInstance();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public FixtureDTO createFixture(AddFixtureCommand command)
+      throws BindException, Exception {
+    FixtureDTO fixture = new FixtureDTO();
+    fixture.setBuilding(command.getBuildingName());
     fixture.setId(lastUsedId++);
+    fixture.setInventoryNumber(command.getInventoryNumber());
+    fixture.setIpAddress(command.getInetAddress().toString());
+    fixture.setMacAddress(command.getMacAddress().toString());
+    fixture.setPositionHint(command.getPositionHint());
+    fixture.setRoom(command.getRoomNumber());
+    fixture.setSerialNumber(command.getSerialNumber());
     fixture.setVersion(1L);
+    return fixture;
   }
   
 }

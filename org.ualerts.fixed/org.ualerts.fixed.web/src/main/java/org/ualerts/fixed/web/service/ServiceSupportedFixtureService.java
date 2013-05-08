@@ -22,10 +22,11 @@ package org.ualerts.fixed.web.service;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindException;
 import org.ualerts.fixed.Fixture;
+import org.ualerts.fixed.service.Command;
 import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
-import org.ualerts.fixed.service.errors.ValidationErrors;
 import org.ualerts.fixed.web.dto.FixtureDTO;
 
 /**
@@ -43,25 +44,21 @@ public class ServiceSupportedFixtureService implements FixtureService {
    * {@inheritDoc}
    */
   @Override
-  public void createFixture(FixtureDTO fixture)
-      throws ValidationErrors, Exception {
-
-    AddFixtureCommand command =
-        commandService.newCommand(AddFixtureCommand.class);
-    command.setBuildingName(fixture.getBuilding());
-    command.setInetAddress(fixture.getIpAddressObj());
-    command.setInventoryNumber(fixture.getInventoryNumber());
-    command.setMacAddress(fixture.getMacAddressObj());
-    command.setPositionHint(fixture.getPositionHint());
-    command.setRoomNumber(fixture.getRoom());
-    command.setSerialNumber(fixture.getSerialNumber());
-    
-    Fixture newFixture = commandService.invoke(command);
-    
-    fixture.setId(newFixture.getId());
-    fixture.setVersion(newFixture.getVersion());
+  @SuppressWarnings("rawtypes")
+  public <T extends Command> T newCommand(Class<T> clazz) throws Exception {
+    return commandService.newCommand(clazz);
   }
-
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public FixtureDTO createFixture(AddFixtureCommand command)
+      throws BindException, Exception {
+    Fixture fixture = commandService.invoke(command);
+    return new FixtureDTO(fixture);
+  }
+  
   /**
    * Sets the {@code commandService} property.
    * @param commandService the value to set
