@@ -4,10 +4,10 @@
 	<div class="error" data-for="_global"></div>
 
 	<div class="control-group">
-		<sf:label path="ipAddress" cssClass="control-label">IP Address</sf:label>
+		<sf:label path="inetAddress" cssClass="control-label">IP Address</sf:label>
 		<div class="controls">
-			<sf:input path="ipAddress" />
-			<br /><div class="error" data-for="ipAddress"></div>
+			<sf:input path="inetAddress" />
+			<br /><div class="error" data-for="inetAddress"></div>
 		</div>
 	</div>
 	<div class="control-group">
@@ -33,17 +33,17 @@
 	</div>
 
 	<div class="control-group">
-		<sf:label path="building" cssClass="control-label">Building</sf:label>
+		<sf:label path="buildingName" cssClass="control-label">Building</sf:label>
 		<div class="controls">
-			<sf:input path="building" />
-			<br /><div class="error" data-for="building"></div>
+			<sf:input path="buildingName" />
+			<br /><div class="error" data-for="buildingName"></div>
 		</div>
 	</div>
 	<div class="control-group">
-		<sf:label path="room" cssClass="control-label">Room</sf:label>
+		<sf:label path="roomNumber" cssClass="control-label">Room</sf:label>
 		<div class="controls">
-			<sf:input path="room" />
-			<br /><div class="error" data-for="room"></div>
+			<sf:input path="roomNumber" />
+			<br /><div class="error" data-for="roomNumber"></div>
 		</div>
 	</div>
 	<div class="control-group">
