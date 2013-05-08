@@ -35,6 +35,7 @@ public class Building {
 
   private String id;
   private String name;
+  private String abbreviation;
   
   /**
    * Gets the {@code id} property.
@@ -68,6 +69,23 @@ public class Building {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Gets the {@code abbreviation} property.
+   * @return property value
+   */
+  @Column(name = "abbreviation")
+  public String getAbbreviation() {
+    return abbreviation;
+  }
+
+  /**
+   * Sets the {@code abbreviation} property.
+   * @param abbreviation the value to set
+   */
+  public void setAbbreviation(String abbreviation) {
+    this.abbreviation = abbreviation;
   }
 
   /**

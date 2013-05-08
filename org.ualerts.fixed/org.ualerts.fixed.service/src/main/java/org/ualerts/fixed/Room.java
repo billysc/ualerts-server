@@ -30,7 +30,7 @@ import javax.persistence.Table;
  * @author Brian Early
  */
 @Entity
-@Table(name = "Room")
+@Table(name = "room")
 public class Room extends AbstractEntity {
 
   private static final long serialVersionUID = -8230988187096633342L;

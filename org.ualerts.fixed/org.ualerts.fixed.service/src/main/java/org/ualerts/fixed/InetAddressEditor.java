@@ -20,6 +20,8 @@ package org.ualerts.fixed;
 
 import java.beans.PropertyEditorSupport;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * A {@code PropertyEditor} for an {@link InetAddress}.
  *
@@ -35,7 +37,7 @@ public class InetAddressEditor extends PropertyEditorSupport {
 
   @Override
   public void setAsText(String text) throws IllegalArgumentException {
-    setValue(InetAddress.getByAddress(text));
+    setValue(InetAddress.getByAddress(StringUtils.isBlank(text)? null : text));
   }
 
 }
