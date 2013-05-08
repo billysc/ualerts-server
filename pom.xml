@@ -1,11 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.ualerts</groupId>
-  <artifactId>ualerts-server</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <name>UAlerts</name>
-  <description>UAlerts Emergency Alerts System</description>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.ualerts</groupId>
+	<artifactId>ualerts-server</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>UAlerts</name>
+	<description>UAlerts Emergency Alerts System</description>
 	<url>${site.homepage.baseUrl}</url>
 	<inceptionYear>2013</inceptionYear>
 	<licenses>
@@ -50,11 +51,11 @@
 		<url>http://ualerts.org</url>
 	</organization>
 	<scm>
-      <connection>scm:git:git@github.com:ualerts-org/ualerts-server.git</connection>
-      <developerConnection>scm:git:git@github.com:ualerts-org/ualerts-server.git</developerConnection>
-      <url>https://github.com/ualerts-org/ualerts-server</url>
-      <tag>REL-0.0.1</tag>
-  </scm>
+		<connection>scm:git:git@github.com:ualerts-org/ualerts-server.git</connection>
+		<developerConnection>scm:git:git@github.com:ualerts-org/ualerts-server.git</developerConnection>
+		<url>https://github.com/ualerts-org/ualerts-server</url>
+		<tag>REL-0.0.1</tag>
+	</scm>
 	<build>
 		<plugins>
 			<plugin>
@@ -115,13 +116,32 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>verify</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
 				<configuration>
 					<tagNameFormat>REL-@{project.version}</tagNameFormat>
 					<useReleaseProfile>false</useReleaseProfile>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
-                    <mavenExecutorId>forked-path</mavenExecutorId>
+					<mavenExecutorId>forked-path</mavenExecutorId>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -169,7 +189,7 @@
 							<artifactId>wagon-ssh</artifactId>
 							<version>2.4</version>
 						</dependency>
-          </dependencies>
+					</dependencies>
 				</plugin>
 				<plugin>
 					<artifactId>maven-war-plugin</artifactId>
@@ -216,7 +236,7 @@
 				<plugin>
 					<groupId>org.mortbay.jetty</groupId>
 					<artifactId>jetty-maven-plugin</artifactId>
-				  <version>8.1.10.v20130312</version>
+					<version>8.1.10.v20130312</version>
 				</plugin>
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -734,9 +754,8 @@
 			<dependency>
 				<groupId>net.sourceforge.htmlunit</groupId>
 				<artifactId>htmlunit</artifactId>
-				<type>jar</type>
-				<scope>compile</scope>
-				<version>2.8</version>
+				<version>2.12</version>
+				<scope>test</scope>
 				<exclusions>
 					<exclusion>
 						<artifactId>commons-logging</artifactId>

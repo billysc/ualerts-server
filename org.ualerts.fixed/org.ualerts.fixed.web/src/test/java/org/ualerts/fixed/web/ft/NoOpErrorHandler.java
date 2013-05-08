@@ -1,5 +1,5 @@
 /*
- * File created on May 1, 2013
+ * File created on May 7, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -16,29 +16,39 @@
  * limitations under the License.
  *
  */
-package org.ualerts.fixed.web.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+package org.ualerts.fixed.web.ft;
+
+import org.w3c.css.sac.CSSException;
+import org.w3c.css.sac.CSSParseException;
+import org.w3c.css.sac.ErrorHandler;
 
 /**
- * A controller that serves up the start/index page.
+ * A CSS error handler that does nothing at all.
  *
- * @author Michael Irwin
+ * @author ceharris
  */
-@Controller
-public class IndexController {
+public class NoOpErrorHandler implements ErrorHandler {
 
-  /** Servlet path for the index resource */
-  public static final String INDEX_PATH = "/";
-  
   /**
-   * Display the basic start/index page
-   * @return The name of the JSP file to be rendered
+   * {@inheritDoc}
    */
-  @RequestMapping(INDEX_PATH)
-  public String displayIndex() {
-    return "index";
+  @Override
+  public void error(CSSParseException ex) throws CSSException {
   }
-  
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void fatalError(CSSParseException ex) throws CSSException {
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void warning(CSSParseException arg0) throws CSSException {
+  }
+
 }
