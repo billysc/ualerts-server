@@ -19,6 +19,7 @@
 package org.ualerts.fixed.service.commands;
 
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
 import org.ualerts.fixed.service.Command;
 import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
@@ -45,10 +46,16 @@ public abstract class AbstractCommand<T>
    */
   public final T execute()
       throws Exception {
-    onValidate();
+    validate();
     return onExecute();
   }
 
+  private void validate() throws BindException,
+      UnspecifiedConstraintException {
+    Assert.notNull(errors);
+    onValidate();
+  }
+  
   /**
    * Performs any required validation of command state and member parameters.
    * @throws BindException if there are validation errors.
