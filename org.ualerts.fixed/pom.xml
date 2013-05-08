@@ -9,8 +9,8 @@
 	</parent>
 	<artifactId>org.ualerts.fixed</artifactId>
 	<packaging>pom</packaging>
-	<name>UAlerts Fixed child project.</name>
-	<description>Defines functionality related to UAlerts fixed assets, such as signs.</description>
+	<name>UAlerts Fixed</name>
+	<description>Support for fixed alerting components (e.g. digital signage)</description>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
