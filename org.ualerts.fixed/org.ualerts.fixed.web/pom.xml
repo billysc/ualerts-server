@@ -183,6 +183,11 @@
     	<groupId>net.sourceforge.htmlunit</groupId>
     	<artifactId>htmlunit</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   
   <properties>
@@ -202,7 +207,7 @@
         <ft.hsqldb.version>${hsqldb.version}</ft.hsqldb.version>
         <ft.hibernate.dialect>org.hibernate.dialect.HSQLDialect</ft.hibernate.dialect>
         <ft.hibernate.schema>create</ft.hibernate.schema>
-        <ft.dataSource.driverClassName>org.hsqldb.jdbcDriver</ft.dataSource.driverClassName>
+        <ft.dataSource.driverClassName>org.hsqldb.jdbc.JDBCDriver</ft.dataSource.driverClassName>
         <ft.dataSource.username>sa</ft.dataSource.username>
         <ft.dataSource.password />
         <ft.dataSource.url>jdbc:hsqldb:hsql://localhost:${hsqldb.serverPort}/${persistence.unit}</ft.dataSource.url>
