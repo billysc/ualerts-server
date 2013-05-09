@@ -21,6 +21,7 @@ package org.ualerts.fixed.web.dto;
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.InetAddress;
 import org.ualerts.fixed.MacAddress;
+import org.ualerts.fixed.Room;
 
 /**
  * A Data Transfer Object representing a fixture.
@@ -67,6 +68,7 @@ public class FixtureDTO {
   private Long id;
   private Long version;
   private String building;
+  private String buildingAbbreviation;
   private String room;
   private String positionHint;
   private String inventoryNumber;
@@ -89,8 +91,10 @@ public class FixtureDTO {
    */
   public FixtureDTO(Fixture fixture) {
     if (fixture.getRoom() != null) {
-      this.building = fixture.getRoom().getBuilding().getName();
-      this.room = fixture.getRoom().getRoomNumber();
+      Room room = fixture.getRoom();
+      this.building = room.getBuilding().getName();
+      this.buildingAbbreviation = room.getBuilding().getAbbreviation();
+      this.room = room.getRoomNumber();
     }
     if (fixture.getAsset() != null) {
       this.inventoryNumber = fixture.getAsset().getInventoryNumber();
@@ -152,6 +156,22 @@ public class FixtureDTO {
    */
   public void setBuilding(String building) {
     this.building = building;
+  }
+  
+  /**
+   * Gets the {@code buildingAbbreviation} property.
+   * @return property value
+   */
+  public String getBuildingAbbreviation() {
+    return buildingAbbreviation;
+  }
+  
+  /**
+   * Sets the {@code buildingAbbreviation} property.
+   * @param buildingAbbreviation the value to set
+   */
+  public void setBuildingAbbreviation(String buildingAbbreviation) {
+    this.buildingAbbreviation = buildingAbbreviation;
   }
   
   /**
