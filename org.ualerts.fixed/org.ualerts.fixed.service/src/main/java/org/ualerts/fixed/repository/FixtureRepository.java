@@ -44,6 +44,14 @@ public interface FixtureRepository {
   Fixture findFixtureByLocation(Long roomId, Long hintId);
   
   /**
+   * Finds a fixture by its ID.
+   * @param id the ID of the fixture
+   * @return the Fixture object.
+   * @throws EntityNotFoundException if the fixture can't be found.
+   */
+  Fixture findFixtureById(Long id) throws EntityNotFoundException;
+  
+  /**
    * Adds a fixture to persistence control.  Assumes that any linked entities
    * have already been persisted.
    * @param fixture the fixture to add.

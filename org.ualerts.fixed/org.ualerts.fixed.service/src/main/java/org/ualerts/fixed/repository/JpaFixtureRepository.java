@@ -68,6 +68,22 @@ public class JpaFixtureRepository extends AbstractJpaRepository
    * {@inheritDoc}
    */
   @Override
+  public Fixture findFixtureById(Long id) throws EntityNotFoundException {
+    try {
+      return getEntityManager()
+          .createNamedQuery("findFixtureById", Fixture.class)
+          .setParameter("id", id)
+          .getSingleResult();
+    }
+    catch (NoResultException ex) {
+      throw new EntityNotFoundException(Fixture.class, id);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void addFixture(Fixture fixture) {
     getEntityManager().persist(fixture);
   }

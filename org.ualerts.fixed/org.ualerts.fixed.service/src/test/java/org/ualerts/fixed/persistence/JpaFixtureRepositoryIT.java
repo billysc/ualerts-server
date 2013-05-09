@@ -19,6 +19,7 @@
 
 package org.ualerts.fixed.persistence;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -32,8 +33,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.util.Assert;
+import org.ualerts.fixed.Asset;
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.integration.ApplicationContextUtil;
+import org.ualerts.fixed.repository.EntityNotFoundException;
+import org.ualerts.fixed.repository.JpaAssetRepository;
 import org.ualerts.fixed.repository.JpaFixtureRepository;
 
 import edu.vt.cns.kestrel.common.IntegrationTestRunner;
@@ -49,6 +53,7 @@ public class JpaFixtureRepositoryIT {
   private EntityManager entityManager;
   private EntityTransaction tx;
   private JpaFixtureRepository repository;
+  private JpaAssetRepository assetRepository;
   
   /**
    * Things to set up before the test instance of this
@@ -83,6 +88,9 @@ public class JpaFixtureRepositoryIT {
     repository = new JpaFixtureRepository();
     repository.setEntityManager(entityManager);
     repository.setEntityManagerFactory(entityManagerFactory);
+    assetRepository = new JpaAssetRepository();
+    assetRepository.setEntityManager(entityManager);
+    assetRepository.setEntityManagerFactory(entityManagerFactory);
   }
   
   /**
@@ -104,9 +112,60 @@ public class JpaFixtureRepositoryIT {
    * @throws Exception as needed
    */
   @Test
-  public void testFindVlanByIdNotFound() throws Exception {
+  public void testFindAllFixtures() throws Exception {
     List<Fixture> results = repository.findAllFixtures();
     Assert.notNull(results);
   }
 
+  /**
+   * Verifies that a search for a single Fixture works.
+   * @throws Exception as needed
+   */
+  @Test
+  public void testFindFixtureById() throws Exception {
+    Fixture fixture = createFixture();
+    Assert.notNull(fixture.getId());
+    Assert.notNull(fixture.getVersion());
+    Fixture result = repository.findFixtureById(fixture.getId());
+    Assert.isTrue(fixture.getId() == result.getId());
+    Assert.isTrue(fixture.getVersion() == result.getVersion());
+    Assert.isTrue(fixture.getInstalledBy().equals(result.getInstalledBy()));
+    Assert.isTrue(fixture.getIpAddress().equals(result.getIpAddress()));
+  }
+  
+  /**
+   * Verifies that a search for a fixture that isn't there will
+   * result in an EntityNotFoundException. 
+   * @throws Exception as needed
+   */
+  @Test(expected = EntityNotFoundException.class)
+  public void testFindFixtureByIdNotFound() throws Exception {
+    List<Fixture> results = repository.findAllFixtures();
+    Long id = 0L;
+    for (Fixture f : results) {
+      if (f.getId() > id) {
+        id = f.getId();
+      }
+    }
+    id++;
+    repository.findFixtureById(id);
+  }
+
+  private Fixture createFixture() throws Exception {
+    Fixture fixture = new Fixture();
+    Date date = new Date();
+    fixture.setDateCreated(date);
+    fixture.setInstalledBy("earlyb");
+    fixture.setIpAddress("127.0.0.1");
+    Asset asset = new Asset();
+    asset.setDateCreated(date);
+    asset.setInventoryNumber("inventoryNumber");
+    asset.setMacAddress("0A-1B-2C-3D-4E-5F");
+    asset.setSerialNumber("serialNumber");
+    assetRepository.addAsset(asset);
+    fixture.setAsset(asset);
+    repository.addFixture(fixture);
+    return fixture;
+  }
+  
 }
