@@ -18,6 +18,8 @@
  */
 package org.ualerts.fixed.repository;
 
+import java.util.List;
+
 import org.ualerts.fixed.PositionHint;
 
 /**
@@ -26,13 +28,20 @@ import org.ualerts.fixed.PositionHint;
  * @author Brian Early
  */
 public interface PositionHintRepository {
+  
+  /**
+   * Finds all position hints.
+   * @return the list of PositionHint objects.  May be empty/null.
+   */
+  List<PositionHint> findAllHints();
+  
   /**
    * Finds a position hint based on its text.
    * @param hintText the text of the hint.
    * @return the PositionHint object.  Null if it isn't found.
    */
   PositionHint findHint(String hintText);
-  
+
   /**
    * Adds a position hint to persistence control.
    * @param hint the position hint to add.

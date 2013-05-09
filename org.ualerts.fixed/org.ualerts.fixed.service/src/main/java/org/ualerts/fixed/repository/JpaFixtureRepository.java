@@ -18,7 +18,10 @@
  */
 package org.ualerts.fixed.repository;
 
+import java.util.List;
+
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 import org.ualerts.fixed.Fixture;
@@ -31,6 +34,16 @@ import org.ualerts.fixed.Fixture;
 @Repository("fixtureRepository")
 public class JpaFixtureRepository extends AbstractJpaRepository
   implements FixtureRepository {
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<Fixture> findAllFixtures() {
+    TypedQuery<Fixture> query =
+        getEntityManager().createNamedQuery("findAllFixtures", Fixture.class);
+    return query.getResultList();
+  }
 
   /**
    * {@inheritDoc}
@@ -55,8 +68,32 @@ public class JpaFixtureRepository extends AbstractJpaRepository
    * {@inheritDoc}
    */
   @Override
+  public Fixture findFixtureById(Long id) throws EntityNotFoundException {
+    try {
+      return getEntityManager()
+          .createNamedQuery("findFixtureById", Fixture.class)
+          .setParameter("id", id)
+          .getSingleResult();
+    }
+    catch (NoResultException ex) {
+      throw new EntityNotFoundException(Fixture.class, id);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void addFixture(Fixture fixture) {
     getEntityManager().persist(fixture);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void deleteFixture(Fixture fixture) {
+    getEntityManager().remove(fixture);
   }
 
 }

@@ -19,6 +19,8 @@
 
 package org.ualerts.fixed.repository;
 
+import java.util.List;
+
 import org.ualerts.fixed.Building;
 
 /**
@@ -27,6 +29,12 @@ import org.ualerts.fixed.Building;
  * @author Brian Early
  */
 public interface BuildingRepository {
+  /**
+   * Finds all buildings.
+   * @return list of Building objects.  Can be empty/null.
+   */
+  List<Building> findAllBuildings();
+  
   /**
    * Finds a building by its ID.
    * @param id the ID of the building

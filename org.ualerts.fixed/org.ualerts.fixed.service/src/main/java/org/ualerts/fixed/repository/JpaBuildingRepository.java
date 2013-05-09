@@ -18,7 +18,10 @@
  */
 package org.ualerts.fixed.repository;
 
+import java.util.List;
+
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 import org.ualerts.fixed.Building;
@@ -31,6 +34,16 @@ import org.ualerts.fixed.Building;
 @Repository("buildingRepository")
 public class JpaBuildingRepository extends AbstractJpaRepository
   implements BuildingRepository {
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<Building> findAllBuildings() {
+    TypedQuery<Building> query =
+        getEntityManager().createNamedQuery("findAllBuildings", Building.class);
+    return query.getResultList();
+  }
 
   /**
    * {@inheritDoc}

@@ -21,12 +21,36 @@
     </query>
   </named-query>
 
+  <named-query name="findAllBuildings">
+    <query>
+      select distinct building
+      from Building building
+    </query>
+  </named-query>
+
   <named-query name="findRoom">
     <query>
       select distinct room
       from Room room
       where room.building.id = :buildingId
       and room.roomNumber = :roomNumber
+    </query>
+  </named-query>
+
+  <named-query name="findRoomsForBuilding">
+    <query>
+      select distinct room
+      from Room room
+      where room.building.id = :buildingId
+      order by room.roomNumber
+    </query>
+  </named-query>
+
+  <named-query name="findAllPositionHints">
+    <query>
+      select distinct positionHint
+      from PositionHint positionHint
+      order by positionHint.hintText
     </query>
   </named-query>
 
@@ -68,6 +92,27 @@
       from Fixture fixture
       where fixture.room.id = :roomId
       and fixture.positionHint.id = :hintId
+    </query>
+  </named-query>
+
+  <named-query name="findAllFixtures">
+    <query>
+      select distinct fixture
+      from Fixture fixture
+      left outer join fetch fixture.room rm
+      left outer join fetch rm.building
+      left outer join fetch fixture.asset
+    </query>
+  </named-query>
+
+  <named-query name="findFixtureById">
+    <query>
+      select distinct fixture
+      from Fixture fixture
+      left outer join fetch fixture.room rm
+      left outer join fetch rm.building
+      left outer join fetch fixture.asset
+      where fixture.id = :id
     </query>
   </named-query>
 

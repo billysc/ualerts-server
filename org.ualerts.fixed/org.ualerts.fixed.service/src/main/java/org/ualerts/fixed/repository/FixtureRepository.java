@@ -18,6 +18,8 @@
  */
 package org.ualerts.fixed.repository;
 
+import java.util.List;
+
 import org.ualerts.fixed.Fixture;
 
 /**
@@ -28,6 +30,12 @@ import org.ualerts.fixed.Fixture;
 public interface FixtureRepository {
   
   /**
+   * Finds all fixtures currently in the repository.
+   * @return a list of all fixtures.  May be empty/null.
+   */
+  List<Fixture> findAllFixtures();
+  
+  /**
    * Finds a fixture by its location (room & position hint)
    * @param roomId the ID of the room
    * @param hintId the ID of the position hint
@@ -36,9 +44,24 @@ public interface FixtureRepository {
   Fixture findFixtureByLocation(Long roomId, Long hintId);
   
   /**
+   * Finds a fixture by its ID.
+   * @param id the ID of the fixture
+   * @return the Fixture object.
+   * @throws EntityNotFoundException if the fixture can't be found.
+   */
+  Fixture findFixtureById(Long id) throws EntityNotFoundException;
+  
+  /**
    * Adds a fixture to persistence control.  Assumes that any linked entities
    * have already been persisted.
    * @param fixture the fixture to add.
    */
   void addFixture(Fixture fixture);
+  
+  /**
+   * Removes a fixture from persistence control.  Does not
+   * remove any of its associated entities (asset, room, etc).
+   * @param fixture the fixture to remove.
+   */
+  void deleteFixture(Fixture fixture);
 }

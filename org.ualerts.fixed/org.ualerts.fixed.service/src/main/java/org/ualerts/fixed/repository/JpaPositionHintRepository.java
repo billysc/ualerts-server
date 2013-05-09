@@ -18,7 +18,10 @@
  */
 package org.ualerts.fixed.repository;
 
+import java.util.List;
+
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 import org.ualerts.fixed.PositionHint;
@@ -31,6 +34,16 @@ import org.ualerts.fixed.PositionHint;
 @Repository("positionHintRepository")
 public class JpaPositionHintRepository extends AbstractJpaRepository
   implements PositionHintRepository {
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<PositionHint> findAllHints() {
+    TypedQuery<PositionHint> query = getEntityManager()
+        .createNamedQuery("findAllPositionHints", PositionHint.class);
+    return query.getResultList();
+  }
 
   /**
    * {@inheritDoc}

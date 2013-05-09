@@ -18,7 +18,10 @@
  */
 package org.ualerts.fixed.repository;
 
+import java.util.List;
+
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 import org.ualerts.fixed.Room;
@@ -49,6 +52,17 @@ public class JpaRoomRepository extends AbstractJpaRepository
       result = null;
     }
     return result;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<Room> findRoomsForBuilding(String buildingId) {
+    TypedQuery<Room> query =
+        getEntityManager().createNamedQuery("findRoomsForBuilding", Room.class)
+        .setParameter("buildingId", buildingId);
+    return query.getResultList();
   }
 
   /**

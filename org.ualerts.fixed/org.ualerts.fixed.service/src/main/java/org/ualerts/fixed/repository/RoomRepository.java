@@ -18,6 +18,8 @@
  */
 package org.ualerts.fixed.repository;
 
+import java.util.List;
+
 import org.ualerts.fixed.Room;
 
 /**
@@ -26,6 +28,7 @@ import org.ualerts.fixed.Room;
  * @author Brian Early
  */
 public interface RoomRepository {
+  
   /**
    * Finds a room by its building ID and room.
    * @param buildingId the ID of the room's building
@@ -33,6 +36,13 @@ public interface RoomRepository {
    * @return the Room object.  Null if it isn't found.
    */
   Room findRoom(String buildingId, String roomNumber);
+  
+  /**
+   * Finds all rooms associated with a particular building.
+   * @param buildingId the ID of the building
+   * @return list of Room objects.  May be empty/null.
+   */
+  List<Room> findRoomsForBuilding(String buildingId);
   
   /**
    * Adds a room to persistence control.

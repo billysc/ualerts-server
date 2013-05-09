@@ -22,7 +22,7 @@
     class="org.springframework.beans.factory.config.PropertiesFactoryBean">
     <property name="location">
       <jee:jndi-lookup jndi-name="config/persistence.properties"
-        default-value="classpath:/META-INF/persistence.properties"/>
+        default-value="classpath:spring/persistence.properties"/>
     </property>
   </bean>
   
