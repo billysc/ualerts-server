@@ -88,4 +88,12 @@ public class JpaFixtureRepository extends AbstractJpaRepository
     getEntityManager().persist(fixture);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void deleteFixture(Fixture fixture) {
+    getEntityManager().remove(fixture);
+  }
+
 }

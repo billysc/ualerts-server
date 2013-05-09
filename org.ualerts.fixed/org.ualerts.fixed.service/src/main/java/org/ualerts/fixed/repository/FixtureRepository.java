@@ -57,4 +57,11 @@ public interface FixtureRepository {
    * @param fixture the fixture to add.
    */
   void addFixture(Fixture fixture);
+  
+  /**
+   * Removes a fixture from persistence control.  Does not
+   * remove any of its associated entities (asset, room, etc).
+   * @param fixture the fixture to remove.
+   */
+  void deleteFixture(Fixture fixture);
 }

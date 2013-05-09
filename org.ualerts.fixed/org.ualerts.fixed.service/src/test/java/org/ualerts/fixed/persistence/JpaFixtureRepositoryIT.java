@@ -159,6 +159,26 @@ public class JpaFixtureRepositoryIT {
     repository.findFixtureById(id);
   }
 
+  /**
+   * Verifies that deleting a fixture actually removes
+   * it from persistence
+   * @throws Exception as needed
+   */
+  @Test
+  public void testDeleteFixture() throws Exception {
+    Fixture fixture = createFixtureThree();
+    Assert.notNull(fixture.getId());
+    Assert.notNull(fixture.getVersion());
+    repository.deleteFixture(fixture);
+    try {
+      repository.findFixtureById(fixture.getId());
+      Assert.isTrue(false);
+    }
+    catch (EntityNotFoundException ex) {
+      Assert.isTrue(true);
+    }
+  }
+  
   private Fixture createFixtureOne() throws Exception {
     Fixture fixture = new Fixture();
     Date date = new Date();
@@ -187,6 +207,23 @@ public class JpaFixtureRepositoryIT {
     asset.setInventoryNumber("inventoryNumber2");
     asset.setMacAddress("0A-1B-2C-3D-4E-5F");
     asset.setSerialNumber("serialNumber2");
+    assetRepository.addAsset(asset);
+    fixture.setAsset(asset);
+    repository.addFixture(fixture);
+    return fixture;
+  }
+
+  private Fixture createFixtureThree() throws Exception {
+    Fixture fixture = new Fixture();
+    Date date = new Date();
+    fixture.setDateCreated(date);
+    fixture.setInstalledBy("earlyb");
+    fixture.setIpAddress("127.0.0.3");
+    Asset asset = new Asset();
+    asset.setDateCreated(date);
+    asset.setInventoryNumber("inventoryNumber3");
+    asset.setMacAddress("0A-1B-2C-3D-4E-5A");
+    asset.setSerialNumber("serialNumber3");
     assetRepository.addAsset(asset);
     fixture.setAsset(asset);
     repository.addFixture(fixture);

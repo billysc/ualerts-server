@@ -27,12 +27,12 @@ import org.ualerts.fixed.service.CommandComponent;
 import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
 
 /**
- * Command to find a fixture in the UAlerts system.
+ * Command to delete a specific fixture from the UAlerts system.
  *
  * @author Brian Early
  */
 @CommandComponent
-public class FindFixtureCommand extends AbstractCommand<Fixture> {
+public class DeleteFixtureCommand extends AbstractCommand<Fixture> {
   private Long id;
   private FixtureRepository fixtureRepository;
 
@@ -51,7 +51,9 @@ public class FindFixtureCommand extends AbstractCommand<Fixture> {
    */
   @Override
   protected Fixture onExecute() throws Exception {
-    return fixtureRepository.findFixtureById(getId());
+    Fixture fixture = fixtureRepository.findFixtureById(getId());
+    fixtureRepository.deleteFixture(fixture);
+    return null;
   }
 
   /**
