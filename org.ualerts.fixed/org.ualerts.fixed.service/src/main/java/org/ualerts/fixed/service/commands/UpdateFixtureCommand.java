@@ -65,6 +65,8 @@ public class UpdateFixtureCommand extends AbstractCommand<Fixture> {
   protected void onValidate() throws BindException,
       UnspecifiedConstraintException {
     super.onValidate();
+    // TODO - Validation is ripe for refactoring, as it has a ton in common
+    // with validation rules in AddFixtureCommand.
     Assert.notNull(id, "Fixture ID is required.");
     try {
       validateInetAddress(getErrors());
