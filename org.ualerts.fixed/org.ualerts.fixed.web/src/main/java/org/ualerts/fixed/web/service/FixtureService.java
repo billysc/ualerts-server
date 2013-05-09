@@ -18,6 +18,8 @@
  */
 package org.ualerts.fixed.web.service;
 
+import java.util.List;
+
 import org.springframework.validation.BindException;
 import org.ualerts.fixed.service.Command;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
@@ -49,5 +51,12 @@ public interface FixtureService {
    */
   FixtureDTO createFixture(AddFixtureCommand command) 
       throws BindException, Exception;
+  
+  /**
+   * Retrieve all Fixtures stored in persistence
+   * @return A list of all Fixtures stored in persistence
+   * @throws Exception
+   */
+  List<FixtureDTO> retrieveAllFixtures() throws Exception;
   
 }
