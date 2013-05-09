@@ -18,8 +18,13 @@
  */
 package org.ualerts.fixed.web.controller;
 
+import java.util.Map;
+
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.ualerts.fixed.web.service.FixtureService;
 
 /**
  * A controller that serves up the start/index page.
@@ -32,13 +37,25 @@ public class IndexController {
   /** Servlet path for the index resource */
   public static final String INDEX_PATH = "/";
   
+  private FixtureService fixtureService;
+  
   /**
    * Display the basic start/index page
+   * @param model The model for the page
    * @return The name of the JSP file to be rendered
    */
   @RequestMapping(INDEX_PATH)
-  public String displayIndex() {
+  public String displayIndex(Map<String, Object> model) throws Exception {
+    model.put("fixtures", fixtureService.retrieveAllFixtures());
     return "index";
   }
   
+  /**
+   * Sets the {@code fixtureService} property.
+   * @param fixtureService the value to set
+   */
+  @Resource
+  public void setFixtureService(FixtureService fixtureService) {
+    this.fixtureService = fixtureService;
+  }
 }
