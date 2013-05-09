@@ -46,6 +46,14 @@
     </query>
   </named-query>
 
+  <named-query name="findAllPositionHints">
+    <query>
+      select distinct positionHint
+      from PositionHint positionHint
+      order by positionHint.hintText
+    </query>
+  </named-query>
+
   <named-query name="findPositionHint">
     <query>
       select distinct positionHint
