@@ -21,6 +21,13 @@
     </query>
   </named-query>
 
+  <named-query name="findAllBuildings">
+    <query>
+      select distinct building
+      from Building building
+    </query>
+  </named-query>
+
   <named-query name="findRoom">
     <query>
       select distinct room
