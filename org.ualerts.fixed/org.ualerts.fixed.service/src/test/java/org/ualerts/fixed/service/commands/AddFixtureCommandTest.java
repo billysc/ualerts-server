@@ -165,32 +165,23 @@ public class AddFixtureCommandTest {
     room.setId(1L);
     final PositionHint hint = new PositionHint();
     hint.setId(2L);
-    try {
-      populateCommand(command);
-      command.setInventoryNumber(null);
-      context.checking(new Expectations() { {
-        oneOf(buildingRepository).findBuildingByName("buildingName");
-        will(returnValue(building));
-        oneOf(assetRepository).findAssetBySerialNumber("serialNumber");
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
-        will(returnValue(null));
-        oneOf(roomRepository).findRoom("buildingId", "roomNumber");
-        will(returnValue(room));
-        oneOf(positionHintRepository).findHint("hint");
-        will(returnValue(hint));
-        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
-        will(returnValue(null));
-      } });
-      command.onValidate();
-      assertTrue(false);
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertTrue(ex.getAllErrors().size() == 1);
-      assertTrue(ex.getAllErrors().get(0)
-          .getCode().equals(ErrorCodes.MISSING_INVENTORY_NUMBER_FIELD));
-    }
+    populateCommand(command);
+    command.setInventoryNumber(null);
+    context.checking(new Expectations() { {
+      oneOf(buildingRepository).findBuildingByName("buildingName");
+      will(returnValue(building));
+      oneOf(assetRepository).findAssetBySerialNumber("serialNumber");
+      will(returnValue(null));
+      oneOf(assetRepository).findAssetByMacAddress("0A-1B-2C-3D-4E-5F");
+      will(returnValue(null));
+      oneOf(roomRepository).findRoom("buildingId", "roomNumber");
+      will(returnValue(room));
+      oneOf(positionHintRepository).findHint("hint");
+      will(returnValue(hint));
+      oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
+      will(returnValue(null));
+    } });
+    command.onValidate();
   }
 
   /**
@@ -707,7 +698,7 @@ public class AddFixtureCommandTest {
       oneOf(positionHintRepository).findHint("hint");
       will(returnValue(null));
       oneOf(positionHintRepository)
-        .addPositionHint(with(any(PositionHint.class)));
+      .addPositionHint(with(any(PositionHint.class)));
       oneOf(dateService).getCurrentDate();
       will(returnValue(date));
       oneOf(assetRepository).addAsset(with(any(Asset.class)));

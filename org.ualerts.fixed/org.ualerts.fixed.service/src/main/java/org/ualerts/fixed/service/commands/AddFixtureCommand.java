@@ -98,12 +98,9 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   }
 
   private void validateInventoryNumber(BindException errors) {
-    if (StringUtils.isBlank(getInventoryNumber())) {
-      errors.rejectValue("inventoryNumber",
-          ErrorCodes.MISSING_INVENTORY_NUMBER_FIELD);
-    }
-    else if (assetRepository
-             .findAssetByInventoryNumber(getInventoryNumber()) != null) {
+    if (StringUtils.isNotBlank(getInventoryNumber())
+        && (assetRepository
+           .findAssetByInventoryNumber(getInventoryNumber()) != null)) {
       errors.rejectValue("inventoryNumber",
           ErrorCodes.INVENTORY_NUMBER_CONFLICT);
     }
