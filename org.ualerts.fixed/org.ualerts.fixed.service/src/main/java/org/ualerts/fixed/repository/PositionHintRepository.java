@@ -41,7 +41,7 @@ public interface PositionHintRepository {
    * @return the PositionHint object.  Null if it isn't found.
    */
   PositionHint findHint(String hintText);
-  
+
   /**
    * Adds a position hint to persistence control.
    * @param hint the position hint to add.

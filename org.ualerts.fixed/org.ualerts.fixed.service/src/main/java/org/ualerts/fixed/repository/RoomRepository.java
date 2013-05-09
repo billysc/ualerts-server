@@ -28,6 +28,7 @@ import org.ualerts.fixed.Room;
  * @author Brian Early
  */
 public interface RoomRepository {
+  
   /**
    * Finds a room by its building ID and room.
    * @param buildingId the ID of the room's building

@@ -24,7 +24,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
-import org.ualerts.fixed.Building;
 import org.ualerts.fixed.Room;
 
 /**
