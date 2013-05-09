@@ -159,11 +159,14 @@
           <tagNameFormat>REL-@{project.version}</tagNameFormat>
           <useReleaseProfile>false</useReleaseProfile>
           <autoVersionSubmodules>true</autoVersionSubmodules>
-          <mavenExecutorId>forked-path</mavenExecutorId>
+                    <mavenExecutorId>forked-path</mavenExecutorId>
         </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-gpg-plugin</artifactId>
+        <configuration>
+          <useAgent>true</useAgent>
+        </configuration>
         <executions>
           <execution>
             <id>sign-artifacts</id>
@@ -213,7 +216,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>2.9</version>
+          <version>${javadoc.version}</version>
         </plugin>
         <plugin>
           <artifactId>maven-source-plugin</artifactId>
@@ -241,15 +244,19 @@
         </plugin>
         <plugin>
           <artifactId>maven-surefire-report-plugin</artifactId>
-          <version>2.14.1</version>
+          <version>${surefire-report.version}</version>
         </plugin>
         <plugin>
           <artifactId>maven-jxr-plugin</artifactId>
-          <version>2.3</version>
+          <version>${jxr.version}</version>
         </plugin>
         <plugin>
           <artifactId>maven-pmd-plugin</artifactId>
-          <version>3.0.1</version>
+          <version>${pmd.version}</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${checkstyle.version}</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -261,6 +268,16 @@
           <artifactId>build-helper-maven-plugin</artifactId>
           <version>1.7</version>
         </plugin>
+	      <plugin>
+	        <groupId>org.codehaus.mojo</groupId>
+	        <artifactId>jdepend-maven-plugin</artifactId>
+	        <version>${jdepend.version}</version>
+	      </plugin>
+	      <plugin>
+	        <groupId>org.codehaus.mojo</groupId>
+	        <artifactId>cobertura-maven-plugin</artifactId>
+	        <version>${cobertura.version}</version>
+	      </plugin>
         <plugin>
           <groupId>org.mortbay.jetty</groupId>
           <artifactId>jetty-maven-plugin</artifactId>
@@ -316,12 +333,15 @@
     <plugins>
       <plugin>
         <artifactId>maven-jxr-plugin</artifactId>
+        <version>${jxr.version}</version>
       </plugin>
       <plugin>
         <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>${surefire-report.version}</version>
       </plugin>
       <plugin>
         <artifactId>maven-pmd-plugin</artifactId>
+        <version>${pmd.version}</version>
         <configuration>
           <linkXref>true</linkXref>
           <minimumTokens>100</minimumTokens>
@@ -331,10 +351,11 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>jdepend-maven-plugin</artifactId>
-        <version>2.0-beta-2</version>
+        <version>${jdepend.version}</version>
       </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${javadoc.version}</version>
         <configuration>
           <links>
             <link>http://docs.oracle.com/javase/6/docs/api</link>
@@ -343,6 +364,7 @@
       </plugin>
       <plugin>
          <artifactId>maven-checkstyle-plugin</artifactId>
+         <version>${checkstyle.version}</version>
          <configuration>
            <configLocation>ualerts/checkstyle.xml</configLocation>
          </configuration>
@@ -350,7 +372,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
-        <version>2.5.2</version>
+        <version>${cobertura.version}</version>
       </plugin>
     </plugins>
   </reporting>
@@ -878,6 +900,12 @@
     <bc.version>1.48</bc.version>
     <checkstyle.version>2.10</checkstyle.version>
     <alerts.server.basedir>${session.executionRootDirectory}</alerts.server.basedir>
+    <jxr.version>2.3</jxr.version>
+    <surefire-report.version>2.14.1</surefire-report.version>
+    <pmd.version>3.0.1</pmd.version>
+    <javadoc.version>2.9</javadoc.version>
+    <cobertura.version>2.5.2</cobertura.version>
+    <jdepend.version>2.0-beta-2</jdepend.version>
   </properties>
   <distributionManagement>
     <site>
