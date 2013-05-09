@@ -31,7 +31,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 import org.ualerts.fixed.Building;
 import org.ualerts.fixed.Room;
 import org.ualerts.fixed.integration.ApplicationContextUtil;
@@ -118,10 +118,10 @@ public class JpaRoomRepositoryIT {
   public void testFindRoom() throws Exception {
     Room result =
         repository.findRoom(building.getId(), room.getRoomNumber());
-    Assert.notNull(result);
-    Assert.isTrue(result.getId() == room.getId());
-    Assert.isTrue(result.getBuilding().getId().equals(building.getId()));
-    Assert.isTrue(result.getRoomNumber().equals(room.getRoomNumber()));
+    Assert.assertNotNull(result);
+    Assert.assertTrue(result.getId() == room.getId());
+    Assert.assertTrue(result.getBuilding().getId().equals(building.getId()));
+    Assert.assertTrue(result.getRoomNumber().equals(room.getRoomNumber()));
   }
 
   /**
@@ -132,7 +132,7 @@ public class JpaRoomRepositoryIT {
   public void testFindRoomNotFound() throws Exception {
     Room result =
         repository.findRoom(building.getId(), "BLAH!");
-    Assert.isNull(result);
+    Assert.assertTrue(result == null);
   }
 
   /**
@@ -142,15 +142,15 @@ public class JpaRoomRepositoryIT {
   @Test
   public void testFindRoomsForBuilding() throws Exception {
     List<Room> results = repository.findRoomsForBuilding(building.getId());
-    Assert.notNull(results);
-    Assert.isTrue(results.size() > 0);
+    Assert.assertNotNull(results);
+    Assert.assertTrue(results.size() > 0);
     Room match = null;
     for (Room r : results) {
       if (r.getId() == room.getId()) {
         match = r;
       }
     }
-    Assert.notNull(match);
+    Assert.assertNotNull(match);
   }
 
   private Building createBuilding() {

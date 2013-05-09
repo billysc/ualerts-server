@@ -32,7 +32,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 import org.ualerts.fixed.Asset;
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.integration.ApplicationContextUtil;
@@ -115,14 +115,14 @@ public class JpaFixtureRepositoryIT {
   public void testFindAllFixtures() throws Exception {
     Fixture fixture = createFixtureTwo();
     List<Fixture> results = repository.findAllFixtures();
-    Assert.notNull(results);
+    Assert.assertNotNull(results);
     Fixture match = null;
     for (Fixture f : results) {
       if (f.getId().equals(fixture.getId())) {
         match = f;
       }
     }
-    Assert.notNull(match);
+    Assert.assertNotNull(match);
   }
 
   /**
@@ -132,13 +132,13 @@ public class JpaFixtureRepositoryIT {
   @Test
   public void testFindFixtureById() throws Exception {
     Fixture fixture = createFixtureOne();
-    Assert.notNull(fixture.getId());
-    Assert.notNull(fixture.getVersion());
+    Assert.assertNotNull(fixture.getId());
+    Assert.assertNotNull(fixture.getVersion());
     Fixture result = repository.findFixtureById(fixture.getId());
-    Assert.isTrue(fixture.getId() == result.getId());
-    Assert.isTrue(fixture.getVersion() == result.getVersion());
-    Assert.isTrue(fixture.getInstalledBy().equals(result.getInstalledBy()));
-    Assert.isTrue(fixture.getIpAddress().equals(result.getIpAddress()));
+    Assert.assertTrue(fixture.getId() == result.getId());
+    Assert.assertTrue(fixture.getVersion() == result.getVersion());
+    Assert.assertTrue(fixture.getInstalledBy().equals(result.getInstalledBy()));
+    Assert.assertTrue(fixture.getIpAddress().equals(result.getIpAddress()));
   }
   
   /**
@@ -167,15 +167,15 @@ public class JpaFixtureRepositoryIT {
   @Test
   public void testDeleteFixture() throws Exception {
     Fixture fixture = createFixtureThree();
-    Assert.notNull(fixture.getId());
-    Assert.notNull(fixture.getVersion());
+    Assert.assertNotNull(fixture.getId());
+    Assert.assertNotNull(fixture.getVersion());
     repository.deleteFixture(fixture);
     try {
       repository.findFixtureById(fixture.getId());
-      Assert.isTrue(false);
+      Assert.fail("Did not receive expected exception.");
     }
     catch (EntityNotFoundException ex) {
-      Assert.isTrue(true);
+      Assert.assertTrue(true);
     }
   }
   

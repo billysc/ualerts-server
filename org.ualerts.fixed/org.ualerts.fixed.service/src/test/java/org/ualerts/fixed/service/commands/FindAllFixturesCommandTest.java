@@ -18,8 +18,6 @@
  */
 package org.ualerts.fixed.service.commands;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +26,7 @@ import javax.persistence.PersistenceException;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ualerts.fixed.Fixture;
@@ -93,7 +92,7 @@ public class FindAllFixturesCommandTest {
         will(throwException(new PersistenceException("GAH!")));
       } });
       command.onExecute();
-      assertTrue(false);
+      Assert.fail("Did not receive expected exception.");
     }
     catch (PersistenceException ex) {
       context.assertIsSatisfied();

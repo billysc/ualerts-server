@@ -18,12 +18,15 @@
  */
 package org.ualerts.fixed.service.commands;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.util.Assert;
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.repository.EntityNotFoundException;
 import org.ualerts.fixed.repository.FixtureRepository;
@@ -67,7 +70,7 @@ public class FindFixtureCommandTest {
   public void testOnValidate() throws Exception {
     command.setId(1L);
     command.onValidate();
-    Assert.isTrue(true);
+    assertTrue(true);
   }
 
   /**
@@ -95,7 +98,7 @@ public class FindFixtureCommandTest {
     } });
     Fixture result = command.onExecute();
     context.assertIsSatisfied();
-    Assert.notNull(result);
+    assertNotNull(result);
   }
 
   /**
@@ -112,7 +115,7 @@ public class FindFixtureCommandTest {
         will(throwException(new EntityNotFoundException(Fixture.class, 1L)));
       } });
       command.onExecute();
-      Assert.isTrue(false);
+      Assert.fail("Did not receive expected exception.");
     }
     catch (EntityNotFoundException ex) {
       context.assertIsSatisfied();

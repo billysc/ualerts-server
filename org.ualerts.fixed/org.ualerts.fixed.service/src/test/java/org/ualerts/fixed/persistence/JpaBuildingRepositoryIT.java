@@ -31,7 +31,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 import org.ualerts.fixed.Building;
 import org.ualerts.fixed.integration.ApplicationContextUtil;
 import org.ualerts.fixed.repository.JpaBuildingRepository;
@@ -111,15 +111,15 @@ public class JpaBuildingRepositoryIT {
     building.setName("Building 1");
     addBuilding(building);
     List<Building> results = repository.findAllBuildings();
-    Assert.notNull(results);
-    Assert.isTrue(results.size() > 0);
+    Assert.assertNotNull(results);
+    Assert.assertTrue(results.size() > 0);
     Building match = null;
     for (Building b : results) {
       if (b.getId().equals(building.getId())) {
         match = b;
       }
     }
-    Assert.notNull(match);
+    Assert.assertNotNull(match);
   }
   
   private void addBuilding(Building building) {
