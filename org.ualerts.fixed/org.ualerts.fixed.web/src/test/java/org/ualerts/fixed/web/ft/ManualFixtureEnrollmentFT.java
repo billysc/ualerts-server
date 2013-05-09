@@ -49,7 +49,7 @@ import edu.vt.cns.kestrel.common.IntegrationTestRunner;
  * @author ceharris
  */
 @RunWith(IntegrationTestRunner.class)
-public class ManualFixtureEnrollmentFT {
+public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   
   private static final String HTML_ID_GLOBAL_ERRORS = "globalErrorContainer";
   private static final String HTML_ID_IP_ADDRESS = "ipAddressContainer";
@@ -60,7 +60,6 @@ public class ManualFixtureEnrollmentFT {
   private static final String HTML_ID_POSITION_HINT = "positionHintContainer";
   private static final String HTML_ID_ROOM_NUMBER = "roomContainer";
   private static final String HTML_ID_SERIAL_NUMBER = "serialNumberContainer";
-  private static final String UI_PATH = "/ui";    // TODO repeated in web.xml
   private static final String VALID_BUILDING = DBSetupUtility.BUILDING1_NAME;
   private static final String VALID_INVENTORY_NUMBER = "INV-12345";
   private static final String VALID_MAC_ADDRESS = "0A:12:34:0B:56:78";
@@ -69,9 +68,6 @@ public class ManualFixtureEnrollmentFT {
   private static final String VALID_SERIAL_NUMBER = "SER-12345";
   
   private static EntityManager entityManager;
-
-  private WebClient client = new WebClient(BrowserVersion.FIREFOX_17);
-  private String contextUrl = WebContextUtil.getUrl();
 
   /**
    * One time setup that sets the EntityManager to be used
@@ -101,7 +97,7 @@ public class ManualFixtureEnrollmentFT {
    */
   @Before
   public void setUp() throws Exception {
-    client.setCssErrorHandler(new NoOpErrorHandler());
+    getClient().setCssErrorHandler(new NoOpErrorHandler());
     DBSetupUtility.populateDatabase(entityManager);
   }
   
@@ -212,17 +208,11 @@ public class ManualFixtureEnrollmentFT {
         + HTML_ID_GLOBAL_ERRORS + "']" + "/div")).getTextContent()
         .contains("combination is already in use"));
   }
-  
-  private HtmlPage getHtmlPage(String url) throws Exception {
-    HtmlPage page = client.getPage(contextUrl + UI_PATH + url);
-    client.waitForBackgroundJavaScript(1000);
-    return page;
-  }
 
   private void openEnrollFixtureDialog(HtmlPage page) throws Exception {
     HtmlAnchor fixtureButton = page.getHtmlElementById(HTML_ID_FIXTURE_BUTTON);
     fixtureButton.click();
-    client.waitForBackgroundJavaScript(1000);
+    getClient().waitForBackgroundJavaScript(1000);
   }
   
   private HtmlDivision getModalBody(HtmlPage page) {
@@ -232,7 +222,7 @@ public class ManualFixtureEnrollmentFT {
   private void clickSubmitButtonAndWait(HtmlPage page) throws Exception {
     ((HtmlButton) page.getFirstByXPath("//button[@class='btn btn-primary']"))
       .click();
-    client.waitForBackgroundJavaScript(4000);
+    getClient().waitForBackgroundJavaScript(4000);
   }
   
   private void assertNoErrors(HtmlPage page) throws Exception {
