@@ -41,12 +41,12 @@ public final class DBSetupUtility {
   /**
    * Name of a building that is put into persistence for testing
    */
-  public static final String BUILDING1_NAME = "Building 1";
+  public static final String BUILDING_NAME = "Building 1";
 
   /**
    * Abbreviation of a building that is put into persistence for testing
    */
-  public static final String BUILDING1_ABBR = "BULD1";
+  public static final String BUILDING_ABBR = "BULD1";
 
   /**
    * Installer for Fixture

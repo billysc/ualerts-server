@@ -60,7 +60,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   private static final String HTML_ID_POSITION_HINT = "positionHintContainer";
   private static final String HTML_ID_ROOM_NUMBER = "roomContainer";
   private static final String HTML_ID_SERIAL_NUMBER = "serialNumberContainer";
-  private static final String VALID_BUILDING = DBSetupUtility.BUILDING1_NAME;
+  private static final String VALID_BUILDING = DBSetupUtility.BUILDING_NAME;
   private static final String VALID_INVENTORY_NUMBER = "INV-12345";
   private static final String VALID_MAC_ADDRESS = "0A:12:34:0B:56:78";
   private static final String VALID_POSITION_HINT = "TOP-RIGHT";
