@@ -95,7 +95,7 @@
     </query>
   </named-query>
 
-  <named-query name="findAllFixtures">
+  <named-query name="findAllFixtureDetails">
     <query>
       select distinct fixture
       from Fixture fixture

@@ -31,7 +31,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 import org.ualerts.fixed.PositionHint;
 import org.ualerts.fixed.integration.ApplicationContextUtil;
 import org.ualerts.fixed.repository.JpaPositionHintRepository;
@@ -108,15 +108,15 @@ public class JpaPositionHintRepositoryIT {
   @Test
   public void testFindAllHints() throws Exception {
     List<PositionHint> results = repository.findAllHints();
-    Assert.notNull(results);
-    Assert.isTrue(results.size() > 0);
+    Assert.assertNotNull(results);
+    Assert.assertTrue(results.size() > 0);
     PositionHint match = null;
     for (PositionHint h : results) {
       if (h.getId() == hint.getId()) {
         match = h;
       }
     }
-    Assert.notNull(match);
+    Assert.assertNotNull(match);
   }
   
   /**
@@ -126,10 +126,10 @@ public class JpaPositionHintRepositoryIT {
   @Test
   public void testFindHint() throws Exception {
     PositionHint result = repository.findHint(hint.getHintText());
-    Assert.notNull(result);
-    Assert.isTrue(result.getId() == hint.getId());
-    Assert.isTrue(result.getVersion() == hint.getVersion());
-    Assert.isTrue(result.getHintText().equals(hint.getHintText()));
+    Assert.assertNotNull(result);
+    Assert.assertTrue(result.getId() == hint.getId());
+    Assert.assertTrue(result.getVersion() == hint.getVersion());
+    Assert.assertTrue(result.getHintText().equals(hint.getHintText()));
   }
 
   /**
@@ -139,7 +139,7 @@ public class JpaPositionHintRepositoryIT {
   @Test
   public void testFindHintNotFound() throws Exception {
     PositionHint result = repository.findHint("FLEEB!");
-    Assert.isNull(result);
+    Assert.assertTrue(result == null);
   }
 
   private PositionHint createHint() {

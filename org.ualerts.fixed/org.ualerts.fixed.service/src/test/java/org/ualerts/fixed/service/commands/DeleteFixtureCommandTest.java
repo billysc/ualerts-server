@@ -20,12 +20,13 @@ package org.ualerts.fixed.service.commands;
 
 import javax.persistence.PersistenceException;
 
+import org.junit.Assert;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.util.Assert;
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.repository.EntityNotFoundException;
 import org.ualerts.fixed.repository.FixtureRepository;
@@ -69,7 +70,6 @@ public class DeleteFixtureCommandTest {
   public void testOnValidate() throws Exception {
     command.setId(1L);
     command.onValidate();
-    Assert.isTrue(true);
   }
 
   /**
@@ -114,7 +114,7 @@ public class DeleteFixtureCommandTest {
         will(throwException(new EntityNotFoundException(Fixture.class, 1L)));
       } });
       command.onExecute();
-      Assert.isTrue(false);
+      Assert.fail("Did not receive expected exception.");
     }
     catch (EntityNotFoundException ex) {
       context.assertIsSatisfied();
@@ -138,7 +138,7 @@ public class DeleteFixtureCommandTest {
         will(throwException(new PersistenceException("GAH!")));
       } });
       command.onExecute();
-      Assert.isTrue(false);
+      Assert.fail("Did not receive expected exception.");
     }
     catch (PersistenceException ex) {
       context.assertIsSatisfied();
