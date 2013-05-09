@@ -94,7 +94,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   * {@link AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidate() throws Exception {
@@ -127,7 +127,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method with missing building for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   * {@link AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateBlankBuilding() throws Exception {
@@ -155,7 +155,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method with missing inventory number for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   * {@link AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateBlankInventory() throws Exception {
@@ -195,7 +195,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method with missing INET address for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   * {@link AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateBlankInetAddress() throws Exception {
@@ -237,7 +237,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method with missing MAC address for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   * {@link AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateBlankMacAddress() throws Exception {
@@ -277,7 +277,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method with missing position hint for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   * {@link AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateBlankPositionHint() throws Exception {
@@ -313,7 +313,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method with missing room for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   * {@link AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateBlankRoom() throws Exception {
@@ -349,7 +349,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method with missing serial number for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   * {@link AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateBlankSerialNumber() throws Exception {
@@ -389,7 +389,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method with a bad building name for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   * {@link AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateBadBuildingName() throws Exception {
@@ -422,7 +422,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method with an inventory number conflict for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   * {@link AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateInventoryNumberConflict() throws Exception {
@@ -464,7 +464,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method with a serial number conflict for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   * {@link AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateSerialNumberConflict() throws Exception {
@@ -506,7 +506,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method with a MAC address conflict for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   * {@link AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateMacAddressConflict() throws Exception {
@@ -548,7 +548,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method with a location conflict for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   * {@link AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateLocationConflict() throws Exception {
@@ -590,7 +590,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onValidate()}.
+   * {@link AddFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateNoInstalledBy() throws Exception {
@@ -626,7 +626,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onExecute()}.
+   * {@link AddFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecute() throws Exception {
@@ -658,7 +658,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method creating a new room for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onExecute()}.
+   * {@link AddFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecuteCreateNewRoom() throws Exception {
@@ -689,7 +689,7 @@ public class AddFixtureCommandTest {
 
   /**
    * Test method creating a new position hint for
-   * {@link org.ualerts.fixed.service.commands.AddFixtureCommand#onExecute()}.
+   * {@link AddFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecuteCreateNewPositionHint() throws Exception {

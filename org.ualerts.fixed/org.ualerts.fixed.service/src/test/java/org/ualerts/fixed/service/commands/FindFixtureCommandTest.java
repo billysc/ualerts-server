@@ -20,11 +20,11 @@ package org.ualerts.fixed.service.commands;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ualerts.fixed.Fixture;
@@ -63,8 +63,7 @@ public class FindFixtureCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   *     .FindFixtureCommand#onValidate()}.
+   * {@link FindFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidate() throws Exception {
@@ -75,8 +74,7 @@ public class FindFixtureCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   *     .FindFixtureCommand#onValidate()}.
+   * {@link FindFixtureCommand#onValidate()}.
    */
   @Test(expected = Exception.class)
   public void testOnValidateMissingId() throws Exception {
@@ -85,8 +83,7 @@ public class FindFixtureCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   *     .FindFixtureCommand#onExecute()}.
+   * {@link FindFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecute() throws Exception {
@@ -103,8 +100,7 @@ public class FindFixtureCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   *     .FindFixtureCommand#onExecute()}.
+   * {@link FindFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecuteWithException() throws Exception {
@@ -115,7 +111,7 @@ public class FindFixtureCommandTest {
         will(throwException(new EntityNotFoundException(Fixture.class, 1L)));
       } });
       command.onExecute();
-      Assert.fail("Did not receive expected exception.");
+      fail("Did not receive expected exception.");
     }
     catch (EntityNotFoundException ex) {
       context.assertIsSatisfied();

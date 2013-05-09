@@ -18,9 +18,9 @@
  */
 package org.ualerts.fixed.service.commands;
 
-import javax.persistence.PersistenceException;
+import static org.junit.Assert.fail;
 
-import org.junit.Assert;
+import javax.persistence.PersistenceException;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -63,8 +63,7 @@ public class DeleteFixtureCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   *     .DeleteFixtureCommand#onValidate()}.
+   * {@link DeleteFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidate() throws Exception {
@@ -74,8 +73,7 @@ public class DeleteFixtureCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   *     .DeleteFixtureCommand#onValidate()}.
+   * {@link DeleteFixtureCommand#onValidate()}.
    */
   @Test(expected = Exception.class)
   public void testOnValidateMissingId() throws Exception {
@@ -84,8 +82,7 @@ public class DeleteFixtureCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   *     .DeleteFixtureCommand#onExecute()}.
+   * {@link DeleteFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecute() throws Exception {
@@ -102,8 +99,7 @@ public class DeleteFixtureCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   *     .DeleteFixtureCommand#onExecute()}.
+   * {@link DeleteFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecuteWithExceptionOnFind() throws Exception {
@@ -114,7 +110,7 @@ public class DeleteFixtureCommandTest {
         will(throwException(new EntityNotFoundException(Fixture.class, 1L)));
       } });
       command.onExecute();
-      Assert.fail("Did not receive expected exception.");
+      fail("Did not receive expected exception.");
     }
     catch (EntityNotFoundException ex) {
       context.assertIsSatisfied();
@@ -123,8 +119,7 @@ public class DeleteFixtureCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   *     .DeleteFixtureCommand#onExecute()}.
+   * {@link DeleteFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecuteWithExceptionOnDelete() throws Exception {
@@ -138,7 +133,7 @@ public class DeleteFixtureCommandTest {
         will(throwException(new PersistenceException("GAH!")));
       } });
       command.onExecute();
-      Assert.fail("Did not receive expected exception.");
+      fail("Did not receive expected exception.");
     }
     catch (PersistenceException ex) {
       context.assertIsSatisfied();

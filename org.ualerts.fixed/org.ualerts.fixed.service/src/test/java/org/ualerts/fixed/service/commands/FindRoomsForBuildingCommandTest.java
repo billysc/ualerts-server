@@ -18,6 +18,8 @@
  */
 package org.ualerts.fixed.service.commands;
 
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,6 @@ import javax.persistence.PersistenceException;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ualerts.fixed.Room;
@@ -65,8 +66,7 @@ public class FindRoomsForBuildingCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   *     .FindRoomsForBuildingCommand#onValidate()}.
+   * {@link FindRoomsForBuildingCommand#onValidate()}.
    */
   @Test
   public void testOnValidate() throws Exception {
@@ -76,8 +76,7 @@ public class FindRoomsForBuildingCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   *     .FindRoomsForBuildingCommand#onValidate()}.
+   * {@link FindRoomsForBuildingCommand#onValidate()}.
    */
   @Test(expected = Exception.class)
   public void testOnValidateMissingBuildingId() throws Exception {
@@ -86,8 +85,7 @@ public class FindRoomsForBuildingCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   *     .FindRoomsForBuildingCommand#onExecute()}.
+   * {@link FindRoomsForBuildingCommand#onExecute()}.
    */
   @Test
   public void testOnExecute() throws Exception {
@@ -103,8 +101,7 @@ public class FindRoomsForBuildingCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   *     .FindRoomsForBuildingCommand#onExecute()}.
+   * {@link FindRoomsForBuildingCommand#onExecute()}.
    */
   @Test(expected = UnspecifiedConstraintException.class)
   public void testOnExecuteWithException() throws Exception {
@@ -115,7 +112,7 @@ public class FindRoomsForBuildingCommandTest {
         will(throwException(new PersistenceException("GAH!")));
       } });
       command.onExecute();
-      Assert.fail("Did not receive the expected exception.");
+      fail("Did not receive the expected exception.");
     }
     catch (PersistenceException ex) {
       context.assertIsSatisfied();
