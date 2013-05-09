@@ -40,7 +40,7 @@
 	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
 	    <h3 id="myModalLabel">Enroll Fixture</h3>
 	  </div>
-	  <div class="modal-body"></div>
+	  <div id="modalBody" class="modal-body"></div>
 	  <div class="modal-footer">
 	    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
 	    <button class="btn btn-primary"></button>
