@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Manual Enrollment of Fixture</title>
+	<title>Fixtures Dashboard</title>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap-responsive.min.css" />
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css" />

@@ -117,7 +117,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   @Test
   public void testGetManualEnrollmentForm() throws Exception {
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
-    assertTrue(page.getTitleText().contains("Manual Enrollment"));
+    assertTrue(page.getTitleText().contains("Fixtures Dashboard"));
     assertNotNull(page.getHtmlElementById(HTML_ID_FIXTURE_BUTTON));
   }
   
