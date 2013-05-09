@@ -19,6 +19,9 @@
 
 package org.ualerts.fixed.web.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.validation.BindException;
 import org.ualerts.fixed.service.Command;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
@@ -32,12 +35,14 @@ import org.ualerts.fixed.web.dto.FixtureDTO;
 public class MockedFixtureService implements FixtureService {
 
   private Long lastUsedId;
+  private List<FixtureDTO> fixtures;
   
   /**
    * Constructs a new instance of the mocked service.
    */
   public MockedFixtureService() {
     lastUsedId = 1L;
+    fixtures = new ArrayList<FixtureDTO>();
   }
   
   /**
@@ -66,7 +71,16 @@ public class MockedFixtureService implements FixtureService {
     fixture.setRoom(command.getRoomNumber());
     fixture.setSerialNumber(command.getSerialNumber());
     fixture.setVersion(1L);
+    fixtures.add(fixture);
     return fixture;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<FixtureDTO> retrieveAllFixtures() throws Exception {
+    return fixtures;
   }
   
 }

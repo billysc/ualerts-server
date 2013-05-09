@@ -19,6 +19,9 @@
 
 package org.ualerts.fixed.web.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -27,6 +30,7 @@ import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.service.Command;
 import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
+import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
 import org.ualerts.fixed.web.dto.FixtureDTO;
 
 /**
@@ -57,6 +61,19 @@ public class ServiceSupportedFixtureService implements FixtureService {
       throws BindException, Exception {
     Fixture fixture = commandService.invoke(command);
     return new FixtureDTO(fixture);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<FixtureDTO> retrieveAllFixtures() throws Exception {
+    FindAllFixturesCommand command = newCommand(FindAllFixturesCommand.class);
+    List<FixtureDTO> fixtures = new ArrayList<FixtureDTO>();
+    for (Fixture fixture : commandService.invoke(command)) {
+      fixtures.add(new FixtureDTO(fixture));
+    }
+    return fixtures;
   }
   
   /**
