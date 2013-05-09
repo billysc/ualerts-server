@@ -37,6 +37,15 @@
     </query>
   </named-query>
 
+  <named-query name="findRoomsForBuilding">
+    <query>
+      select distinct room
+      from Room room
+      where room.building.id = :buildingId
+      order by room.roomNumber
+    </query>
+  </named-query>
+
   <named-query name="findPositionHint">
     <query>
       select distinct positionHint
