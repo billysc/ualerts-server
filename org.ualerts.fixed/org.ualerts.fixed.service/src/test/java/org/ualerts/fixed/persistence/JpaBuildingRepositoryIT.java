@@ -19,6 +19,9 @@
 
 package org.ualerts.fixed.persistence;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -31,7 +34,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.Assert;
 import org.ualerts.fixed.Building;
 import org.ualerts.fixed.integration.ApplicationContextUtil;
 import org.ualerts.fixed.repository.JpaBuildingRepository;
@@ -111,15 +113,15 @@ public class JpaBuildingRepositoryIT {
     building.setName("Building 1");
     addBuilding(building);
     List<Building> results = repository.findAllBuildings();
-    Assert.assertNotNull(results);
-    Assert.assertTrue(results.size() > 0);
+    assertNotNull(results);
+    assertTrue(results.size() > 0);
     Building match = null;
     for (Building b : results) {
       if (b.getId().equals(building.getId())) {
         match = b;
       }
     }
-    Assert.assertNotNull(match);
+    assertNotNull(match);
   }
   
   private void addBuilding(Building building) {

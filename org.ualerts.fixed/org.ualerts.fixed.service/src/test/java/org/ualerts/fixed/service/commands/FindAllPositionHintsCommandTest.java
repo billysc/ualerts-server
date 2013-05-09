@@ -18,6 +18,8 @@
  */
 package org.ualerts.fixed.service.commands;
 
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,6 @@ import javax.persistence.PersistenceException;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ualerts.fixed.PositionHint;
@@ -65,8 +66,7 @@ public class FindAllPositionHintsCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   *     .FindAllPositionHintsCommand#onExecute()}.
+   * {@link FindAllPositionHintsCommand#onExecute()}.
    */
   @Test
   public void testOnExecute() throws Exception {
@@ -81,8 +81,7 @@ public class FindAllPositionHintsCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   *     .FindAllPositionHintsCommand#onExecute()}.
+   * {@link FindAllPositionHintsCommand#onExecute()}.
    */
   @Test(expected = UnspecifiedConstraintException.class)
   public void testOnExecuteWithException() throws Exception {
@@ -92,7 +91,7 @@ public class FindAllPositionHintsCommandTest {
         will(throwException(new PersistenceException("GAH!")));
       } });
       command.onExecute();
-      Assert.fail("Did not receive expected exception.");
+      fail("Did not receive expected exception.");
     }
     catch (PersistenceException ex) {
       context.assertIsSatisfied();

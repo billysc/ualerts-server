@@ -19,13 +19,13 @@
 package org.ualerts.fixed.service.commands;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.BindException;
@@ -88,8 +88,7 @@ public class UpdateFixtureCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   * .UpdateFixtureCommand#onValidate()}.
+   * {@link UpdateFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidate() throws Exception {
@@ -116,8 +115,7 @@ public class UpdateFixtureCommandTest {
 
   /**
    * Test method with missing building for
-   * {@link org.ualerts.fixed.service.commands
-   * .UpdateFixtureCommand#onValidate()}.
+   * {@link UpdateFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateBlankBuilding() throws Exception {
@@ -136,8 +134,7 @@ public class UpdateFixtureCommandTest {
 
   /**
    * Test method with missing INET address for
-   * {@link org.ualerts.fixed.service.commands
-   * .UpdateFixtureCommand#onValidate()}.
+   * {@link UpdateFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateBlankInetAddress() throws Exception {
@@ -161,7 +158,7 @@ public class UpdateFixtureCommandTest {
         will(returnValue(null));
       } });
       command.onValidate();
-      Assert.fail("Did not receive expected exception.");
+      fail("Did not receive expected exception.");
     }
     catch (BindException ex) {
       context.assertIsSatisfied();
@@ -173,8 +170,7 @@ public class UpdateFixtureCommandTest {
 
   /**
    * Test method with missing position hint for
-   * {@link org.ualerts.fixed.service.commands
-   * .UpdateFixtureCommand#onValidate()}.
+   * {@link UpdateFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateBlankPositionHint() throws Exception {
@@ -204,8 +200,7 @@ public class UpdateFixtureCommandTest {
 
   /**
    * Test method with missing room for
-   * {@link org.ualerts.fixed.service.commands
-   * .UpdateFixtureCommand#onValidate()}.
+   * {@link UpdateFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateBlankRoom() throws Exception {
@@ -235,8 +230,7 @@ public class UpdateFixtureCommandTest {
 
   /**
    * Test method with a bad building name for
-   * {@link org.ualerts.fixed.service.commands
-   * .UpdateFixtureCommand#onValidate()}.
+   * {@link UpdateFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateBadBuildingName() throws Exception {
@@ -263,8 +257,7 @@ public class UpdateFixtureCommandTest {
 
   /**
    * Test method with a location conflict for
-   * {@link org.ualerts.fixed.service.commands
-   * .UpdateFixtureCommand#onValidate()}.
+   * {@link UpdateFixtureCommand#onValidate()}.
    */
   @Test
   public void testOnValidateLocationConflict() throws Exception {
@@ -300,8 +293,7 @@ public class UpdateFixtureCommandTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.commands
-   * .UpdateFixtureCommand#onExecute()}.
+   * {@link UpdateFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecute() throws Exception {
@@ -332,8 +324,7 @@ public class UpdateFixtureCommandTest {
 
   /**
    * Test method creating a new room for
-   * {@link org.ualerts.fixed.service.commands
-   * .UpdateFixtureCommand#onExecute()}.
+   * {@link UpdateFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecuteCreateNewRoom() throws Exception {
@@ -363,8 +354,7 @@ public class UpdateFixtureCommandTest {
 
   /**
    * Test method creating a new position hint for
-   * {@link org.ualerts.fixed.service.commands
-   * .UpdateFixtureCommand#onExecute()}.
+   * {@link UpdateFixtureCommand#onExecute()}.
    */
   @Test
   public void testOnExecuteCreateNewPositionHint() throws Exception {

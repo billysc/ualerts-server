@@ -56,7 +56,7 @@ public class DefaultCommandInvokerTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.DefaultCommandInvoker#invoke()}.
+   * {@link DefaultCommandInvoker#invoke()}.
    */
   @Test
   public void testInvoke() throws Exception {

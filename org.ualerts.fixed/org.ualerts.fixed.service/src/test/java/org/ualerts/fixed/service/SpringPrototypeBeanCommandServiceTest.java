@@ -67,8 +67,7 @@ public class SpringPrototypeBeanCommandServiceTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.
-   *     SpringPrototypeBeanCommandService#newCommand()}.
+   * {@link SpringPrototypeBeanCommandService#newCommand()}.
    */
   @Test
   public void testNewComand() throws Exception {
@@ -82,8 +81,7 @@ public class SpringPrototypeBeanCommandServiceTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.
-   *     SpringPrototypeBeanCommandService#newCommand()}.
+   * {@link SpringPrototypeBeanCommandService#newCommand()}.
    */
   @Test
   public void testNewCommandWithBeanName() throws Exception {
@@ -98,8 +96,7 @@ public class SpringPrototypeBeanCommandServiceTest {
 
   /**
    * Test method for
-   * {@link org.ualerts.fixed.service.
-   *     SpringPrototypeBeanCommandService#invoke()}.
+   * {@link SpringPrototypeBeanCommandService#invoke()}.
    */
   @Test
   public void testInvoke() throws Exception {
