@@ -35,7 +35,7 @@ import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
  */
 @CommandComponent
 public class FindAllFixturesCommand extends AbstractCommand<List<Fixture>> {
-  private FixtureRepository fixtureRepository;
+  private FixtureRepository repository;
 
   /**
    * {@inheritDoc}
@@ -43,7 +43,7 @@ public class FindAllFixturesCommand extends AbstractCommand<List<Fixture>> {
   @Override
   protected List<Fixture> onExecute() throws UnspecifiedConstraintException {
     try {
-      return fixtureRepository.findAllFixtures();
+      return repository.findAllFixtures();
     }
     catch (PersistenceException ex) {
       throw new UnspecifiedConstraintException(ex);
@@ -56,7 +56,7 @@ public class FindAllFixturesCommand extends AbstractCommand<List<Fixture>> {
    */
   @Autowired
   public void setFixtureRepository(FixtureRepository repository) {
-    this.fixtureRepository = repository;
+    this.repository = repository;
   }
 
 }
