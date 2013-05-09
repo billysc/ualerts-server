@@ -113,8 +113,16 @@ public class JpaFixtureRepositoryIT {
    */
   @Test
   public void testFindAllFixtures() throws Exception {
+    Fixture fixture = createFixtureTwo();
     List<Fixture> results = repository.findAllFixtures();
     Assert.notNull(results);
+    Fixture match = null;
+    for (Fixture f : results) {
+      if (f.getId().equals(fixture.getId())) {
+        match = f;
+      }
+    }
+    Assert.notNull(match);
   }
 
   /**
@@ -123,7 +131,7 @@ public class JpaFixtureRepositoryIT {
    */
   @Test
   public void testFindFixtureById() throws Exception {
-    Fixture fixture = createFixture();
+    Fixture fixture = createFixtureOne();
     Assert.notNull(fixture.getId());
     Assert.notNull(fixture.getVersion());
     Fixture result = repository.findFixtureById(fixture.getId());
@@ -151,7 +159,7 @@ public class JpaFixtureRepositoryIT {
     repository.findFixtureById(id);
   }
 
-  private Fixture createFixture() throws Exception {
+  private Fixture createFixtureOne() throws Exception {
     Fixture fixture = new Fixture();
     Date date = new Date();
     fixture.setDateCreated(date);
@@ -159,13 +167,30 @@ public class JpaFixtureRepositoryIT {
     fixture.setIpAddress("127.0.0.1");
     Asset asset = new Asset();
     asset.setDateCreated(date);
-    asset.setInventoryNumber("inventoryNumber");
-    asset.setMacAddress("0A-1B-2C-3D-4E-5F");
-    asset.setSerialNumber("serialNumber");
+    asset.setInventoryNumber("inventoryNumber1");
+    asset.setMacAddress("0A-1B-2C-3D-4E-5E");
+    asset.setSerialNumber("serialNumber1");
     assetRepository.addAsset(asset);
     fixture.setAsset(asset);
     repository.addFixture(fixture);
     return fixture;
   }
-  
+
+  private Fixture createFixtureTwo() throws Exception {
+    Fixture fixture = new Fixture();
+    Date date = new Date();
+    fixture.setDateCreated(date);
+    fixture.setInstalledBy("earlyb");
+    fixture.setIpAddress("127.0.0.2");
+    Asset asset = new Asset();
+    asset.setDateCreated(date);
+    asset.setInventoryNumber("inventoryNumber2");
+    asset.setMacAddress("0A-1B-2C-3D-4E-5F");
+    asset.setSerialNumber("serialNumber2");
+    assetRepository.addAsset(asset);
+    fixture.setAsset(asset);
+    repository.addFixture(fixture);
+    return fixture;
+  }
+
 }
