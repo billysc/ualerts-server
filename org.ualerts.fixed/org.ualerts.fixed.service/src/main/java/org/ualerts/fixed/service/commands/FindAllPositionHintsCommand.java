@@ -53,6 +53,14 @@ public class FindAllPositionHintsCommand
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean errorsRequired() {
+    return false;
+  }
+
+  /**
    * Sets the {@code repository} property.
    * @param repository the position hint repository
    */

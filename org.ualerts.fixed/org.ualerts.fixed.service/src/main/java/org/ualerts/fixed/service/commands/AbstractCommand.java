@@ -52,8 +52,20 @@ public abstract class AbstractCommand<T>
 
   private void validate() throws BindException,
       UnspecifiedConstraintException {
-    Assert.notNull(errors);
+    if (errorsRequired()) {
+      Assert.notNull(errors);
+    }
     onValidate();
+  }
+  
+  /**
+   * Indicates whether or not the errors field is required.
+   * By default it is, but it can be overridden to return
+   * false if a command does not need the field.
+   * @return true if the field is required, otherwise false.
+   */
+  protected boolean errorsRequired() {
+    return true;
   }
   
   /**
