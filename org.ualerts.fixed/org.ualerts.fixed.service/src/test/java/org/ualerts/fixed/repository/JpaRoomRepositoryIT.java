@@ -81,7 +81,7 @@ public class JpaRoomRepositoryIT {
    * @throws Exception as needed
    */
   @Before
-  public void setupUp() throws Exception {
+  public void setUp() throws Exception {
     entityManager = entityManagerFactory.createEntityManager();
     tx = entityManager.getTransaction();
     tx.begin();

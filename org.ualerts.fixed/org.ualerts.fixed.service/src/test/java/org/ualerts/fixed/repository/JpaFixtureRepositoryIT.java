@@ -21,7 +21,6 @@ package org.ualerts.fixed.repository;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.List;
@@ -54,6 +53,7 @@ public class JpaFixtureRepositoryIT {
   private EntityTransaction tx;
   private JpaFixtureRepository repository;
   private JpaAssetRepository assetRepository;
+  private Fixture fixture;
   
   /**
    * Things to set up before the test instance of this
@@ -65,7 +65,7 @@ public class JpaFixtureRepositoryIT {
     entityManagerFactory =
         ApplicationContextUtil.getContext().getBean(EntityManagerFactory.class);
   }
-  
+
   /**
    * Things to set up after the test instance of this class
    * has been destroyed.
@@ -81,7 +81,7 @@ public class JpaFixtureRepositoryIT {
    * @throws Exception as needed
    */
   @Before
-  public void setupUp() throws Exception {
+  public void setUp() throws Exception {
     entityManager = entityManagerFactory.createEntityManager();
     tx = entityManager.getTransaction();
     tx.begin();
@@ -91,8 +91,9 @@ public class JpaFixtureRepositoryIT {
     assetRepository = new JpaAssetRepository();
     assetRepository.setEntityManager(entityManager);
     assetRepository.setEntityManagerFactory(entityManagerFactory);
+    fixture = createFixture();
   }
-  
+
   /**
    * Tears down any outstanding objects before exiting.
    * @throws Exception as needed
@@ -113,7 +114,6 @@ public class JpaFixtureRepositoryIT {
    */
   @Test
   public void testFindAllFixtures() throws Exception {
-    Fixture fixture = createFixtureTwo();
     List<Fixture> results = repository.findAllFixtures();
     assertNotNull(results);
     Fixture match = null;
@@ -131,7 +131,6 @@ public class JpaFixtureRepositoryIT {
    */
   @Test
   public void testFindFixtureById() throws Exception {
-    Fixture fixture = createFixtureOne();
     assertNotNull(fixture.getId());
     assertNotNull(fixture.getVersion());
     Fixture result = repository.findFixtureById(fixture.getId());
@@ -140,7 +139,7 @@ public class JpaFixtureRepositoryIT {
     assertTrue(fixture.getInstalledBy().equals(result.getInstalledBy()));
     assertTrue(fixture.getIpAddress().equals(result.getIpAddress()));
   }
-  
+
   /**
    * Verifies that a search for a fixture that isn't there will
    * result in an EntityNotFoundException. 
@@ -148,15 +147,7 @@ public class JpaFixtureRepositoryIT {
    */
   @Test(expected = EntityNotFoundException.class)
   public void testFindFixtureByIdNotFound() throws Exception {
-    List<Fixture> results = repository.findAllFixtures();
-    Long id = 0L;
-    for (Fixture f : results) {
-      if (f.getId() > id) {
-        id = f.getId();
-      }
-    }
-    id++;
-    repository.findFixtureById(id);
+    repository.findFixtureById(0L);
   }
 
   /**
@@ -164,22 +155,15 @@ public class JpaFixtureRepositoryIT {
    * it from persistence
    * @throws Exception as needed
    */
-  @Test
+  @Test(expected = EntityNotFoundException.class)
   public void testDeleteFixture() throws Exception {
-    Fixture fixture = createFixtureThree();
     assertNotNull(fixture.getId());
     assertNotNull(fixture.getVersion());
     repository.deleteFixture(fixture);
-    try {
-      repository.findFixtureById(fixture.getId());
-      fail("Did not receive expected exception.");
-    }
-    catch (EntityNotFoundException ex) {
-      assertTrue(true);
-    }
+    repository.findFixtureById(fixture.getId());
   }
-  
-  private Fixture createFixtureOne() throws Exception {
+
+  private Fixture createFixture() throws Exception {
     Fixture fixture = new Fixture();
     Date date = new Date();
     fixture.setDateCreated(date);
@@ -190,40 +174,6 @@ public class JpaFixtureRepositoryIT {
     asset.setInventoryNumber("inventoryNumber1");
     asset.setMacAddress("0A-1B-2C-3D-4E-5E");
     asset.setSerialNumber("serialNumber1");
-    assetRepository.addAsset(asset);
-    fixture.setAsset(asset);
-    repository.addFixture(fixture);
-    return fixture;
-  }
-
-  private Fixture createFixtureTwo() throws Exception {
-    Fixture fixture = new Fixture();
-    Date date = new Date();
-    fixture.setDateCreated(date);
-    fixture.setInstalledBy("earlyb");
-    fixture.setIpAddress("127.0.0.2");
-    Asset asset = new Asset();
-    asset.setDateCreated(date);
-    asset.setInventoryNumber("inventoryNumber2");
-    asset.setMacAddress("0A-1B-2C-3D-4E-5F");
-    asset.setSerialNumber("serialNumber2");
-    assetRepository.addAsset(asset);
-    fixture.setAsset(asset);
-    repository.addFixture(fixture);
-    return fixture;
-  }
-
-  private Fixture createFixtureThree() throws Exception {
-    Fixture fixture = new Fixture();
-    Date date = new Date();
-    fixture.setDateCreated(date);
-    fixture.setInstalledBy("earlyb");
-    fixture.setIpAddress("127.0.0.3");
-    Asset asset = new Asset();
-    asset.setDateCreated(date);
-    asset.setInventoryNumber("inventoryNumber3");
-    asset.setMacAddress("0A-1B-2C-3D-4E-5A");
-    asset.setSerialNumber("serialNumber3");
     assetRepository.addAsset(asset);
     fixture.setAsset(asset);
     repository.addFixture(fixture);

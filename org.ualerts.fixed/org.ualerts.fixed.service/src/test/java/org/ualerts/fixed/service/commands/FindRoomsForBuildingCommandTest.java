@@ -18,12 +18,8 @@
  */
 package org.ualerts.fixed.service.commands;
 
-import static org.junit.Assert.fail;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.PersistenceException;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -32,7 +28,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ualerts.fixed.Room;
 import org.ualerts.fixed.repository.RoomRepository;
-import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
 
 /**
  * Unit tests for {@link FindRoomsForBuildingCommand}.
@@ -52,7 +47,7 @@ public class FindRoomsForBuildingCommandTest {
     context = new Mockery();
     repository = context.mock(RoomRepository.class);
     command = new FindRoomsForBuildingCommand();
-    command.setRepository(repository);
+    command.setRoomRepository(repository);
   }
 
   /**
@@ -97,26 +92,6 @@ public class FindRoomsForBuildingCommandTest {
     } });
     command.onExecute();
     context.assertIsSatisfied();
-  }
-
-  /**
-   * Test method for
-   * {@link FindRoomsForBuildingCommand#onExecute()}.
-   */
-  @Test(expected = UnspecifiedConstraintException.class)
-  public void testOnExecuteWithException() throws Exception {
-    command.setBuildingId("BLDG1");
-    try {
-      context.checking(new Expectations() { {
-        oneOf(repository).findRoomsForBuilding("BLDG1");
-        will(throwException(new PersistenceException("GAH!")));
-      } });
-      command.onExecute();
-      fail("Did not receive the expected exception.");
-    }
-    catch (PersistenceException ex) {
-      context.assertIsSatisfied();
-    }
   }
 
 }

@@ -20,6 +20,7 @@
 package org.ualerts.fixed.repository;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -78,7 +79,7 @@ public class JpaPositionHintRepositoryIT {
    * @throws Exception as needed
    */
   @Before
-  public void setupUp() throws Exception {
+  public void setUp() throws Exception {
     entityManager = entityManagerFactory.createEntityManager();
     tx = entityManager.getTransaction();
     tx.begin();
@@ -140,7 +141,7 @@ public class JpaPositionHintRepositoryIT {
   @Test
   public void testFindHintNotFound() throws Exception {
     PositionHint result = repository.findHint("FLEEB!");
-    assertTrue(result == null);
+    assertNull(result);
   }
 
   private PositionHint createHint() {

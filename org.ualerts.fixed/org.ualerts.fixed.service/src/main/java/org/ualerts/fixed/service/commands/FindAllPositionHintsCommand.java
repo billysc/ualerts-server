@@ -20,8 +20,6 @@ package org.ualerts.fixed.service.commands;
 
 import java.util.List;
 
-import javax.persistence.PersistenceException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ualerts.fixed.PositionHint;
 import org.ualerts.fixed.repository.PositionHintRepository;
@@ -35,8 +33,8 @@ import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
  */
 @CommandComponent
 public class FindAllPositionHintsCommand
-    extends AbstractCommand<List<PositionHint>> {
-  private PositionHintRepository repository;
+extends AbstractCommand<List<PositionHint>> {
+  private PositionHintRepository positionHintRepository;
 
   /**
    * {@inheritDoc}
@@ -44,12 +42,7 @@ public class FindAllPositionHintsCommand
   @Override
   protected List<PositionHint> onExecute()
       throws UnspecifiedConstraintException {
-    try {
-      return repository.findAllHints();
-    }
-    catch (PersistenceException ex) {
-      throw new UnspecifiedConstraintException(ex);
-    }
+    return positionHintRepository.findAllHints();
   }
 
   /**
@@ -61,12 +54,13 @@ public class FindAllPositionHintsCommand
   }
 
   /**
-   * Sets the {@code repository} property.
-   * @param repository the position hint repository
+   * Sets the {@code positionHintRepository} property.
+   * @param positionHintRepository the position hint repository
    */
   @Autowired
-  public void setRepository(PositionHintRepository repository) {
-    this.repository = repository;
+  public void setPositionHintRepository(
+      PositionHintRepository positionHintRepository) {
+    this.positionHintRepository = positionHintRepository;
   }
 
 }

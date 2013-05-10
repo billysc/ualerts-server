@@ -40,8 +40,8 @@ public class JpaFixtureRepository extends AbstractJpaRepository
    */
   @Override
   public List<Fixture> findAllFixtures() {
-    TypedQuery<Fixture> query =
-        getEntityManager().createNamedQuery("findAllFixtureDetails", Fixture.class);
+    TypedQuery<Fixture> query = getEntityManager()
+        .createNamedQuery("findAllFixtureDetails", Fixture.class);
     return query.getResultList();
   }
 

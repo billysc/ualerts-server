@@ -18,12 +18,8 @@
  */
 package org.ualerts.fixed.service.commands;
 
-import static org.junit.Assert.fail;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.PersistenceException;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -32,7 +28,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ualerts.fixed.PositionHint;
 import org.ualerts.fixed.repository.PositionHintRepository;
-import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
 
 /**
  * Unit tests for {@link FindAllPositionHintsCommand}.
@@ -52,7 +47,7 @@ public class FindAllPositionHintsCommandTest {
     context = new Mockery();
     repository = context.mock(PositionHintRepository.class);
     command = new FindAllPositionHintsCommand();
-    command.setRepository(repository);
+    command.setPositionHintRepository(repository);
   }
 
   /**
@@ -79,22 +74,4 @@ public class FindAllPositionHintsCommandTest {
     context.assertIsSatisfied();
   }
 
-  /**
-   * Test method for
-   * {@link FindAllPositionHintsCommand#onExecute()}.
-   */
-  @Test(expected = UnspecifiedConstraintException.class)
-  public void testOnExecuteWithException() throws Exception {
-    try {
-      context.checking(new Expectations() { {
-        oneOf(repository).findAllHints();
-        will(throwException(new PersistenceException("GAH!")));
-      } });
-      command.onExecute();
-      fail("Did not receive expected exception.");
-    }
-    catch (PersistenceException ex) {
-      context.assertIsSatisfied();
-    }
-  }
 }

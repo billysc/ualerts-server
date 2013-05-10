@@ -20,8 +20,6 @@ package org.ualerts.fixed.service.commands;
 
 import java.util.List;
 
-import javax.persistence.PersistenceException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.repository.FixtureRepository;
@@ -35,19 +33,14 @@ import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
  */
 @CommandComponent
 public class FindAllFixturesCommand extends AbstractCommand<List<Fixture>> {
-  private FixtureRepository repository;
+  private FixtureRepository fixtureRepository;
 
   /**
    * {@inheritDoc}
    */
   @Override
   protected List<Fixture> onExecute() throws UnspecifiedConstraintException {
-    try {
-      return repository.findAllFixtures();
-    }
-    catch (PersistenceException ex) {
-      throw new UnspecifiedConstraintException(ex);
-    }
+    return fixtureRepository.findAllFixtures();
   }
 
   /**
@@ -59,12 +52,12 @@ public class FindAllFixturesCommand extends AbstractCommand<List<Fixture>> {
   }
 
   /**
-   * Sets the {@code repository} property.
-   * @param repository the fixed repository
+   * Sets the {@code fixtureRepository} property.
+   * @param fixtureRepository the fixed repository
    */
   @Autowired
-  public void setFixtureRepository(FixtureRepository repository) {
-    this.repository = repository;
+  public void setFixtureRepository(FixtureRepository fixtureRepository) {
+    this.fixtureRepository = fixtureRepository;
   }
 
 }

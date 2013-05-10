@@ -30,7 +30,7 @@ import javax.persistence.Table;
  * @author Brian Early
  */
 @Entity
-@Table(name = "fixed_asset")
+@Table(name = "asset")
 public class Asset extends AbstractEntity {
 
   private static final long serialVersionUID = -8272019373642337929L;

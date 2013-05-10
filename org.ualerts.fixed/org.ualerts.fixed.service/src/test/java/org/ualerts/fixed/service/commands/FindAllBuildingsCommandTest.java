@@ -18,12 +18,8 @@
  */
 package org.ualerts.fixed.service.commands;
 
-import static org.junit.Assert.fail;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.PersistenceException;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -32,7 +28,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ualerts.fixed.Building;
 import org.ualerts.fixed.repository.BuildingRepository;
-import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
 
 /**
  * Unit tests for {@link FindAllBuildingsCommand}.
@@ -52,7 +47,7 @@ public class FindAllBuildingsCommandTest {
     context = new Mockery();
     repository = context.mock(BuildingRepository.class);
     command = new FindAllBuildingsCommand();
-    command.setRepository(repository);
+    command.setBuildingRepository(repository);
   }
 
   /**
@@ -77,25 +72,6 @@ public class FindAllBuildingsCommandTest {
     } });
     command.onExecute();
     context.assertIsSatisfied();
-  }
-
-  /**
-   * Test method for
-   * {@link FindAllBuildingsCommand#onExecute()}.
-   */
-  @Test(expected = UnspecifiedConstraintException.class)
-  public void testOnExecuteWithException() throws Exception {
-    try {
-      context.checking(new Expectations() { {
-        oneOf(repository).findAllBuildings();
-        will(throwException(new PersistenceException("GAH!")));
-      } });
-      command.onExecute();
-      fail("Did not receive expected exception.");
-    }
-    catch (PersistenceException ex) {
-      context.assertIsSatisfied();
-    }
   }
 
 }

@@ -50,6 +50,7 @@ public class JpaBuildingRepositoryIT {
   private EntityManager entityManager;
   private EntityTransaction tx;
   private JpaBuildingRepository repository;
+  private Building building;
   
   /**
    * Things to set up before the test instance of this
@@ -77,13 +78,14 @@ public class JpaBuildingRepositoryIT {
    * @throws Exception as needed
    */
   @Before
-  public void setupUp() throws Exception {
+  public void setUp() throws Exception {
     entityManager = entityManagerFactory.createEntityManager();
     tx = entityManager.getTransaction();
     tx.begin();
     repository = new JpaBuildingRepository();
     repository.setEntityManager(entityManager);
     repository.setEntityManagerFactory(entityManagerFactory);
+    building = createBuilding();
   }
   
   /**
@@ -106,11 +108,6 @@ public class JpaBuildingRepositoryIT {
    */
   @Test
   public void testFindAllBuildings() throws Exception {
-    Building building = new Building();
-    building.setAbbreviation("bldg1");
-    building.setId("BLDG1");
-    building.setName("Building 1");
-    addBuilding(building);
     List<Building> results = repository.findAllBuildings();
     assertNotNull(results);
     assertTrue(results.size() > 0);
@@ -123,8 +120,13 @@ public class JpaBuildingRepositoryIT {
     assertNotNull(match);
   }
   
-  private void addBuilding(Building building) {
+  private Building createBuilding() {
+    Building building = new Building();
+    building.setAbbreviation("bldg1");
+    building.setId("BLDG1");
+    building.setName("Building 1");
     entityManager.persist(building);
+    return building;
   }
-
+  
 }

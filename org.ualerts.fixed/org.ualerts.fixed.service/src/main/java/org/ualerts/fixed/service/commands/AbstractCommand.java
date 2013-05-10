@@ -26,7 +26,7 @@ import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
 
 /**
  * An abstract base for {@link Command} implementations.
- *
+ * @param <T> defines the type of the command
  * @author Carl Harris
  */
 public abstract class AbstractCommand<T> 
@@ -36,13 +36,13 @@ public abstract class AbstractCommand<T>
   private BindException errors;
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public void afterPropertiesSet() throws Exception {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public final T execute()
       throws Exception {
@@ -64,6 +64,7 @@ public abstract class AbstractCommand<T>
    * false if a command does not need the field.
    * @return true if the field is required, otherwise false.
    */
+  // FIXME - This has no business being here.  Related to validation.
   protected boolean errorsRequired() {
     return true;
   }

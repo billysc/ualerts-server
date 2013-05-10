@@ -110,6 +110,7 @@ public class InetAddress implements Serializable {
    */
   @Override
   public boolean equals(Object o) {
+    if (o == this) return true;
     if (!(o instanceof InetAddress)) return false;
     if (this.value == null) return false;
     return this.value.equals(((InetAddress) o).value);

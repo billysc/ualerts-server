@@ -20,8 +20,6 @@ package org.ualerts.fixed.service.commands;
 
 import java.util.List;
 
-import javax.persistence.PersistenceException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ualerts.fixed.Building;
 import org.ualerts.fixed.repository.BuildingRepository;
@@ -35,19 +33,14 @@ import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
  */
 @CommandComponent
 public class FindAllBuildingsCommand extends AbstractCommand<List<Building>> {
-  private BuildingRepository repository;
+  private BuildingRepository buildingRepository;
 
   /**
    * {@inheritDoc}
    */
   @Override
   protected List<Building> onExecute() throws UnspecifiedConstraintException {
-    try {
-      return repository.findAllBuildings();
-    }
-    catch (PersistenceException ex) {
-      throw new UnspecifiedConstraintException(ex);
-    }
+    return buildingRepository.findAllBuildings();
   }
 
   /**
@@ -59,12 +52,12 @@ public class FindAllBuildingsCommand extends AbstractCommand<List<Building>> {
   }
 
   /**
-   * Sets the {@code repository} property.
-   * @param repository the building repository
+   * Sets the {@code buildingRepository} property.
+   * @param buildingRepository the building repository
    */
   @Autowired
-  public void setRepository(BuildingRepository repository) {
-    this.repository = repository;
+  public void setBuildingRepository(BuildingRepository buildingRepository) {
+    this.buildingRepository = buildingRepository;
   }
 
 }
