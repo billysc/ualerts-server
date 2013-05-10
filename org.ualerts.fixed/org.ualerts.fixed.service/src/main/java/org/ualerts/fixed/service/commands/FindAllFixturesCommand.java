@@ -51,6 +51,14 @@ public class FindAllFixturesCommand extends AbstractCommand<List<Fixture>> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean errorsRequired() {
+    return false;
+  }
+
+  /**
    * Sets the {@code repository} property.
    * @param repository the fixed repository
    */

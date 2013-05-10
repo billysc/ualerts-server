@@ -65,6 +65,14 @@ public class FindRoomsForBuildingCommand
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean errorsRequired() {
+    return false;
+  }
+
+  /**
    * Gets the {@code buildingId} property.
    * @return property value
    */

@@ -55,6 +55,14 @@ public class FindFixtureCommand extends AbstractCommand<Fixture> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean errorsRequired() {
+    return false;
+  }
+
+  /**
    * Gets the {@code id} property.
    * @return property value
    */
