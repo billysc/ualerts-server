@@ -97,7 +97,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
    */
   @Before
   public void setUp() throws Exception {
-    DBSetupUtility.populateDatabase(entityManager);
+    DBSetupUtility.populateBuildings(entityManager);
   }
   
   /**
