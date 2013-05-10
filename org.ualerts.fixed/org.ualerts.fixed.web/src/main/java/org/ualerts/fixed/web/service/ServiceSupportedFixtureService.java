@@ -69,6 +69,7 @@ public class ServiceSupportedFixtureService implements FixtureService {
   @Override
   public List<FixtureDTO> retrieveAllFixtures() throws Exception {
     FindAllFixturesCommand command = newCommand(FindAllFixturesCommand.class);
+    command.setErrors(new BindException(this, "fixtureService"));
     List<FixtureDTO> fixtures = new ArrayList<FixtureDTO>();
     for (Fixture fixture : commandService.invoke(command)) {
       fixtures.add(new FixtureDTO(fixture));
