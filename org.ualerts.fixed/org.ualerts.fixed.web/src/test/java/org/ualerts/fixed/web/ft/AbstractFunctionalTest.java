@@ -19,6 +19,8 @@
 
 package org.ualerts.fixed.web.ft;
 
+import org.junit.Before;
+
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -28,12 +30,20 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
  *
  * @author Michael Irwin
  */
-public class AbstractFunctionalTest {
+public abstract class AbstractFunctionalTest {
   
   private static final String UI_PATH = "/ui";    // TODO repeated in web.xml
 
   private WebClient client = new WebClient(BrowserVersion.FIREFOX_17);
   private String contextUrl = WebContextUtil.getUrl();
+  
+  /**
+   * Setup for the functional test 
+   */
+  @Before
+  public void clientSetup() {
+    getClient().setCssErrorHandler(new NoOpErrorHandler());
+  }
   
   /**
    * Load an html page and return it
