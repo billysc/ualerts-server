@@ -67,8 +67,10 @@ public class FixtureViewFT extends AbstractFunctionalTest {
    */
   @AfterClass
   public static void oneTimeTearDown() throws Exception {
-    if (entityManager != null && entityManager.isOpen())
+    if (entityManager != null && entityManager.isOpen()) {
+      DBSetupUtility.cleanDatabase(entityManager);
       entityManager.close();
+    }
   }
 
   /**
@@ -79,10 +81,10 @@ public class FixtureViewFT extends AbstractFunctionalTest {
   @Test
   public void testValidateEmptyMessageWhenNoFixtures() throws Exception {
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
-    assertTrue(page.getTitleText().contains("Fixture Dashboard"));
+    assertTrue(page.getTitleText().contains("Fixtures Dashboard"));
     ((HtmlDivision) page
         .getFirstByXPath("//div[@id='" + HTML_ID_FIXTURE_TABLE + "']"))
-        .getTextContent().contains("No fixtures");
+        .getTextContent().contains("no fixtures");
   }
   
   /**
@@ -95,10 +97,10 @@ public class FixtureViewFT extends AbstractFunctionalTest {
     DBSetupUtility.populateDatabase(entityManager);
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
     HtmlTable table = getFixtureTable(page);
-    HtmlTableRow row = (HtmlTableRow) table.getFirstByXPath("//tbody/tr[0]");
+    HtmlTableRow row = (HtmlTableRow) table.getFirstByXPath("//tbody/tr[1]");
     validateRowDisplay(row, 
         DBSetupUtility.BUILDING_ABBR + " " + DBSetupUtility.FIXTURE_ROOM_NUMBER,
-        DBSetupUtility.FIXTURE_ROOM_NUMBER, DBSetupUtility.FIXTURE_IP_ADDR, 
+        DBSetupUtility.FIXTURE_POSITION_HINT, DBSetupUtility.FIXTURE_IP_ADDR, 
         DBSetupUtility.FIXTURE_MAC_ADDR, DBSetupUtility.FIXTURE_INV_NUMBER);
   }
   
@@ -127,7 +129,7 @@ public class FixtureViewFT extends AbstractFunctionalTest {
    * @return
    */
   private HtmlTableCell getCell(HtmlTableRow row, int index) {
-    return (HtmlTableCell) row.getByXPath("//td[" + (index + 1) + "]");
+    return (HtmlTableCell) row.getFirstByXPath("//td[" + (index + 1) + "]");
   }
   
 }
