@@ -18,7 +18,9 @@
  */
 package org.ualerts.fixed.service.commands;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 
@@ -153,13 +155,13 @@ public class AddFixtureCommandTest {
         will(returnValue(null));
       } });
       command.onValidate();
-      assertTrue(false);
+      fail("Expected exception did not occur.");
     }
     catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getAllErrors().size() == 1);
-      assertTrue(ex.getAllErrors().get(0)
-          .getCode().equals(ErrorCodes.MISSING_BUILDING_FIELD));
+      assertEquals(1, ex.getAllErrors().size());
+      assertEquals(ErrorCodes.MISSING_BUILDING_FIELD,
+          ex.getAllErrors().get(0).getCode());
     }
   }
 
@@ -226,13 +228,13 @@ public class AddFixtureCommandTest {
         will(returnValue(null));
       } });
       command.onValidate();
-      assertTrue(false);
+      fail("Expected exception did not occur.");
     }
     catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getAllErrors().size() == 1);
-      assertTrue(ex.getAllErrors().get(0)
-          .getCode().equals(ErrorCodes.MISSING_INET_ADDRESS_FIELD));
+      assertEquals(1, ex.getAllErrors().size());
+      assertEquals(ErrorCodes.MISSING_INET_ADDRESS_FIELD,
+          ex.getAllErrors().get(0).getCode());
     }
   }
 
@@ -266,13 +268,13 @@ public class AddFixtureCommandTest {
         will(returnValue(null));
       } });
       command.onValidate();
-      assertTrue(false);
+      fail("Expected exception did not occur.");
     }
     catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getAllErrors().size() == 1);
-      assertTrue(ex.getAllErrors().get(0)
-          .getCode().equals(ErrorCodes.MISSING_MAC_ADDRESS_FIELD));
+      assertEquals(1, ex.getAllErrors().size());
+      assertEquals(ErrorCodes.MISSING_MAC_ADDRESS_FIELD,
+          ex.getAllErrors().get(0).getCode());
     }
   }
 
@@ -302,13 +304,13 @@ public class AddFixtureCommandTest {
         will(returnValue(null));
       } });
       command.onValidate();
-      assertTrue(false);
+      fail("Expected exception did not occur.");
     }
     catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getAllErrors().size() == 1);
-      assertTrue(ex.getAllErrors().get(0)
-          .getCode().equals(ErrorCodes.MISSING_POSITION_HINT_FIELD));
+      assertEquals(1, ex.getAllErrors().size());
+      assertEquals(ErrorCodes.MISSING_POSITION_HINT_FIELD,
+          ex.getAllErrors().get(0).getCode());
     }
   }
 
@@ -338,13 +340,13 @@ public class AddFixtureCommandTest {
         will(returnValue(null));
       } });
       command.onValidate();
-      assertTrue(false);
+      fail("Expected exception did not occur.");
     }
     catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getAllErrors().size() == 1);
-      assertTrue(ex.getAllErrors().get(0)
-          .getCode().equals(ErrorCodes.MISSING_ROOM_FIELD));
+      assertEquals(1, ex.getAllErrors().size());
+      assertEquals(ErrorCodes.MISSING_ROOM_FIELD,
+          ex.getAllErrors().get(0).getCode());
     }
   }
 
@@ -378,13 +380,13 @@ public class AddFixtureCommandTest {
         will(returnValue(null));
       } });
       command.onValidate();
-      assertTrue(false);
+      fail("Expected exception did not occur.");
     }
     catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getAllErrors().size() == 1);
-      assertTrue(ex.getAllErrors().get(0)
-          .getCode().equals(ErrorCodes.MISSING_SERIAL_NUMBER_FIELD));
+      assertEquals(1, ex.getAllErrors().size());
+      assertEquals(ErrorCodes.MISSING_SERIAL_NUMBER_FIELD,
+          ex.getAllErrors().get(0).getCode());
     }
   }
 
@@ -411,13 +413,13 @@ public class AddFixtureCommandTest {
         will(returnValue(null));
       } });
       command.onValidate();
-      assertTrue(false);
+      fail("Expected exception did not occur.");
     }
     catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getAllErrors().size() == 1);
-      assertTrue(ex.getAllErrors().get(0)
-          .getCode().equals(ErrorCodes.UNKNOWN_BUILDING));
+      assertEquals(1, ex.getAllErrors().size());
+      assertEquals(ErrorCodes.UNKNOWN_BUILDING,
+          ex.getAllErrors().get(0).getCode());
     }
   }
 
@@ -453,13 +455,13 @@ public class AddFixtureCommandTest {
         will(returnValue(null));
       } });
       command.onValidate();
-      assertTrue(false);
+      fail("Expected exception did not occur.");
     }
     catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getAllErrors().size() == 1);
-      assertTrue(ex.getAllErrors().get(0)
-          .getCode().equals(ErrorCodes.INVENTORY_NUMBER_CONFLICT));
+      assertEquals(1, ex.getAllErrors().size());
+      assertEquals(ErrorCodes.INVENTORY_NUMBER_CONFLICT,
+          ex.getAllErrors().get(0).getCode());
     }
   }
 
@@ -495,13 +497,13 @@ public class AddFixtureCommandTest {
         will(returnValue(null));
       } });
       command.onValidate();
-      assertTrue(false);
+      fail("Expected exception did not occur.");
     }
     catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getAllErrors().size() == 1);
-      assertTrue(ex.getAllErrors().get(0)
-          .getCode().equals(ErrorCodes.SERIAL_NUMBER_CONFLICT));
+      assertEquals(1, ex.getAllErrors().size());
+      assertEquals(ErrorCodes.SERIAL_NUMBER_CONFLICT,
+          ex.getAllErrors().get(0).getCode());
     }
   }
 
@@ -537,13 +539,13 @@ public class AddFixtureCommandTest {
         will(returnValue(null));
       } });
       command.onValidate();
-      assertTrue(false);
+      fail("Expected exception did not occur.");
     }
     catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getAllErrors().size() == 1);
-      assertTrue(ex.getAllErrors().get(0)
-          .getCode().equals(ErrorCodes.MAC_ADDRESS_CONFLICT));
+      assertEquals(1, ex.getAllErrors().size());
+      assertEquals(ErrorCodes.MAC_ADDRESS_CONFLICT,
+          ex.getAllErrors().get(0).getCode());
     }
   }
 
@@ -579,13 +581,13 @@ public class AddFixtureCommandTest {
         will(returnValue(fixture));
       } });
       command.onValidate();
-      assertTrue(false);
+      fail("Expected exception did not occur.");
     }
     catch (BindException ex) {
       context.assertIsSatisfied();
-      assertTrue(ex.getAllErrors().size() == 1);
-      assertTrue(ex.getAllErrors().get(0)
-          .getCode().equals(ErrorCodes.LOCATION_CONFLICT));
+      assertEquals(1, ex.getAllErrors().size());
+      assertEquals(ErrorCodes.LOCATION_CONFLICT,
+          ex.getAllErrors().get(0).getCode());
     }
   }
 
@@ -654,7 +656,7 @@ public class AddFixtureCommandTest {
     } });
     Fixture result = command.onExecute();
     context.assertIsSatisfied();
-    assertTrue(result.getIpAddress().equals(IP_ADDRESS));
+    assertEquals(IP_ADDRESS, result.getIpAddress());
   }
 
   /**

@@ -19,6 +19,7 @@
 
 package org.ualerts.fixed.repository;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -129,9 +130,9 @@ public class JpaPositionHintRepositoryIT {
   public void testFindHint() throws Exception {
     PositionHint result = repository.findHint(hint.getHintText());
     assertNotNull(result);
-    assertTrue(result.getId() == hint.getId());
-    assertTrue(result.getVersion() == hint.getVersion());
-    assertTrue(result.getHintText().equals(hint.getHintText()));
+    assertEquals(result.getId(), hint.getId());
+    assertEquals(result.getVersion(), hint.getVersion());
+    assertEquals(result.getHintText(), hint.getHintText());
   }
 
   /**

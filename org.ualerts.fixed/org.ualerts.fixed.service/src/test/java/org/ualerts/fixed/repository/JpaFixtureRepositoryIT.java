@@ -19,8 +19,8 @@
 
 package org.ualerts.fixed.repository;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 import java.util.List;
@@ -134,10 +134,10 @@ public class JpaFixtureRepositoryIT {
     assertNotNull(fixture.getId());
     assertNotNull(fixture.getVersion());
     Fixture result = repository.findFixtureById(fixture.getId());
-    assertTrue(fixture.getId() == result.getId());
-    assertTrue(fixture.getVersion() == result.getVersion());
-    assertTrue(fixture.getInstalledBy().equals(result.getInstalledBy()));
-    assertTrue(fixture.getIpAddress().equals(result.getIpAddress()));
+    assertEquals(fixture.getId(), result.getId());
+    assertEquals(fixture.getVersion(), result.getVersion());
+    assertEquals(fixture.getInstalledBy(), result.getInstalledBy());
+    assertEquals(fixture.getIpAddress(), result.getIpAddress());
   }
 
   /**
