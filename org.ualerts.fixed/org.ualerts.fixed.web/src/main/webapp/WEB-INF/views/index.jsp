@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,6 +31,27 @@
 				<a id="addFixture" class="btn modalTrigger" href="${pageContext.request.contextPath}/ui/enrollment" data-target="#modal" data-title="Add Fixture" data-primarybuttontext="Submit New Fixture" data-cancelbuttontext="Cancel" data-postmodalcallback="postModalDisplay_enrollFixture">
 					<i class="icon-plus"></i> Add Fixture
 				</a>
+				<c:choose>
+					<c:when test="${empty fixtures}">
+						<div id="fixturesList">There are currently no fixtures to display</div>
+					</c:when>
+					<c:otherwise>
+						<table id="fixturesList" class="table table-striped table-bordered table-hover table-condensed">
+							<tbody>
+								<c:forEach items="${fixtures}" var="fixture">
+									<tr>
+										<td>${fixture.buildingAbbreviation} ${fixture.room}</td>
+										<td>${fixture.positionHint}</td>
+										<td>${fixture.ipAddress}</td>
+										<td>${fixture.macAddress}</td>
+										<td>${fixture.inventoryNumber}</td>
+										<td><a href="#">Details</a></td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
 	</div>
