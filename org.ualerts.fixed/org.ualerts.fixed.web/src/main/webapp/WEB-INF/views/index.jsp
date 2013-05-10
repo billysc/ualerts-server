@@ -27,16 +27,28 @@
 	
 	<div class="container">
 		<div class="row">
-			<div class="span-12">
-				<a id="addFixture" class="btn modalTrigger" href="${pageContext.request.contextPath}/ui/enrollment" data-target="#modal" data-title="Add Fixture" data-primarybuttontext="Submit New Fixture" data-cancelbuttontext="Cancel" data-postmodalcallback="postModalDisplay_enrollFixture">
-					<i class="icon-plus"></i> Add Fixture
-				</a>
+			<div class="span12">
+				<div class="text-right actionButtons">
+					<a id="addFixture" class="btn modalTrigger" href="${pageContext.request.contextPath}/ui/enrollment" data-target="#modal" data-title="Add Fixture" data-primarybuttontext="Submit New Fixture" data-cancelbuttontext="Cancel" data-postmodalcallback="postModalDisplay_enrollFixture">
+						<i class="icon-plus"></i> Add Fixture
+					</a>
+				</div>
 				<c:choose>
 					<c:when test="${empty fixtures}">
 						<div id="fixturesList">There are currently no fixtures to display</div>
 					</c:when>
 					<c:otherwise>
 						<table id="fixturesList" class="table table-striped table-bordered table-hover table-condensed">
+							<thead>
+								<tr>
+									<th>Location</th>
+									<th>Position</th>
+									<th>IP Address</th>
+									<th>MAC Address</th>
+									<th>Inventory Number</th>
+									<th>&nbsp;</th>
+								</tr>
+							</thead>
 							<tbody>
 								<c:forEach items="${fixtures}" var="fixture">
 									<tr>
