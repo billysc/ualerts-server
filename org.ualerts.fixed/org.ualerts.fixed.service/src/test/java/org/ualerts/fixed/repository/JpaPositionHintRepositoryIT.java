@@ -17,7 +17,7 @@
  *
  */
 
-package org.ualerts.fixed.persistence;
+package org.ualerts.fixed.repository;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -36,7 +36,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ualerts.fixed.PositionHint;
 import org.ualerts.fixed.integration.ApplicationContextUtil;
-import org.ualerts.fixed.repository.JpaPositionHintRepository;
 
 import edu.vt.cns.kestrel.common.IntegrationTestRunner;
 
