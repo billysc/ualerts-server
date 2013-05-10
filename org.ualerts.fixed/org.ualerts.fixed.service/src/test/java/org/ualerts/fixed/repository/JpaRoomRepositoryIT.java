@@ -1,5 +1,5 @@
 /*
- * File created on May 8, 2013
+ * File created on May 9, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -17,7 +17,7 @@
  *
  */
 
-package org.ualerts.fixed.persistence;
+package org.ualerts.fixed.repository;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -35,22 +35,25 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ualerts.fixed.Building;
+import org.ualerts.fixed.Room;
 import org.ualerts.fixed.integration.ApplicationContextUtil;
-import org.ualerts.fixed.repository.JpaBuildingRepository;
 
 import edu.vt.cns.kestrel.common.IntegrationTestRunner;
 
 /**
- * Integration tests for {@link JpaBuildingRepository}.
+ * Integration tests for {@link JpaRoomRepository}.
  *
  * @author Brian Early
  */
 @RunWith(IntegrationTestRunner.class)
-public class JpaBuildingRepositoryIT {
+public class JpaRoomRepositoryIT {
   private static EntityManagerFactory entityManagerFactory;
   private EntityManager entityManager;
   private EntityTransaction tx;
-  private JpaBuildingRepository repository;
+  private JpaRoomRepository repository;
+  private JpaBuildingRepository buildingRepository;
+  private Building building;
+  private Room room;
   
   /**
    * Things to set up before the test instance of this
@@ -82,9 +85,15 @@ public class JpaBuildingRepositoryIT {
     entityManager = entityManagerFactory.createEntityManager();
     tx = entityManager.getTransaction();
     tx.begin();
-    repository = new JpaBuildingRepository();
+    repository = new JpaRoomRepository();
     repository.setEntityManager(entityManager);
     repository.setEntityManagerFactory(entityManagerFactory);
+    buildingRepository = new JpaBuildingRepository();
+    buildingRepository.setEntityManager(entityManager);
+    buildingRepository.setEntityManagerFactory(entityManagerFactory);
+    building = createBuilding();
+    room = createRoom(building);
+    
   }
   
   /**
@@ -102,30 +111,63 @@ public class JpaBuildingRepositoryIT {
   }
 
   /**
-   * Verifies that a request for all Buildings works. 
+   * Verifies that a search for a particular room works. 
    * @throws Exception as needed
    */
   @Test
-  public void testFindAllBuildings() throws Exception {
-    Building building = new Building();
-    building.setAbbreviation("bldg1");
-    building.setId("BLDG1");
-    building.setName("Building 1");
-    addBuilding(building);
-    List<Building> results = repository.findAllBuildings();
+  public void testFindRoom() throws Exception {
+    Room result =
+        repository.findRoom(building.getId(), room.getRoomNumber());
+    assertNotNull(result);
+    assertTrue(result.getId() == room.getId());
+    assertTrue(result.getBuilding().getId().equals(building.getId()));
+    assertTrue(result.getRoomNumber().equals(room.getRoomNumber()));
+  }
+
+  /**
+   * Verifies that a search for a non-existent room works. 
+   * @throws Exception as needed
+   */
+  @Test
+  public void testFindRoomNotFound() throws Exception {
+    Room result =
+        repository.findRoom(building.getId(), "BLAH!");
+    assertTrue(result == null);
+  }
+
+  /**
+   * Verifies that a search for rooms for a building works. 
+   * @throws Exception as needed
+   */
+  @Test
+  public void testFindRoomsForBuilding() throws Exception {
+    List<Room> results = repository.findRoomsForBuilding(building.getId());
     assertNotNull(results);
     assertTrue(results.size() > 0);
-    Building match = null;
-    for (Building b : results) {
-      if (b.getId().equals(building.getId())) {
-        match = b;
+    Room match = null;
+    for (Room r : results) {
+      if (r.getId() == room.getId()) {
+        match = r;
       }
     }
     assertNotNull(match);
   }
-  
-  private void addBuilding(Building building) {
-    entityManager.persist(building);
-  }
 
+  private Building createBuilding() {
+    Building building = new Building();
+    building.setAbbreviation("bldg1");
+    building.setId("BLDG1");
+    building.setName("Building 1");
+    entityManager.persist(building);
+    return building;
+  }
+  
+  private Room createRoom(Building building) {
+    Room room = new Room();
+    room.setBuilding(building);
+    room.setRoomNumber("123");
+    repository.addRoom(room);
+    return room;
+  }
+  
 }

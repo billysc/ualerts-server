@@ -17,7 +17,7 @@
  *
  */
 
-package org.ualerts.fixed.persistence;
+package org.ualerts.fixed.repository;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -39,9 +39,6 @@ import org.junit.runner.RunWith;
 import org.ualerts.fixed.Asset;
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.integration.ApplicationContextUtil;
-import org.ualerts.fixed.repository.EntityNotFoundException;
-import org.ualerts.fixed.repository.JpaAssetRepository;
-import org.ualerts.fixed.repository.JpaFixtureRepository;
 
 import edu.vt.cns.kestrel.common.IntegrationTestRunner;
 
