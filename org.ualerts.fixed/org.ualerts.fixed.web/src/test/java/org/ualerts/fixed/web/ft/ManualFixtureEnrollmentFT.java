@@ -97,7 +97,6 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
    */
   @Before
   public void setUp() throws Exception {
-    getClient().setCssErrorHandler(new NoOpErrorHandler());
     DBSetupUtility.populateDatabase(entityManager);
   }
   
@@ -139,6 +138,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     assertFieldHasError(page, HTML_ID_SERIAL_NUMBER, "is required");
     assertFieldHasError(page, HTML_ID_BUILDING, "is required");
     assertFieldHasError(page, HTML_ID_ROOM_NUMBER, "is required");
+    assertEmpty(getErrorMessage(page, HTML_ID_INV_NUMBER));
   }
   
   /**
@@ -226,13 +226,13 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   }
   
   private void assertNoErrors(HtmlPage page) throws Exception {
-    assertTrue(getErrorMessage(page, HTML_ID_BUILDING).isEmpty());
-    assertTrue(getErrorMessage(page, HTML_ID_INV_NUMBER).isEmpty());
-    assertTrue(getErrorMessage(page, HTML_ID_IP_ADDRESS).isEmpty());
-    assertTrue(getErrorMessage(page, HTML_ID_MAC_ADDRESS).isEmpty());
-    assertTrue(getErrorMessage(page, HTML_ID_POSITION_HINT).isEmpty());
-    assertTrue(getErrorMessage(page, HTML_ID_ROOM_NUMBER).isEmpty());
-    assertTrue(getErrorMessage(page, HTML_ID_SERIAL_NUMBER).isEmpty());
+    assertEmpty(getErrorMessage(page, HTML_ID_BUILDING));
+    assertEmpty(getErrorMessage(page, HTML_ID_INV_NUMBER));
+    assertEmpty(getErrorMessage(page, HTML_ID_IP_ADDRESS));
+    assertEmpty(getErrorMessage(page, HTML_ID_MAC_ADDRESS));
+    assertEmpty(getErrorMessage(page, HTML_ID_POSITION_HINT));
+    assertEmpty(getErrorMessage(page, HTML_ID_ROOM_NUMBER));
+    assertEmpty(getErrorMessage(page, HTML_ID_SERIAL_NUMBER));
   }
   
   private void assertFieldHasError(HtmlPage page, String fieldId, String msg) 

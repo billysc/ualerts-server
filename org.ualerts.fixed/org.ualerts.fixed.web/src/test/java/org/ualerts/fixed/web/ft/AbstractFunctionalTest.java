@@ -19,6 +19,9 @@
 
 package org.ualerts.fixed.web.ft;
 
+import junit.framework.Assert;
+
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
@@ -63,6 +66,15 @@ public abstract class AbstractFunctionalTest {
    */
   protected WebClient getClient() {
     return client;
+  }
+  
+  /**
+   * Assert that a value is either null or empty
+   * @param value The value to assert
+   */
+  protected void assertEmpty(String value) {
+    if (value != null && !value.trim().isEmpty())
+      Assert.fail("Expected empty, but got " + value);
   }
   
 }
