@@ -107,6 +107,18 @@ public final class DBSetupUtility {
   }
   
   /**
+   * Populate the database only with a building
+   * @param entityManager The EntityManager to work with
+   */
+  public static void populateBuildings(EntityManager entityManager) {
+    EntityTransaction tx = entityManager.getTransaction();
+    tx.begin();
+    Building building = createBuilding(entityManager);
+    tx.commit();
+    LOGGER.info("Buildings populated");
+  }
+  
+  /**
    * Clean out the database
    * @param entityManager The EntityManager to use for database connection
    */
