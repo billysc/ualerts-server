@@ -145,7 +145,7 @@ public final class DBSetupUtility {
     entityManager.createNativeQuery("DELETE FROM building").executeUpdate();
     entityManager.createNativeQuery("DELETE FROM position_hint")
       .executeUpdate();
-    entityManager.createNativeQuery("DELETE FROM fixed_asset").executeUpdate();
+    entityManager.createNativeQuery("DELETE FROM asset").executeUpdate();
     tx.commit();
     LOGGER.info("Database cleaned");
   }
