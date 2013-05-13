@@ -33,8 +33,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ualerts.fixed.web.controller.IndexController;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
@@ -44,12 +42,12 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import edu.vt.cns.kestrel.common.IntegrationTestRunner;
 
 /**
- * Functional tests for manual fixture enrollment (AFDP-10).
+ * Functional tests for manual fixture enrollment
  *
  * @author ceharris
  */
 @RunWith(IntegrationTestRunner.class)
-public class ManualFixtureEnrollmentFT {
+public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   
   private static final String HTML_ID_GLOBAL_ERRORS = "globalErrorContainer";
   private static final String HTML_ID_IP_ADDRESS = "ipAddressContainer";
@@ -60,8 +58,7 @@ public class ManualFixtureEnrollmentFT {
   private static final String HTML_ID_POSITION_HINT = "positionHintContainer";
   private static final String HTML_ID_ROOM_NUMBER = "roomContainer";
   private static final String HTML_ID_SERIAL_NUMBER = "serialNumberContainer";
-  private static final String UI_PATH = "/ui";    // TODO repeated in web.xml
-  private static final String VALID_BUILDING = DBSetupUtility.BUILDING1_NAME;
+  private static final String VALID_BUILDING = DBSetupUtility.BUILDING_NAME;
   private static final String VALID_INVENTORY_NUMBER = "INV-12345";
   private static final String VALID_MAC_ADDRESS = "0A:12:34:0B:56:78";
   private static final String VALID_POSITION_HINT = "TOP-RIGHT";
@@ -69,9 +66,6 @@ public class ManualFixtureEnrollmentFT {
   private static final String VALID_SERIAL_NUMBER = "SER-12345";
   
   private static EntityManager entityManager;
-
-  private WebClient client = new WebClient(BrowserVersion.FIREFOX_17);
-  private String contextUrl = WebContextUtil.getUrl();
 
   /**
    * One time setup that sets the EntityManager to be used
@@ -101,8 +95,7 @@ public class ManualFixtureEnrollmentFT {
    */
   @Before
   public void setUp() throws Exception {
-    client.setCssErrorHandler(new NoOpErrorHandler());
-    DBSetupUtility.populateDatabase(entityManager);
+    DBSetupUtility.populateBuildings(entityManager);
   }
   
   /**
@@ -121,7 +114,7 @@ public class ManualFixtureEnrollmentFT {
   @Test
   public void testGetManualEnrollmentForm() throws Exception {
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
-    assertTrue(page.getTitleText().contains("Manual Enrollment"));
+    assertTrue(page.getTitleText().contains("Enrolled Fixtures"));
     assertNotNull(page.getHtmlElementById(HTML_ID_FIXTURE_BUTTON));
   }
   
@@ -143,6 +136,7 @@ public class ManualFixtureEnrollmentFT {
     assertFieldHasError(page, HTML_ID_SERIAL_NUMBER, "is required");
     assertFieldHasError(page, HTML_ID_BUILDING, "is required");
     assertFieldHasError(page, HTML_ID_ROOM_NUMBER, "is required");
+    assertEmpty(getErrorMessage(page, HTML_ID_INV_NUMBER));
   }
   
   /**
@@ -212,17 +206,11 @@ public class ManualFixtureEnrollmentFT {
         + HTML_ID_GLOBAL_ERRORS + "']" + "/div")).getTextContent()
         .contains("combination is already in use"));
   }
-  
-  private HtmlPage getHtmlPage(String url) throws Exception {
-    HtmlPage page = client.getPage(contextUrl + UI_PATH + url);
-    client.waitForBackgroundJavaScript(1000);
-    return page;
-  }
 
   private void openEnrollFixtureDialog(HtmlPage page) throws Exception {
     HtmlAnchor fixtureButton = page.getHtmlElementById(HTML_ID_FIXTURE_BUTTON);
     fixtureButton.click();
-    client.waitForBackgroundJavaScript(1000);
+    getClient().waitForBackgroundJavaScript(JS_LONG_DELAY);
   }
   
   private HtmlDivision getModalBody(HtmlPage page) {
@@ -232,17 +220,17 @@ public class ManualFixtureEnrollmentFT {
   private void clickSubmitButtonAndWait(HtmlPage page) throws Exception {
     ((HtmlButton) page.getFirstByXPath("//button[@class='btn btn-primary']"))
       .click();
-    client.waitForBackgroundJavaScript(4000);
+    getClient().waitForBackgroundJavaScript(JS_LONG_DELAY);
   }
   
   private void assertNoErrors(HtmlPage page) throws Exception {
-    assertTrue(getErrorMessage(page, HTML_ID_BUILDING).isEmpty());
-    assertTrue(getErrorMessage(page, HTML_ID_INV_NUMBER).isEmpty());
-    assertTrue(getErrorMessage(page, HTML_ID_IP_ADDRESS).isEmpty());
-    assertTrue(getErrorMessage(page, HTML_ID_MAC_ADDRESS).isEmpty());
-    assertTrue(getErrorMessage(page, HTML_ID_POSITION_HINT).isEmpty());
-    assertTrue(getErrorMessage(page, HTML_ID_ROOM_NUMBER).isEmpty());
-    assertTrue(getErrorMessage(page, HTML_ID_SERIAL_NUMBER).isEmpty());
+    assertEmpty(getErrorMessage(page, HTML_ID_BUILDING));
+    assertEmpty(getErrorMessage(page, HTML_ID_INV_NUMBER));
+    assertEmpty(getErrorMessage(page, HTML_ID_IP_ADDRESS));
+    assertEmpty(getErrorMessage(page, HTML_ID_MAC_ADDRESS));
+    assertEmpty(getErrorMessage(page, HTML_ID_POSITION_HINT));
+    assertEmpty(getErrorMessage(page, HTML_ID_ROOM_NUMBER));
+    assertEmpty(getErrorMessage(page, HTML_ID_SERIAL_NUMBER));
   }
   
   private void assertFieldHasError(HtmlPage page, String fieldId, String msg) 

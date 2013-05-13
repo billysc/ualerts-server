@@ -19,6 +19,12 @@
 
 package org.ualerts.fixed.web.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.jmock.Expectations;
@@ -30,6 +36,7 @@ import org.ualerts.fixed.InetAddress;
 import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
+import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
 import org.ualerts.fixed.web.dto.FixtureDTO;
 
 /**
@@ -87,5 +94,26 @@ public class ServiceSupportedFixtureServiceTest {
     Assert.assertEquals(fixtureObj.getVersion(), fixture.getVersion());
   }
   
+  /**
+   * Validate the retrival of all fixtures.
+   * @throws Exception
+   */
+  @Test
+  public void validateRetrievalAllFixtures() throws Exception {
+    final FindAllFixturesCommand command = new FindAllFixturesCommand();
+    final List<Fixture> fixtures = new ArrayList<Fixture>();
+    
+    context.checking(new Expectations() { { 
+      oneOf(commandService).newCommand(FindAllFixturesCommand.class);
+      will(returnValue(command));
+      oneOf(commandService).invoke(command);
+      will(returnValue(fixtures));
+    } });
+    
+    List<FixtureDTO> fixtureDtos = service.retrieveAllFixtures();
+    context.assertIsSatisfied();
+    assertNotNull(fixtureDtos);
+    assertEquals(fixtures.size(), fixtureDtos.size());
+  }
   
 }

@@ -19,10 +19,20 @@
 
 package org.ualerts.fixed.web.controller;
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jmock.Expectations;
+import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.ualerts.fixed.web.dto.FixtureDTO;
+import org.ualerts.fixed.web.service.FixtureService;
 
 /**
  * Test case for the {@link IndexController} class.
@@ -31,14 +41,21 @@ import org.junit.Test;
  */
 public class IndexControllerTest {
 
+  private Mockery context;
+  private Map<String, Object> model;
   private IndexController controller;
+  private FixtureService fixtureService;
   
   /**
    * Setup to be performed for each test
    */
   @Before
   public void setup() {
+    context = new Mockery();
+    model = new HashMap<String, Object>();
+    fixtureService = context.mock(FixtureService.class);
     controller = new IndexController();
+    controller.setFixtureService(fixtureService);
   }
   
   /**
@@ -46,8 +63,18 @@ public class IndexControllerTest {
    * when the index page is requested.
    */
   @Test
-  public void validateIndexPage() {
-    Assert.assertEquals("index", controller.displayIndex());
+  public void validateIndexPage() throws Exception {
+    final List<FixtureDTO> fixtures = new ArrayList<FixtureDTO>();
+    context.checking(new Expectations() { { 
+      oneOf(fixtureService).retrieveAllFixtures();
+      will(returnValue(fixtures));
+    } });
+    
+    String view = controller.displayIndex(model);
+    context.assertIsSatisfied();
+    assertEquals("index", view);
+    assertTrue(model.containsKey("fixtures"));
+    assertEquals(fixtures, model.get("fixtures"));
   }
   
 }

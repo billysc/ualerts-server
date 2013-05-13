@@ -91,6 +91,7 @@ public class ManuallyEnrollFixtureControllerTest {
     } });
     
     String view = controller.handleFormSubmission(command, result);
+    context.assertIsSatisfied();
     Assert.assertEquals("enrollment/manualForm", view);
   }
   

@@ -19,6 +19,11 @@
 
 package org.ualerts.fixed.web.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,8 +64,23 @@ public class MockedFixtureServiceTest {
   @Test
   public void testCreateFixture() throws Exception {
     FixtureDTO fixture = service.createFixture(command);
-    Assert.assertNotNull(fixture.getId());
-    Assert.assertNotNull(fixture.getVersion());
+    assertNotNull(fixture.getId());
+    assertNotNull(fixture.getVersion());
   }
   
+  /**
+   * Test the retrieval of all fixtures
+   * @throws Exception
+   */
+  @Test
+  public void testRetrieveAllFixtures() throws Exception {
+    List<FixtureDTO> fixtures = service.retrieveAllFixtures();
+    assertNotNull(fixtures);
+    assertEquals(0, fixtures.size());
+    
+    service.createFixture(command);
+    fixtures = service.retrieveAllFixtures();
+    assertNotNull(fixtures);
+    assertEquals(1, fixtures.size());
+  }
 }
