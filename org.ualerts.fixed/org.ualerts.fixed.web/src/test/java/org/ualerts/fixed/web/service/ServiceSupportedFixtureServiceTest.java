@@ -109,7 +109,9 @@ public class ServiceSupportedFixtureServiceTest {
       oneOf(commandService).invoke(command);
       will(returnValue(fixtures));
     } });
+    
     List<FixtureDTO> fixtureDtos = service.retrieveAllFixtures();
+    context.assertIsSatisfied();
     assertNotNull(fixtureDtos);
     assertEquals(fixtures.size(), fixtureDtos.size());
   }
