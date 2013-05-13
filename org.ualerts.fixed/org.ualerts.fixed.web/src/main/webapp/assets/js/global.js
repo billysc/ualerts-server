@@ -5,8 +5,8 @@ $(function() {
     cache: false
   });
   
-  $(".modalTrigger").click(function(evt) {
-    evt.stopPropagation();
+  $(".modalTrigger").click(function(event) {
+    event.stopPropagation();
     var $this = $(this);
     var $target = $("" + $this.data("target"));
     var remote = $this.attr("href");
