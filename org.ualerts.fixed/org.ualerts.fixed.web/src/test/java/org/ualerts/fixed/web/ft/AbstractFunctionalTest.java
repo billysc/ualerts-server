@@ -21,7 +21,6 @@ package org.ualerts.fixed.web.ft;
 
 import junit.framework.Assert;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
@@ -36,6 +35,18 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 public abstract class AbstractFunctionalTest {
   
   private static final String UI_PATH = "/ui";    // TODO repeated in web.xml
+  
+  /**
+   * Short delay for Javascript wait time. Intended for short functions that
+   * don't fetch remote sources
+   */
+  protected static final Long JS_SHORT_DELAY = 1000L;
+  
+  /**
+   * Long delay for Javascript wait time. Should be used whenever attempting
+   * to fetch remote sources
+   */
+  protected static final Long JS_LONG_DELAY = 4000L;
 
   private WebClient client = new WebClient(BrowserVersion.FIREFOX_17);
   private String contextUrl = WebContextUtil.getUrl();
@@ -56,7 +67,7 @@ public abstract class AbstractFunctionalTest {
    */
   protected HtmlPage getHtmlPage(String url) throws Exception {
     HtmlPage page = client.getPage(contextUrl + UI_PATH + url);
-    client.waitForBackgroundJavaScript(1000);
+    client.waitForBackgroundJavaScript(JS_SHORT_DELAY);
     return page;
   }
   

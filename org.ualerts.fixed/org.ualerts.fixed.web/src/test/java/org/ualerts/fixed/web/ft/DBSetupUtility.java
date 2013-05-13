@@ -113,7 +113,7 @@ public final class DBSetupUtility {
   public static void populateBuildings(EntityManager entityManager) {
     EntityTransaction tx = entityManager.getTransaction();
     tx.begin();
-    Building building = createBuilding(entityManager);
+    createBuilding(entityManager);
     tx.commit();
     LOGGER.info("Buildings populated");
   }

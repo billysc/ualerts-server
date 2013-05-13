@@ -33,8 +33,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ualerts.fixed.web.controller.IndexController;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
@@ -212,7 +210,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   private void openEnrollFixtureDialog(HtmlPage page) throws Exception {
     HtmlAnchor fixtureButton = page.getHtmlElementById(HTML_ID_FIXTURE_BUTTON);
     fixtureButton.click();
-    getClient().waitForBackgroundJavaScript(1000);
+    getClient().waitForBackgroundJavaScript(JS_LONG_DELAY);
   }
   
   private HtmlDivision getModalBody(HtmlPage page) {
@@ -222,7 +220,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   private void clickSubmitButtonAndWait(HtmlPage page) throws Exception {
     ((HtmlButton) page.getFirstByXPath("//button[@class='btn btn-primary']"))
       .click();
-    getClient().waitForBackgroundJavaScript(4000);
+    getClient().waitForBackgroundJavaScript(JS_LONG_DELAY);
   }
   
   private void assertNoErrors(HtmlPage page) throws Exception {
