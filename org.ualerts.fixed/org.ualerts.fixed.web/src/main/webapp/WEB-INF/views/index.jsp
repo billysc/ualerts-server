@@ -35,35 +35,36 @@
         </div>
         <c:choose>
           <c:when test="${empty fixtures}">
-            <div id="fixturesList">There are currently no fixtures to display</div>
+            <div id="fixturesListEmpty">There are currently no fixtures to display</div>
+            <table id="fixturesList" class="table table-striped table-bordered table-hover table-condensed hide">
           </c:when>
           <c:otherwise>
             <table id="fixturesList" class="table table-striped table-bordered table-hover table-condensed">
-              <thead>
-                <tr>
-                  <th>Location</th>
-                  <th>Position</th>
-                  <th>IP Address</th>
-                  <th>MAC Address</th>
-                  <th>Inventory Number</th>
-                  <th>&nbsp;</th>
-                </tr>
-              </thead>
-              <tbody>
-                <c:forEach items="${fixtures}" var="fixture">
-                  <tr>
-                    <td>${fixture.buildingAbbreviation} ${fixture.room}</td>
-                    <td>${fixture.positionHint}</td>
-                    <td>${fixture.ipAddress}</td>
-                    <td>${fixture.macAddress}</td>
-                    <td>${fixture.inventoryNumber}</td>
-                    <td><a href="#">Details</a></td>
-                  </tr>
-                </c:forEach>
-              </tbody>
-            </table>
           </c:otherwise>
         </c:choose>
+          <thead>
+            <tr>
+              <th>Location</th>
+              <th>Position</th>
+              <th>IP Address</th>
+              <th>MAC Address</th>
+              <th>Inventory Number</th>
+              <th>&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <c:forEach items="${fixtures}" var="fixture">
+              <tr>
+                <td>${fixture.buildingAbbreviation} ${fixture.room}</td>
+                <td>${fixture.positionHint}</td>
+                <td>${fixture.ipAddress}</td>
+                <td>${fixture.macAddress}</td>
+                <td>${fixture.inventoryNumber}</td>
+                <td><a href="#">Details</a></td>
+              </tr>
+            </c:forEach>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -84,6 +85,7 @@
   
   <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery.min.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery.dataTables.min.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/global.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/index.js"></script>
 </body>

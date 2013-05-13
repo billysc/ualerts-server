@@ -1,4 +1,19 @@
 
+$(function() {
+  $("#fixturesList").dataTable({
+    bPaginate: false,
+    bInfo: false,
+    aoColumns: [
+      null,
+      null,
+      null,
+      null,
+      null,
+      { bSortable: false }
+    ]
+  });
+});
+
 function postModalDisplay_enrollFixture($modal) {
   var submitEnrollFixture = function() {
     var $form = $modal.find("form");

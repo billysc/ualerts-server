@@ -24,15 +24,20 @@ import static org.junit.Assert.assertTrue;
 
 import javax.persistence.EntityManager;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.ualerts.fixed.web.controller.IndexController;
 
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
+import com.gargoylesoftware.htmlunit.html.HtmlTableBody;
 import com.gargoylesoftware.htmlunit.html.HtmlTableCell;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 
@@ -46,6 +51,8 @@ import edu.vt.cns.kestrel.common.IntegrationTestRunner;
 @RunWith(IntegrationTestRunner.class)
 public class FixtureViewFT extends AbstractFunctionalTest {
 
+  private static final Logger logger = LoggerFactory.getLogger(FixtureViewFT.class);
+  private static final String HTML_ID_FIXTURE_EMPTY = "fixturesListEmpty";
   private static final String HTML_ID_FIXTURE_TABLE = "fixturesList";
   
   private static EntityManager entityManager;
@@ -72,6 +79,11 @@ public class FixtureViewFT extends AbstractFunctionalTest {
       entityManager.close();
     }
   }
+  
+  @After
+  public void after() throws Exception {
+    DBSetupUtility.cleanDatabase(entityManager);
+  }
 
   /**
    * Validate that if there are no fixtures in the system, an appropriate
@@ -83,7 +95,7 @@ public class FixtureViewFT extends AbstractFunctionalTest {
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
     assertTrue(page.getTitleText().contains("Enrolled Fixtures"));
     ((HtmlDivision) page
-        .getFirstByXPath("//div[@id='" + HTML_ID_FIXTURE_TABLE + "']"))
+        .getFirstByXPath("//div[@id='" + HTML_ID_FIXTURE_EMPTY + "']"))
         .getTextContent().contains("no fixtures");
   }
   
@@ -102,6 +114,68 @@ public class FixtureViewFT extends AbstractFunctionalTest {
         DBSetupUtility.BUILDING_ABBR + " " + DBSetupUtility.FIXTURE_ROOM_NUMBER,
         DBSetupUtility.FIXTURE_POSITION_HINT, DBSetupUtility.FIXTURE_IP_ADDR, 
         DBSetupUtility.FIXTURE_MAC_ADDR, DBSetupUtility.FIXTURE_INV_NUMBER);
+  }
+  
+  /**
+   * Validate the table is sortable by clicking the first header and verifying
+   * the row contents
+   * @throws Exception
+   */
+  @Test
+  public void testValidateTableSorting() throws Exception {
+    DBSetupUtility.populateDatabase(entityManager);
+    HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
+    HtmlTable table = getFixtureTable(page);
+    HtmlTableRow row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
+    validateRowDisplay(row, 
+        DBSetupUtility.BUILDING_ABBR + " " + DBSetupUtility.FIXTURE_ROOM_NUMBER,
+        DBSetupUtility.FIXTURE_POSITION_HINT, DBSetupUtility.FIXTURE_IP_ADDR, 
+        DBSetupUtility.FIXTURE_MAC_ADDR, DBSetupUtility.FIXTURE_INV_NUMBER);
+    row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[2]");
+
+    validateRowDisplay(row, DBSetupUtility.BUILDING_ABBR + " " 
+        + DBSetupUtility.FIXTURE2_ROOM_NUMBER,
+        DBSetupUtility.FIXTURE2_POSITION_HINT, DBSetupUtility.FIXTURE2_IP_ADDR, 
+        DBSetupUtility.FIXTURE2_MAC_ADDR, DBSetupUtility.FIXTURE2_INV_NUMBER);
+    
+    HtmlTableRow header = (HtmlTableRow) table.getFirstByXPath("thead/tr[1]");
+    ((HtmlTableCell) header.getFirstByXPath("th[1]")).click();
+    row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
+    validateRowDisplay(row, DBSetupUtility.BUILDING_ABBR + " " 
+        + DBSetupUtility.FIXTURE2_ROOM_NUMBER,
+        DBSetupUtility.FIXTURE2_POSITION_HINT, DBSetupUtility.FIXTURE2_IP_ADDR, 
+        DBSetupUtility.FIXTURE2_MAC_ADDR, DBSetupUtility.FIXTURE2_INV_NUMBER);
+    
+    ((HtmlTableCell) header.getFirstByXPath("th[1]")).click();
+    row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
+    validateRowDisplay(row, 
+        DBSetupUtility.BUILDING_ABBR + " " + DBSetupUtility.FIXTURE_ROOM_NUMBER,
+        DBSetupUtility.FIXTURE_POSITION_HINT, DBSetupUtility.FIXTURE_IP_ADDR, 
+        DBSetupUtility.FIXTURE_MAC_ADDR, DBSetupUtility.FIXTURE_INV_NUMBER);
+  }
+  
+  /**
+   * Validate the table filtering works
+   * @throws Exception
+   */
+  @Test
+  public void validateTableFiltering() throws Exception {
+    DBSetupUtility.populateDatabase(entityManager);
+    HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
+    HtmlTable table = getFixtureTable(page);
+    
+    HtmlInput searchField = page
+        .getFirstByXPath("//div[@class='dataTables_filter']/label[1]/input[1]");
+    searchField.type(DBSetupUtility.FIXTURE2_POSITION_HINT);
+    
+    HtmlTableBody body = (HtmlTableBody) table.getFirstByXPath("tbody");
+    assertEquals(1, body.getChildElementCount());
+    
+    HtmlTableRow row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
+    validateRowDisplay(row, DBSetupUtility.BUILDING_ABBR + " " 
+        + DBSetupUtility.FIXTURE2_ROOM_NUMBER,
+        DBSetupUtility.FIXTURE2_POSITION_HINT, DBSetupUtility.FIXTURE2_IP_ADDR, 
+        DBSetupUtility.FIXTURE2_MAC_ADDR, DBSetupUtility.FIXTURE2_INV_NUMBER);
   }
   
   private HtmlTable getFixtureTable(HtmlPage page) {
@@ -129,7 +203,7 @@ public class FixtureViewFT extends AbstractFunctionalTest {
    * @return
    */
   private HtmlTableCell getCell(HtmlTableRow row, int index) {
-    return (HtmlTableCell) row.getFirstByXPath("//td[" + (index + 1) + "]");
+    return (HtmlTableCell) row.getFirstByXPath("td[" + (index + 1) + "]");
   }
   
 }
