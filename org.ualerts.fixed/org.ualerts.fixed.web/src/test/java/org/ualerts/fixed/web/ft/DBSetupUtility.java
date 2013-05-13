@@ -66,7 +66,7 @@ public final class DBSetupUtility {
   /**
    * MAC Address used for fixture creation
    */
-  public static final String FIXTURE_MAC_ADDR = "0A:12:34:0B:56:78";
+  public static final String FIXTURE_MAC_ADDR = "0A-12-34-0B-56-78";
   
   /**
    * Position hint text used for fixture creation
@@ -85,7 +85,7 @@ public final class DBSetupUtility {
 
   public static final String FIXTURE2_INV_NUMBER = "INV-534321";
 
-  public static final String FIXTURE2_MAC_ADDR = "99:99:99:88:88:88";
+  public static final String FIXTURE2_MAC_ADDR = "99-99-99-88-88-88";
 
   public static final String FIXTURE2_SER_NUMBER = "SER-8765432";
 
