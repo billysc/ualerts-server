@@ -39,7 +39,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 import edu.vt.cns.kestrel.common.IntegrationTestRunner;
 
 /**
- * Functional tests for Story AFDP-11
+ * Functional tests for Fixtures View
  *
  * @author Michael Irwin
  */

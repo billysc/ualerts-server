@@ -42,7 +42,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import edu.vt.cns.kestrel.common.IntegrationTestRunner;
 
 /**
- * Functional tests for manual fixture enrollment (AFDP-10).
+ * Functional tests for manual fixture enrollment
  *
  * @author ceharris
  */
