@@ -32,7 +32,7 @@ import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
  * @author Brian Early
  */
 @CommandComponent
-public class DeleteFixtureCommand extends AbstractCommand<Fixture> {
+public class DeleteFixtureCommand extends AbstractCommand<Void> {
   private Long id;
   private FixtureRepository fixtureRepository;
 
@@ -43,14 +43,14 @@ public class DeleteFixtureCommand extends AbstractCommand<Fixture> {
   protected void onValidate() throws BindException,
       UnspecifiedConstraintException {
     super.onValidate();
-    Assert.notNull(getId(), "Fixture ID is required.");
+    Assert.notNull(getId(), "id is required");
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected Fixture onExecute() throws Exception {
+  protected Void onExecute() throws Exception {
     Fixture fixture = fixtureRepository.findFixtureById(getId());
     fixtureRepository.deleteFixture(fixture);
     return null;

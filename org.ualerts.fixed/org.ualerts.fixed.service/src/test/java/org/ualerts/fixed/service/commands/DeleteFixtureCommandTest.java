@@ -20,8 +20,6 @@ package org.ualerts.fixed.service.commands;
 
 import static org.junit.Assert.fail;
 
-import javax.persistence.PersistenceException;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
@@ -117,27 +115,4 @@ public class DeleteFixtureCommandTest {
     }
   }
 
-  /**
-   * Test method for
-   * {@link DeleteFixtureCommand#onExecute()}.
-   */
-  @Test
-  public void testOnExecuteWithExceptionOnDelete() throws Exception {
-    final Fixture fixture = new Fixture();
-    try {
-      command.setId(1L);
-      context.checking(new Expectations() { {
-        oneOf(fixtureRepository).findFixtureById(1L);
-        will(returnValue(fixture));
-        oneOf(fixtureRepository).deleteFixture(with(any(Fixture.class)));
-        will(throwException(new PersistenceException("GAH!")));
-      } });
-      command.onExecute();
-      fail("Did not receive expected exception.");
-    }
-    catch (PersistenceException ex) {
-      context.assertIsSatisfied();
-    }
-  }
-  
 }

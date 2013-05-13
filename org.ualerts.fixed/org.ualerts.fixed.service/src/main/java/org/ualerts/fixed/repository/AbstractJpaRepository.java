@@ -34,20 +34,20 @@ public abstract class AbstractJpaRepository {
   private EntityManagerFactory entityManagerFactory;
 
   /**
+   * Gets the {@code entityManager} property.
+   * @return the entity manager
+   */
+  public EntityManager getEntityManager() {
+    return entityManager;
+  }
+
+  /**
    * Sets the {@code entityManager} property.
    * @param entityManager the entity manager
    */
   @PersistenceContext
   public void setEntityManager(EntityManager entityManager) {
     this.entityManager = entityManager;
-  }
-
-  /**
-   * Gets the {@code entityManager} property.
-   * @return the entity manager
-   */
-  public EntityManager getEntityManager() {
-    return entityManager;
   }
 
   /**

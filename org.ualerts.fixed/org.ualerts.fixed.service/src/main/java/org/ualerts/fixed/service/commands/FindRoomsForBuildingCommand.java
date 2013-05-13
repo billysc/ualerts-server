@@ -20,8 +20,6 @@ package org.ualerts.fixed.service.commands;
 
 import java.util.List;
 
-import javax.persistence.PersistenceException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
@@ -37,18 +35,18 @@ import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
  */
 @CommandComponent
 public class FindRoomsForBuildingCommand
-    extends AbstractCommand<List<Room>> {
+extends AbstractCommand<List<Room>> {
   private String buildingId;
-  private RoomRepository repository;
+  private RoomRepository roomRepository;
 
   /**
    * {@inheritDoc}
    */
   @Override
   protected void onValidate() throws BindException,
-      UnspecifiedConstraintException {
+  UnspecifiedConstraintException {
     super.onValidate();
-    Assert.notNull(buildingId, "Building ID is required.");
+    Assert.notNull(buildingId, "buildingId is required");
   }
 
   /**
@@ -56,12 +54,7 @@ public class FindRoomsForBuildingCommand
    */
   @Override
   protected List<Room> onExecute() throws UnspecifiedConstraintException {
-    try {
-      return repository.findRoomsForBuilding(buildingId);
-    }
-    catch (PersistenceException ex) {
-      throw new UnspecifiedConstraintException(ex);
-    }
+    return roomRepository.findRoomsForBuilding(buildingId);
   }
 
   /**
@@ -89,12 +82,12 @@ public class FindRoomsForBuildingCommand
   }
 
   /**
-   * Sets the {@code repository} property.
-   * @param repository the room repository
+   * Sets the {@code roomRepository} property.
+   * @param roomRepository the room repository
    */
   @Autowired
-  public void setRepository(RoomRepository repository) {
-    this.repository = repository;
+  public void setRoomRepository(RoomRepository roomRepository) {
+    this.roomRepository = roomRepository;
   }
 
 }

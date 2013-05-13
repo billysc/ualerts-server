@@ -18,6 +18,7 @@
  */
 package org.ualerts.fixed.service;
 
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import org.jmock.Expectations;
@@ -105,7 +106,7 @@ public class SpringPrototypeBeanCommandServiceTest {
       oneOf(invoker).invoke(command);
       will(returnValue(object));
     } });
-    assertTrue(service.invoke(command) != null);
+    assertSame(object, service.invoke(command));
     context.assertIsSatisfied();
   }
 

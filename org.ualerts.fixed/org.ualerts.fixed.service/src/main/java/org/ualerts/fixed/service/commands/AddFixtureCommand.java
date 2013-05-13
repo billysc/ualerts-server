@@ -56,6 +56,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   private String inventoryNumber;
   private MacAddress macAddress;
   private String installedBy;
+  
   private AssetRepository assetRepository;
   private BuildingRepository buildingRepository;
   private RoomRepository roomRepository;
@@ -171,25 +172,17 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
     try {
       Building building =
           buildingRepository.findBuildingByName(getBuildingName());
-      Room room = findOrConstructRoom(building);
-      PositionHint hint = findOrConstructPositionHint();
-      Asset asset = constructAsset();
-      Fixture fixture = new Fixture();
-      fixture.setAsset(asset);
-      fixture.setDateCreated(dateService.getCurrentDate());
-      fixture.setInstalledBy(getInstalledBy());
-      fixture.setIpAddress(getInetAddress().toString());
-      fixture.setPositionHint(hint);
-      fixture.setRoom(room);
-      fixtureRepository.addFixture(fixture);
-      return fixture;
+      Room room = findOrCreateRoom(building);
+      PositionHint hint = findOrCreatePositionHint();
+      Asset asset = createAsset();
+      return createFixture(asset, hint, room);
     }
     catch (PersistenceException ex) {
       throw new UnspecifiedConstraintException(ex);
     }
   }
 
-  private Room findOrConstructRoom(Building building) {
+  private Room findOrCreateRoom(Building building) {
     Room room = roomRepository.findRoom(building.getId(), getRoomNumber());
     if (room == null) {
       room = new Room();
@@ -200,7 +193,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
     return room;
   }
   
-  private PositionHint findOrConstructPositionHint() {
+  private PositionHint findOrCreatePositionHint() {
     PositionHint hint = positionHintRepository.findHint(getPositionHint());
     if (hint == null) {
       hint = new PositionHint();
@@ -210,7 +203,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
     return hint;
   }
   
-  private Asset constructAsset() {
+  private Asset createAsset() {
     Asset asset = new Asset();
     asset.setDateCreated(dateService.getCurrentDate());
     asset.setInventoryNumber(getInventoryNumber());
@@ -218,6 +211,18 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
     asset.setSerialNumber(getSerialNumber());
     assetRepository.addAsset(asset);
     return asset;
+  }
+  
+  private Fixture createFixture(Asset asset, PositionHint hint, Room room) {
+    Fixture fixture = new Fixture();
+    fixture.setAsset(asset);
+    fixture.setDateCreated(dateService.getCurrentDate());
+    fixture.setInstalledBy(getInstalledBy());
+    fixture.setIpAddress(getInetAddress().toString());
+    fixture.setPositionHint(hint);
+    fixture.setRoom(room);
+    fixtureRepository.addFixture(fixture);
+    return fixture;
   }
   
   /**

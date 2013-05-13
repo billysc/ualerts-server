@@ -19,7 +19,9 @@
 
 package org.ualerts.fixed.repository;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -81,7 +83,7 @@ public class JpaRoomRepositoryIT {
    * @throws Exception as needed
    */
   @Before
-  public void setupUp() throws Exception {
+  public void setUp() throws Exception {
     entityManager = entityManagerFactory.createEntityManager();
     tx = entityManager.getTransaction();
     tx.begin();
@@ -119,9 +121,9 @@ public class JpaRoomRepositoryIT {
     Room result =
         repository.findRoom(building.getId(), room.getRoomNumber());
     assertNotNull(result);
-    assertTrue(result.getId() == room.getId());
-    assertTrue(result.getBuilding().getId().equals(building.getId()));
-    assertTrue(result.getRoomNumber().equals(room.getRoomNumber()));
+    assertEquals(result.getId(), room.getId());
+    assertEquals(result.getBuilding().getId(), building.getId());
+    assertEquals(result.getRoomNumber(), room.getRoomNumber());
   }
 
   /**
@@ -132,7 +134,7 @@ public class JpaRoomRepositoryIT {
   public void testFindRoomNotFound() throws Exception {
     Room result =
         repository.findRoom(building.getId(), "BLAH!");
-    assertTrue(result == null);
+    assertNull(result);
   }
 
   /**

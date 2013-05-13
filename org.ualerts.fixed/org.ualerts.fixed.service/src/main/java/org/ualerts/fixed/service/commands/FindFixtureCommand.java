@@ -43,7 +43,7 @@ public class FindFixtureCommand extends AbstractCommand<Fixture> {
   protected void onValidate() throws BindException,
       UnspecifiedConstraintException {
     super.onValidate();
-    Assert.notNull(getId(), "Fixture ID is required.");
+    Assert.notNull(getId(), "id is required");
   }
 
   /**

@@ -52,6 +52,7 @@ public class UpdateFixtureCommand extends AbstractCommand<Fixture> {
   private String buildingName;
   private String positionHint;
   private InetAddress inetAddress;
+  
   private BuildingRepository buildingRepository;
   private RoomRepository roomRepository;
   private PositionHintRepository positionHintRepository;
@@ -67,7 +68,7 @@ public class UpdateFixtureCommand extends AbstractCommand<Fixture> {
     super.onValidate();
     // TODO - Validation is ripe for refactoring, as it has a ton in common
     // with validation rules in AddFixtureCommand.
-    Assert.notNull(id, "Fixture ID is required.");
+    Assert.notNull(id, "id is required");
     try {
       validateInetAddress(getErrors());
       validateLocation(getErrors());
@@ -134,23 +135,18 @@ public class UpdateFixtureCommand extends AbstractCommand<Fixture> {
   protected Fixture onExecute() throws UnspecifiedConstraintException,
       EntityNotFoundException {
     try {
-      Fixture fixture = fixtureRepository.findFixtureById(getId());
       Building building =
           buildingRepository.findBuildingByName(getBuildingName());
-      Room room = findOrConstructRoom(building);
-      PositionHint hint = findOrConstructPositionHint();
-      fixture.setDateModified(dateService.getCurrentDate());
-      fixture.setIpAddress(getInetAddress().toString());
-      fixture.setPositionHint(hint);
-      fixture.setRoom(room);
-      return fixture;
+      Room room = findOrCreateRoom(building);
+      PositionHint hint = findOrCreatePositionHint();
+      return updateFixture(hint, room);
     }
     catch (PersistenceException ex) {
       throw new UnspecifiedConstraintException(ex);
     }
   }
   
-  private Room findOrConstructRoom(Building building) {
+  private Room findOrCreateRoom(Building building) {
     Room room = roomRepository.findRoom(building.getId(), getRoomNumber());
     if (room == null) {
       room = new Room();
@@ -161,7 +157,7 @@ public class UpdateFixtureCommand extends AbstractCommand<Fixture> {
     return room;
   }
   
-  private PositionHint findOrConstructPositionHint() {
+  private PositionHint findOrCreatePositionHint() {
     PositionHint hint = positionHintRepository.findHint(getPositionHint());
     if (hint == null) {
       hint = new PositionHint();
@@ -171,6 +167,16 @@ public class UpdateFixtureCommand extends AbstractCommand<Fixture> {
     return hint;
   }
 
+  private Fixture updateFixture(PositionHint hint, Room room)
+      throws EntityNotFoundException {
+    Fixture fixture = fixtureRepository.findFixtureById(getId());
+    fixture.setDateModified(dateService.getCurrentDate());
+    fixture.setIpAddress(getInetAddress().toString());
+    fixture.setPositionHint(hint);
+    fixture.setRoom(room);
+    return fixture;
+  }
+  
   /**
    * Gets the {@code id} property.
    * @return property value

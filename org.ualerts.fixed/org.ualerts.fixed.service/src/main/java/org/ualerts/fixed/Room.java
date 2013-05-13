@@ -23,6 +23,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * Entity representing a room.
@@ -30,7 +31,8 @@ import javax.persistence.Table;
  * @author Brian Early
  */
 @Entity
-@Table(name = "room")
+@Table(name = "room", uniqueConstraints =
+       @UniqueConstraint(columnNames = { "room_number", "building_id" }))
 public class Room extends AbstractEntity {
 
   private static final long serialVersionUID = -8230988187096633342L;

@@ -41,6 +41,8 @@ public final class ApplicationContextUtil {
   public static synchronized ApplicationContext getContext() {
     try {
     if (context == null) {
+      // TODO - Decide whether these XML files should be called
+      // "fixed-*" or something else.
       context =
           new ClassPathXmlApplicationContext("spring/fixed-data.xml", 
           "spring/fixed-service.xml");
