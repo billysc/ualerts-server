@@ -1,6 +1,7 @@
 
 $(function() {
   $("#fixturesList").dataTable({
+    aaSorting: [ [0, 'asc'], [1, 'asc'] ],
     bPaginate: false,
     bInfo: false,
     aoColumns: [

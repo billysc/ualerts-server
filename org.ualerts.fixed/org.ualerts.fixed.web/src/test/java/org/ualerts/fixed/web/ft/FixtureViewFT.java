@@ -125,14 +125,15 @@ public class FixtureViewFT extends AbstractFunctionalTest {
   public void testValidateTableSorting() throws Exception {
     DBSetupUtility.populateDatabase(entityManager);
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
+
     HtmlTable table = getFixtureTable(page);
     HtmlTableRow row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
     validateRowDisplay(row, 
         DBSetupUtility.BUILDING_ABBR + " " + DBSetupUtility.FIXTURE_ROOM_NUMBER,
         DBSetupUtility.FIXTURE_POSITION_HINT, DBSetupUtility.FIXTURE_IP_ADDR, 
         DBSetupUtility.FIXTURE_MAC_ADDR, DBSetupUtility.FIXTURE_INV_NUMBER);
-    row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[2]");
 
+    row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[2]");
     validateRowDisplay(row, DBSetupUtility.BUILDING_ABBR + " " 
         + DBSetupUtility.FIXTURE2_ROOM_NUMBER,
         DBSetupUtility.FIXTURE2_POSITION_HINT, DBSetupUtility.FIXTURE2_IP_ADDR, 
@@ -140,12 +141,13 @@ public class FixtureViewFT extends AbstractFunctionalTest {
     
     HtmlTableRow header = (HtmlTableRow) table.getFirstByXPath("thead/tr[1]");
     ((HtmlTableCell) header.getFirstByXPath("th[1]")).click();
+    ((HtmlTableCell) header.getFirstByXPath("th[1]")).click();
     row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
     validateRowDisplay(row, DBSetupUtility.BUILDING_ABBR + " " 
         + DBSetupUtility.FIXTURE2_ROOM_NUMBER,
         DBSetupUtility.FIXTURE2_POSITION_HINT, DBSetupUtility.FIXTURE2_IP_ADDR, 
         DBSetupUtility.FIXTURE2_MAC_ADDR, DBSetupUtility.FIXTURE2_INV_NUMBER);
-    
+
     ((HtmlTableCell) header.getFirstByXPath("th[1]")).click();
     row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
     validateRowDisplay(row, 
