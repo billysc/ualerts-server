@@ -1,13 +1,13 @@
 body {
-	padding-top: 60px;
+  padding-top: 60px;
 }
 
 .error {
-	color: #c00;
+  color: #c00;
 }
 
 .actionButtons {
-	margin-bottom: 20px;s
+  margin-bottom: 20px;s
 }
 
 table.dataTable thead th {
@@ -25,4 +25,8 @@ th.sorting_asc {
 
 th.sorting_desc {
   background-image: url(../img/sort_desc.png);
+}
+
+body div.container tr.updated td {
+  background-color: #FFF9D7;
 }
