@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Fixtures Dashboard</title>
+  <title>Enrolled Fixtures</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css" />
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap-responsive.min.css" />
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css" />

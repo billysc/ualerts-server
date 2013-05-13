@@ -81,7 +81,7 @@ public class FixtureViewFT extends AbstractFunctionalTest {
   @Test
   public void testValidateEmptyMessageWhenNoFixtures() throws Exception {
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
-    assertTrue(page.getTitleText().contains("Fixtures Dashboard"));
+    assertTrue(page.getTitleText().contains("Enrolled Fixtures"));
     ((HtmlDivision) page
         .getFirstByXPath("//div[@id='" + HTML_ID_FIXTURE_TABLE + "']"))
         .getTextContent().contains("no fixtures");
