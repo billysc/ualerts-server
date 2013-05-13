@@ -19,6 +19,7 @@
 
 package org.ualerts.fixed.web.ft;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -38,6 +39,9 @@ import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlTable;
+import com.gargoylesoftware.htmlunit.html.HtmlTableCell;
+import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 
 import edu.vt.cns.kestrel.common.IntegrationTestRunner;
 
@@ -177,6 +181,25 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     submitValidForm(page);
     assertNoErrors(page);
     assertFalse(getModalBody(page).isDisplayed());
+    
+    HtmlTable table = page.getFirstByXPath("//table[@id='fixturesList']");
+    HtmlTableRow row = table.getFirstByXPath("tbody/tr[1]");
+
+    int index = 0;
+    assertEquals(DBSetupUtility.BUILDING_ABBR + " " 
+        + DBSetupUtility.FIXTURE_ROOM_NUMBER, getCellContents(row, index++));
+    assertEquals(DBSetupUtility.FIXTURE_POSITION_HINT, 
+        getCellContents(row, index++));
+    assertEquals(DBSetupUtility.FIXTURE_IP_ADDR, getCellContents(row, index++));
+    assertEquals(DBSetupUtility.FIXTURE_MAC_ADDR, 
+        getCellContents(row, index++));
+    assertEquals(DBSetupUtility.FIXTURE_INV_NUMBER, 
+        getCellContents(row, index++)); 
+  }
+  
+  private String getCellContents(HtmlTableRow row, int index) {
+    return ((HtmlTableCell) row.getFirstByXPath("td[" + index + "]"))
+        .getTextContent();
   }
   
   /**
