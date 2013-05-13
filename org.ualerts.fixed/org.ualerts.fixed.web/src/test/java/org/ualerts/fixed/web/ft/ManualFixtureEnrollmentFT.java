@@ -182,8 +182,8 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     assertNoErrors(page);
     assertFalse(getModalBody(page).isDisplayed());
     
-    HtmlTable table = page.getFirstByXPath("//table[@id='fixturesList']");
-    HtmlTableRow row = table.getFirstByXPath("tbody/tr[1]");
+    HtmlTableRow row = page
+        .getFirstByXPath("//table[@id='fixturesList']/tbody/tr[1]");
 
     int index = 0;
     assertEquals(DBSetupUtility.BUILDING_ABBR + " " 
@@ -198,7 +198,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   }
   
   private String getCellContents(HtmlTableRow row, int index) {
-    return ((HtmlTableCell) row.getFirstByXPath("td[" + index + "]"))
+    return ((HtmlTableCell) row.getFirstByXPath("td[" + (index + 1) + "]"))
         .getTextContent();
   }
   
