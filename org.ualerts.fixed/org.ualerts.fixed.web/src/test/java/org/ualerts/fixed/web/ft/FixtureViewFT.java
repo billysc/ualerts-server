@@ -114,6 +114,7 @@ public class FixtureViewFT extends AbstractFunctionalTest {
       before = "FixtureViewFT_before", after = "FixtureViewFT_after")
   public void testValidateTableSorting() throws Exception {
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
+
     HtmlTable table = getFixtureTable(page);
     HtmlTableRow row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
     validateIsFixture1(row); 
@@ -122,6 +123,7 @@ public class FixtureViewFT extends AbstractFunctionalTest {
     validateIsFixture2(row);
     
     HtmlTableRow header = (HtmlTableRow) table.getFirstByXPath("thead/tr[1]");
+    ((HtmlTableCell) header.getFirstByXPath("th[1]")).click();
     ((HtmlTableCell) header.getFirstByXPath("th[1]")).click();
     row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
     validateIsFixture2(row);
