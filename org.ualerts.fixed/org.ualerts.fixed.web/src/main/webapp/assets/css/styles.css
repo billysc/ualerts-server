@@ -9,3 +9,20 @@ body {
 .actionButtons {
 	margin-bottom: 20px;s
 }
+
+table.dataTable thead th {
+  background-position: right center;
+  background-repeat: no-repeat;
+}
+
+th.sorting {
+  background-image: url(../img/sort_both.png);
+}
+
+th.sorting_asc {
+  background-image: url(../img/sort_asc.png);
+}
+
+th.sorting_desc {
+  background-image: url(../img/sort_desc.png);
+}

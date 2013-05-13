@@ -2,6 +2,7 @@
 $(function() {
   $("#fixturesList").dataTable({
     bPaginate: false,
+    bInfo: false,
     aoColumns: [
       null,
       null,
