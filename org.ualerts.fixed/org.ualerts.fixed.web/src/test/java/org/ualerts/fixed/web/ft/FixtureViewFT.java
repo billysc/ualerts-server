@@ -34,8 +34,10 @@ import org.slf4j.LoggerFactory;
 import org.ualerts.fixed.web.controller.IndexController;
 
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
+import com.gargoylesoftware.htmlunit.html.HtmlTableBody;
 import com.gargoylesoftware.htmlunit.html.HtmlTableCell;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 
@@ -150,6 +152,30 @@ public class FixtureViewFT extends AbstractFunctionalTest {
         DBSetupUtility.BUILDING_ABBR + " " + DBSetupUtility.FIXTURE_ROOM_NUMBER,
         DBSetupUtility.FIXTURE_POSITION_HINT, DBSetupUtility.FIXTURE_IP_ADDR, 
         DBSetupUtility.FIXTURE_MAC_ADDR, DBSetupUtility.FIXTURE_INV_NUMBER);
+  }
+  
+  /**
+   * Validate the table filtering works
+   * @throws Exception
+   */
+  @Test
+  public void validateTableFiltering() throws Exception {
+    DBSetupUtility.populateDatabase(entityManager);
+    HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
+    HtmlTable table = getFixtureTable(page);
+    
+    HtmlInput searchField = page
+        .getFirstByXPath("//div[@class='dataTables_filter']/label[1]/input[1]");
+    searchField.type(DBSetupUtility.FIXTURE2_POSITION_HINT);
+    
+    HtmlTableBody body = (HtmlTableBody) table.getFirstByXPath("tbody");
+    assertEquals(1, body.getChildElementCount());
+    
+    HtmlTableRow row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
+    validateRowDisplay(row, DBSetupUtility.BUILDING_ABBR + " " 
+        + DBSetupUtility.FIXTURE2_ROOM_NUMBER,
+        DBSetupUtility.FIXTURE2_POSITION_HINT, DBSetupUtility.FIXTURE2_IP_ADDR, 
+        DBSetupUtility.FIXTURE2_MAC_ADDR, DBSetupUtility.FIXTURE2_INV_NUMBER);
   }
   
   private HtmlTable getFixtureTable(HtmlPage page) {
