@@ -82,6 +82,20 @@ public final class DBSetupUtility {
    * Serial number used for fixture creation
    */
   public static final String FIXTURE_SER_NUMBER = "SER-12345";
+
+  public static final String FIXTURE2_INV_NUMBER = "INV-534321";
+
+  public static final String FIXTURE2_MAC_ADDR = "99:99:99:88:88:88";
+
+  public static final String FIXTURE2_SER_NUMBER = "SER-8765432";
+
+  public static final String FIXTURE2_POSITION_HINT = "MIDDLE-LEFT";
+
+  public static final String FIXTURE2_ROOM_NUMBER = "210";
+
+  public static final String FIXTURE2_INSTALLED_BY = "Johnny Appleseed";
+
+  public static final String FIXTURE2_IP_ADDR = "192.168.1.156";
   
   private static final Logger LOGGER = 
       LoggerFactory.getLogger(DBSetupUtility.class);
@@ -101,7 +115,8 @@ public final class DBSetupUtility {
     EntityTransaction tx = entityManager.getTransaction();
     tx.begin();
     Building building = createBuilding(entityManager);
-    createFixture(entityManager, building);
+    createFixture1(entityManager, building);
+    createFixture2(entityManager, building);
     tx.commit();
     LOGGER.info("Database populated");
   }
@@ -145,7 +160,7 @@ public final class DBSetupUtility {
     return building;
   }
   
-  private static void createFixture(EntityManager entityManager, 
+  private static void createFixture1(EntityManager entityManager, 
       Building building) {
     Asset asset = new Asset();
     asset.setInventoryNumber(FIXTURE_INV_NUMBER);
@@ -166,6 +181,32 @@ public final class DBSetupUtility {
     fixture.setAsset(asset);
     fixture.setInstalledBy(FIXTURE_INSTALLED_BY);
     fixture.setIpAddress(FIXTURE_IP_ADDR);
+    fixture.setPositionHint(positionHint);
+    fixture.setRoom(room);
+    entityManager.persist(fixture);
+  }
+  
+  private static void createFixture2(EntityManager entityManager, 
+      Building building) {
+    Asset asset = new Asset();
+    asset.setInventoryNumber(FIXTURE2_INV_NUMBER);
+    asset.setMacAddress(FIXTURE2_MAC_ADDR);
+    asset.setSerialNumber(FIXTURE2_SER_NUMBER);
+    entityManager.persist(asset);
+    
+    PositionHint positionHint = new PositionHint();
+    positionHint.setHintText(FIXTURE2_POSITION_HINT);
+    entityManager.persist(positionHint);
+    
+    Room room = new Room();
+    room.setBuilding(building);
+    room.setRoomNumber(FIXTURE2_ROOM_NUMBER);
+    entityManager.persist(room);
+    
+    Fixture fixture = new Fixture();
+    fixture.setAsset(asset);
+    fixture.setInstalledBy(FIXTURE2_INSTALLED_BY);
+    fixture.setIpAddress(FIXTURE2_IP_ADDR);
     fixture.setPositionHint(positionHint);
     fixture.setRoom(room);
     entityManager.persist(fixture);

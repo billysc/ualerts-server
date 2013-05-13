@@ -104,6 +104,43 @@ public class FixtureViewFT extends AbstractFunctionalTest {
         DBSetupUtility.FIXTURE_MAC_ADDR, DBSetupUtility.FIXTURE_INV_NUMBER);
   }
   
+  /**
+   * Validate the table is sortable by clicking the first header and verifying
+   * the row contents
+   * @throws Exception
+   */
+  @Test
+  public void testValidateTableSorting() throws Exception {
+    DBSetupUtility.populateDatabase(entityManager);
+    HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
+    HtmlTable table = getFixtureTable(page);
+    HtmlTableRow row = (HtmlTableRow) table.getFirstByXPath("//tbody/tr[1]");
+    validateRowDisplay(row, 
+        DBSetupUtility.BUILDING_ABBR + " " + DBSetupUtility.FIXTURE_ROOM_NUMBER,
+        DBSetupUtility.FIXTURE_POSITION_HINT, DBSetupUtility.FIXTURE_IP_ADDR, 
+        DBSetupUtility.FIXTURE_MAC_ADDR, DBSetupUtility.FIXTURE_INV_NUMBER);
+    row = (HtmlTableRow) table.getFirstByXPath("//tbody/tr[2]");
+    validateRowDisplay(row, DBSetupUtility.BUILDING_ABBR + " " 
+        + DBSetupUtility.FIXTURE2_ROOM_NUMBER,
+        DBSetupUtility.FIXTURE2_POSITION_HINT, DBSetupUtility.FIXTURE2_IP_ADDR, 
+        DBSetupUtility.FIXTURE2_MAC_ADDR, DBSetupUtility.FIXTURE2_INV_NUMBER);
+    
+    HtmlTableRow header = (HtmlTableRow) table.getFirstByXPath("//thead/tr[1]");
+    ((HtmlTableCell) header.getFirstByXPath("//td[1]")).click();
+    row = (HtmlTableRow) table.getFirstByXPath("//tbody/tr[1]");
+    validateRowDisplay(row, DBSetupUtility.BUILDING_ABBR + " " 
+        + DBSetupUtility.FIXTURE2_ROOM_NUMBER,
+        DBSetupUtility.FIXTURE2_POSITION_HINT, DBSetupUtility.FIXTURE2_IP_ADDR, 
+        DBSetupUtility.FIXTURE2_MAC_ADDR, DBSetupUtility.FIXTURE2_INV_NUMBER);
+    
+    ((HtmlTableCell) header.getFirstByXPath("//td[1]")).click();
+    row = (HtmlTableRow) table.getFirstByXPath("//tbody/tr[1]");
+    validateRowDisplay(row, 
+        DBSetupUtility.BUILDING_ABBR + " " + DBSetupUtility.FIXTURE_ROOM_NUMBER,
+        DBSetupUtility.FIXTURE_POSITION_HINT, DBSetupUtility.FIXTURE_IP_ADDR, 
+        DBSetupUtility.FIXTURE_MAC_ADDR, DBSetupUtility.FIXTURE_INV_NUMBER);
+  }
+  
   private HtmlTable getFixtureTable(HtmlPage page) {
     return (HtmlTable) page
         .getFirstByXPath("//table[@id='" + HTML_ID_FIXTURE_TABLE + "']");
