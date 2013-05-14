@@ -64,7 +64,8 @@ public class FixtureViewFT extends AbstractFunctionalTest {
      new HibernatePersistentDataResource(entityManagerFactory);
   // CHECKSTYLE:ON
   
-  private static PropertiesAccessor properties; 
+  private static PropertiesAccessor properties;
+  private static FixtureViewValidator validator;
       
   /**
    * Perform one-time set up tasks
@@ -73,6 +74,7 @@ public class FixtureViewFT extends AbstractFunctionalTest {
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     properties = PropertiesAccessor.newInstance("persistent-data.properties");
+    validator = new FixtureViewValidator(properties);
   }
   
   /**
@@ -101,7 +103,7 @@ public class FixtureViewFT extends AbstractFunctionalTest {
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
     HtmlTable table = getFixtureTable(page);
     HtmlTableRow row = (HtmlTableRow) table.getFirstByXPath("//tbody/tr[1]");
-    validateIsFixture1(row);
+    validator.validateIsFixture1(row);
   }
   
   /**
@@ -117,20 +119,20 @@ public class FixtureViewFT extends AbstractFunctionalTest {
 
     HtmlTable table = getFixtureTable(page);
     HtmlTableRow row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
-    validateIsFixture1(row); 
+    validator.validateIsFixture1(row); 
   
     row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[2]");
-    validateIsFixture2(row);
+    validator.validateIsFixture2(row);
     
     HtmlTableRow header = (HtmlTableRow) table.getFirstByXPath("thead/tr[1]");
     ((HtmlTableCell) header.getFirstByXPath("th[1]")).click();
     ((HtmlTableCell) header.getFirstByXPath("th[1]")).click();
     row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
-    validateIsFixture2(row);
+    validator.validateIsFixture2(row);
     
     ((HtmlTableCell) header.getFirstByXPath("th[1]")).click();
     row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
-    validateIsFixture1(row);
+    validator.validateIsFixture1(row);
   }
 
   /**
@@ -152,55 +154,12 @@ public class FixtureViewFT extends AbstractFunctionalTest {
     assertEquals(1, body.getChildElementCount());
     
     HtmlTableRow row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
-    validateIsFixture2(row);
+    validator.validateIsFixture2(row);
   }
   
   private HtmlTable getFixtureTable(HtmlPage page) {
     return (HtmlTable) page
         .getFirstByXPath("//table[@id='" + HTML_ID_FIXTURE_TABLE + "']");
-  }
-  
-  private void validateIsFixture1(HtmlTableRow row) throws Exception {
-    validateRowDisplay(row, 
-        properties.getString("building.1.abbreviation") 
-            + " " + properties.getString("room.1.roomNumber"),
-        properties.getString("positionHint.1.hintText"), 
-        properties.getString("fixture.1.ipAddress"),
-        properties.getString("asset.1.macAddress"),
-        properties.getString("asset.1.inventoryNumber"));
-  }
-
-  private void validateIsFixture2(HtmlTableRow row) throws Exception {
-    validateRowDisplay(row,  
-        properties.getString("building.1.abbreviation") 
-            + " " + properties.getString("room.2.roomNumber"),
-        properties.getString("positionHint.2.hintText"), 
-        properties.getString("fixture.2.ipAddress"),
-        properties.getString("asset.2.macAddress"),
-        properties.getString("asset.2.inventoryNumber"));
-  }
-
-  private void validateRowDisplay(HtmlTableRow row, String location, 
-      String positionHint, String ip, String mac, String inventoryTag) 
-          throws Exception {
-    int index = 0;
-    assertEquals(location, getCell(row, index++).getTextContent());
-    assertEquals(positionHint, getCell(row, index++).getTextContent());
-    assertEquals(ip, getCell(row, index++).getTextContent());
-    assertEquals(mac, getCell(row, index++).getTextContent());
-    assertEquals(inventoryTag, getCell(row, index++).getTextContent());
-
-    assertTrue(getCell(row, index).getTextContent().contains("Details"));
-  }
-  
-  /**
-   * Retrieve a cell from a row
-   * @param row The row to retrieve the cell for
-   * @param index The index of the row, 0-based
-   * @return
-   */
-  private HtmlTableCell getCell(HtmlTableRow row, int index) {
-    return (HtmlTableCell) row.getFirstByXPath("td[" + (index + 1) + "]");
   }
   
 }
