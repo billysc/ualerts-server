@@ -104,6 +104,7 @@ public class ManuallyEnrollFixtureController {
       @Valid @ModelAttribute("fixture") FixtureModel fixture,
       BindingResult bindingResult) throws Exception {
 
+    fixture.setInstalledBy("");
     Map<String, Object> responseData = new HashMap<String, Object>();
     if (bindingResult.hasErrors()) {
       responseData.put("success", false);
@@ -130,6 +131,7 @@ public class ManuallyEnrollFixtureController {
       @ModelAttribute("fixture") @Valid FixtureModel fixture,
       BindingResult result) throws Exception {
 
+    fixture.setInstalledBy("");
     if (!result.hasErrors()) {
       fixtureService.createFixture(fixture);
     }

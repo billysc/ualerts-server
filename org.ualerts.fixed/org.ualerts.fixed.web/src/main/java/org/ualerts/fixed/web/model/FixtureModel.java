@@ -24,7 +24,7 @@ import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.Room;
 
 /**
- * A Data Transfer Object representing a fixture.
+ * A model object representing a fixture.
  *
  * @author Michael Irwin
  */
