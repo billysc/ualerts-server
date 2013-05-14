@@ -5,7 +5,7 @@ $(function() {
   var fixturesTable = $("#fixturesList");
   var emptyTable = (fixturesTable.find("tbody tr").size() == 0);
   fixturesListTable = fixturesTable.dataTable({
-	aaSorting: [ [0, 'asc'], [1, 'asc'] ],
+  aaSorting: [ [0, 'asc'], [1, 'asc'] ],
     bPaginate: false,
     bInfo: false,
     aoColumns: [
@@ -18,7 +18,7 @@ $(function() {
     ]
   });
   if (emptyTable) {
-	fixturesTable.parent().hide();
+  fixturesTable.parent().hide();
   }
 });
 
@@ -30,37 +30,8 @@ function postModalDisplay_enrollFixture($modal) {
     var responseType = "json";
     var successCallback = function(data) {
       if (data.success) {
-    	var fixture = data.fixture;
-
-      $("#fixturesListEmpty").remove();
-
-    	//Add the row. Result has index value to retrieve row from dataTables
-      $("#fixturesList").parent().show();
-    	var row = $("#fixturesList").show().dataTable().fnAddData([
-    	  fixture.buildingAbbreviation + " " + fixture.room,
-    	  fixture.positionHint,
-    	  fixture.ipAddress,
-    	  fixture.macAddress,
-    	  fixture.inventoryNumber,
-    	  "<a href='#'>Details</a>"
-    	]);
-    	
-    	var $newRow = $( fixturesListTable.fnGetNodes( row[0] ) );
-    	var currentColor = $newRow.css("backgroundColor");
-    	$newRow.addClass("updated");
-    	
-    	// Scope this section so variables can't be changed
-    	with ({$row: $newRow, originalColor : currentColor}) {
-    		setTimeout(function() {
-    			$row.find("td").animate({backgroundColor: originalColor}, 1000, 
-    		      function() {
-    				// Remove the class and clear out css attributes for bgColor
-    				$row.removeClass("updated").find("td")
-    				  .css("backgroundColor", "");
-    			  }
-    			);
-    		}, 4000);
-    	}
+        var fixture = data.fixture;
+        displayFixture(fixture);
         $modal.modal('hide');
       }
       else {
@@ -76,4 +47,35 @@ function postModalDisplay_enrollFixture($modal) {
   
   $modal.find(".btn-primary").click(submitEnrollFixture);
   $modal.find("form").submit(submitEnrollFixture);
+}
+
+/**
+ * Display the provided fixture in the fixtures display
+ * @param fixture The fixture to display
+ */
+function displayFixture(fixture) {
+  $("#fixturesListEmpty").remove();
+  $("#fixturesList").parent().show();
+
+  //Add the row. Return value has index value to retrieve row from dataTables
+  var row = $("#fixturesList").show().dataTable().fnAddData([
+    fixture.buildingAbbreviation + " " + fixture.room,
+    fixture.positionHint,
+    fixture.ipAddress,
+    fixture.macAddress,
+    fixture.inventoryNumber,
+    "<a href='#'>Details</a>"
+  ]);
+  
+  // Get new row and wrap as jQuery object
+  var $newRow = $( fixturesListTable.fnGetNodes( row[0] ) );
+  var currentColor = $newRow.css("backgroundColor");
+  $newRow.addClass("updated");
+  
+  // Wait, fade out, then remove css styles and updated class
+  $newRow.find("td").delay(4000)
+    .animate({backgroundColor: currentColor}, 1000, function() {
+    	$(this).css("backgroundColor", "").parent().removeClass("updated");
+    });
+  
 }
