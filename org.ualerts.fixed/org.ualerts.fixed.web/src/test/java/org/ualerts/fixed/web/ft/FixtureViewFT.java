@@ -22,16 +22,16 @@ package org.ualerts.fixed.web.ft;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import javax.persistence.EntityManager;
-
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.ualerts.fixed.web.controller.IndexController;
+import org.ualerts.testing.jpa.EntityManagerFactoryResource;
+import org.ualerts.testing.jpa.HibernatePersistentDataResource;
+import org.ualerts.testing.jpa.PersistentDataResource;
+import org.ualerts.testing.jpa.TestResources;
 
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
@@ -51,40 +51,30 @@ import edu.vt.cns.kestrel.common.IntegrationTestRunner;
 @RunWith(IntegrationTestRunner.class)
 public class FixtureViewFT extends AbstractFunctionalTest {
 
-  private static final Logger logger = LoggerFactory.getLogger(FixtureViewFT.class);
   private static final String HTML_ID_FIXTURE_EMPTY = "fixturesListEmpty";
   private static final String HTML_ID_FIXTURE_TABLE = "fixturesList";
   
-  private static EntityManager entityManager;
+  // CHECKSTYLE:OFF
+  @ClassRule
+  public static EntityManagerFactoryResource entityManagerFactory = 
+      new EntityManagerFactoryResource("persistence-test.properties");
   
+  @Rule
+  public PersistentDataResource persistentData =
+     new HibernatePersistentDataResource(entityManagerFactory);
+  // CHECKSTYLE:ON
+  
+  private static PropertiesAccessor properties; 
+      
   /**
-   * Performs one-time setup needed to run the test
+   * Perform one-time set up tasks
    * @throws Exception
    */
   @BeforeClass
-  public static void oneTimeSetup() throws Exception {
-    entityManager = PersistenceTestSupport
-        .createEntityManagerFactory("etc/persistence-test.properties")
-        .createEntityManager();
+  public static void setUpBeforeClass() throws Exception {
+    properties = PropertiesAccessor.newInstance("persistent-data.properties");
   }
   
-  /**
-   * Performs one-time teardown
-   * @throws Exception
-   */
-  @AfterClass
-  public static void oneTimeTearDown() throws Exception {
-    if (entityManager != null && entityManager.isOpen()) {
-      DBSetupUtility.cleanDatabase(entityManager);
-      entityManager.close();
-    }
-  }
-  
-  @After
-  public void after() throws Exception {
-    DBSetupUtility.cleanDatabase(entityManager);
-  }
-
   /**
    * Validate that if there are no fixtures in the system, an appropriate
    * message is displayed
@@ -105,15 +95,13 @@ public class FixtureViewFT extends AbstractFunctionalTest {
    * @throws Exception
    */
   @Test
+  @TestResources(prefix = "sql/", 
+      before = "FixtureViewFT_before", after = "FixtureViewFT_after")
   public void testValidateFixtureDisplay() throws Exception {
-    DBSetupUtility.populateDatabase(entityManager);
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
     HtmlTable table = getFixtureTable(page);
     HtmlTableRow row = (HtmlTableRow) table.getFirstByXPath("//tbody/tr[1]");
-    validateRowDisplay(row, 
-        DBSetupUtility.BUILDING_ABBR + " " + DBSetupUtility.FIXTURE_ROOM_NUMBER,
-        DBSetupUtility.FIXTURE_POSITION_HINT, DBSetupUtility.FIXTURE_IP_ADDR, 
-        DBSetupUtility.FIXTURE_MAC_ADDR, DBSetupUtility.FIXTURE_INV_NUMBER);
+    validateIsFixture1(row);
   }
   
   /**
@@ -122,62 +110,49 @@ public class FixtureViewFT extends AbstractFunctionalTest {
    * @throws Exception
    */
   @Test
+  @TestResources(prefix = "sql/", 
+      before = "FixtureViewFT_before", after = "FixtureViewFT_after")
   public void testValidateTableSorting() throws Exception {
-    DBSetupUtility.populateDatabase(entityManager);
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
 
     HtmlTable table = getFixtureTable(page);
     HtmlTableRow row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
-    validateRowDisplay(row, 
-        DBSetupUtility.BUILDING_ABBR + " " + DBSetupUtility.FIXTURE_ROOM_NUMBER,
-        DBSetupUtility.FIXTURE_POSITION_HINT, DBSetupUtility.FIXTURE_IP_ADDR, 
-        DBSetupUtility.FIXTURE_MAC_ADDR, DBSetupUtility.FIXTURE_INV_NUMBER);
-
+    validateIsFixture1(row); 
+  
     row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[2]");
-    validateRowDisplay(row, DBSetupUtility.BUILDING_ABBR + " " 
-        + DBSetupUtility.FIXTURE2_ROOM_NUMBER,
-        DBSetupUtility.FIXTURE2_POSITION_HINT, DBSetupUtility.FIXTURE2_IP_ADDR, 
-        DBSetupUtility.FIXTURE2_MAC_ADDR, DBSetupUtility.FIXTURE2_INV_NUMBER);
+    validateIsFixture2(row);
     
     HtmlTableRow header = (HtmlTableRow) table.getFirstByXPath("thead/tr[1]");
     ((HtmlTableCell) header.getFirstByXPath("th[1]")).click();
     ((HtmlTableCell) header.getFirstByXPath("th[1]")).click();
     row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
-    validateRowDisplay(row, DBSetupUtility.BUILDING_ABBR + " " 
-        + DBSetupUtility.FIXTURE2_ROOM_NUMBER,
-        DBSetupUtility.FIXTURE2_POSITION_HINT, DBSetupUtility.FIXTURE2_IP_ADDR, 
-        DBSetupUtility.FIXTURE2_MAC_ADDR, DBSetupUtility.FIXTURE2_INV_NUMBER);
-
+    validateIsFixture2(row);
+    
     ((HtmlTableCell) header.getFirstByXPath("th[1]")).click();
     row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
-    validateRowDisplay(row, 
-        DBSetupUtility.BUILDING_ABBR + " " + DBSetupUtility.FIXTURE_ROOM_NUMBER,
-        DBSetupUtility.FIXTURE_POSITION_HINT, DBSetupUtility.FIXTURE_IP_ADDR, 
-        DBSetupUtility.FIXTURE_MAC_ADDR, DBSetupUtility.FIXTURE_INV_NUMBER);
+    validateIsFixture1(row);
   }
-  
+
   /**
    * Validate the table filtering works
    * @throws Exception
    */
   @Test
+  @TestResources(prefix = "sql/", 
+      before = "FixtureViewFT_before", after = "FixtureViewFT_after")
   public void validateTableFiltering() throws Exception {
-    DBSetupUtility.populateDatabase(entityManager);
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
     HtmlTable table = getFixtureTable(page);
     
     HtmlInput searchField = page
         .getFirstByXPath("//div[@class='dataTables_filter']/label[1]/input[1]");
-    searchField.type(DBSetupUtility.FIXTURE2_POSITION_HINT);
+    searchField.type(properties.getString("positionHint.2.hintText"));
     
     HtmlTableBody body = (HtmlTableBody) table.getFirstByXPath("tbody");
     assertEquals(1, body.getChildElementCount());
     
     HtmlTableRow row = (HtmlTableRow) table.getFirstByXPath("tbody/tr[1]");
-    validateRowDisplay(row, DBSetupUtility.BUILDING_ABBR + " " 
-        + DBSetupUtility.FIXTURE2_ROOM_NUMBER,
-        DBSetupUtility.FIXTURE2_POSITION_HINT, DBSetupUtility.FIXTURE2_IP_ADDR, 
-        DBSetupUtility.FIXTURE2_MAC_ADDR, DBSetupUtility.FIXTURE2_INV_NUMBER);
+    validateIsFixture2(row);
   }
   
   private HtmlTable getFixtureTable(HtmlPage page) {
@@ -185,6 +160,26 @@ public class FixtureViewFT extends AbstractFunctionalTest {
         .getFirstByXPath("//table[@id='" + HTML_ID_FIXTURE_TABLE + "']");
   }
   
+  private void validateIsFixture1(HtmlTableRow row) throws Exception {
+    validateRowDisplay(row, 
+        properties.getString("building.1.abbreviation") 
+            + " " + properties.getString("room.1.roomNumber"),
+        properties.getString("positionHint.1.hintText"), 
+        properties.getString("fixture.1.ipAddress"),
+        properties.getString("asset.1.macAddress"),
+        properties.getString("asset.1.inventoryNumber"));
+  }
+
+  private void validateIsFixture2(HtmlTableRow row) throws Exception {
+    validateRowDisplay(row,  
+        properties.getString("building.1.abbreviation") 
+            + " " + properties.getString("room.2.roomNumber"),
+        properties.getString("positionHint.2.hintText"), 
+        properties.getString("fixture.2.ipAddress"),
+        properties.getString("asset.2.macAddress"),
+        properties.getString("asset.2.inventoryNumber"));
+  }
+
   private void validateRowDisplay(HtmlTableRow row, String location, 
       String positionHint, String ip, String mac, String inventoryTag) 
           throws Exception {

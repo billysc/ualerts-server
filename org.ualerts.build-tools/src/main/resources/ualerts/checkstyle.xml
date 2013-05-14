@@ -76,6 +76,7 @@
     <module name="MissingSwitchDefault"/>
     <module name="RedundantThrows">
       <property name="allowUnchecked" value="true"/>
+      <property name="allowSubclasses" value="true"/>
       <property name="suppressLoadErrors" value="true"/>
     </module>
     <module name="SimplifyBooleanExpression"/>
@@ -118,7 +119,7 @@
   </module>
   <module name="SuppressionCommentFilter"/>
   <module name="SuppressWithNearbyCommentFilter">
-    <property name="commentFormat" value="SUPPRESS:(\w+)"/>
+    <property name="commentFormat" value="CHECKSTYLE:(\w+)"/>
   </module>
   <module name="SuppressionFilter">
     <property name="file" value="${checkstyle-suppressions.location}"/>
