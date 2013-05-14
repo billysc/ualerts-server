@@ -20,9 +20,6 @@ package org.ualerts.fixed.web.service;
 
 import java.util.List;
 
-import org.springframework.validation.BindException;
-import org.ualerts.fixed.service.Command;
-import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
@@ -34,14 +31,13 @@ import org.ualerts.fixed.web.model.FixtureModel;
 public interface FixtureService {
   
   /**
-   * Execute the provided command and return its newly created Fixture.
+   * Save the provided fixture into persistence
    * 
-   * @param command The command and model to be executed
-   * @throws BindException An validation errors that occur
+   * @param fixture The fixture to be created
    * @throws Exception Any other internally-caused exception
+   * @return A new model of the newly saved fixture
    */
-  FixtureModel createFixture(AddFixtureCommand command) 
-      throws BindException, Exception;
+  FixtureModel createFixture(FixtureModel fixture) throws Exception;
   
   /**
    * Retrieve all Fixtures stored in persistence

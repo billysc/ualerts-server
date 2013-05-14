@@ -47,7 +47,7 @@ import org.ualerts.fixed.web.model.FixtureModel;
 public class ServiceSupportedFixtureServiceTest {
 
   private Mockery context;
-  private AddFixtureCommand command;
+  private FixtureModel fixture;
   private CommandService commandService;
   private ServiceSupportedFixtureService service;
   
@@ -57,18 +57,18 @@ public class ServiceSupportedFixtureServiceTest {
   @Before
   public void setup() {
     context = new Mockery();
-    command = new AddFixtureCommand();
+    fixture = new FixtureModel();
     commandService = context.mock(CommandService.class);
     service = new ServiceSupportedFixtureService();
     service.setCommandService(commandService);
     
-    command.setBuildingName("A Building");
-    command.setInventoryNumber("INV-234567890");
-    command.setInetAddress(InetAddress.getByAddress("192.168.1.1"));
-    command.setMacAddress(new MacAddress("0A:12:34:0B:56:78"));
-    command.setPositionHint("TOP-RIGHT");
-    command.setRoomNumber("100");
-    command.setSerialNumber("0ABCDEF123456");
+    fixture.setBuilding("A Building");
+    fixture.setInventoryNumber("INV-234567890");
+    fixture.setIpAddressObj(InetAddress.getByAddress("192.168.1.1"));
+    fixture.setMacAddressObj(new MacAddress("0A:12:34:0B:56:78"));
+    fixture.setPositionHint("TOP-RIGHT");
+    fixture.setRoom("100");
+    fixture.setSerialNumber("0ABCDEF123456");
   }
   
   /**
@@ -82,16 +82,27 @@ public class ServiceSupportedFixtureServiceTest {
     fixtureObj.setId(new Long(0));
     fixtureObj.setVersion(new Long(1));
     
+    final AddFixtureCommand command = new AddFixtureCommand();
+    
     context.checking(new Expectations() { {
-      oneOf(commandService).invoke(with(command));
+      oneOf(commandService).newCommand(AddFixtureCommand.class);
+      will(returnValue(command));
+      oneOf(commandService).invoke(command);
       will(returnValue(fixtureObj));
     } });
     
-    FixtureModel fixture = service.createFixture(command);
+    FixtureModel returnedFixture = service.createFixture(fixture);
     
     context.assertIsSatisfied();
-    Assert.assertEquals(fixtureObj.getId(), fixture.getId());
-    Assert.assertEquals(fixtureObj.getVersion(), fixture.getVersion());
+    assertEquals(fixtureObj.getId(), returnedFixture.getId());
+    assertEquals(fixtureObj.getVersion(), returnedFixture.getVersion());
+    assertEquals(fixture.getBuilding(), command.getBuildingName());
+    assertEquals(fixture.getInventoryNumber(), command.getInventoryNumber());
+    assertEquals(fixture.getIpAddressObj(), command.getInetAddress());
+    assertEquals(fixture.getMacAddressObj(), command.getMacAddress());
+    assertEquals(fixture.getPositionHint(), command.getPositionHint());
+    assertEquals(fixture.getRoom(), command.getRoomNumber());
+    assertEquals(fixture.getSerialNumber(), command.getSerialNumber());
   }
   
   /**

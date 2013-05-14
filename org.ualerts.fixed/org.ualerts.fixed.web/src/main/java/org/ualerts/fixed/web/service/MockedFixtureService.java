@@ -49,17 +49,8 @@ public class MockedFixtureService implements FixtureService {
    * {@inheritDoc}
    */
   @Override
-  public FixtureModel createFixture(AddFixtureCommand command)
-      throws BindException, Exception {
-    FixtureModel fixture = new FixtureModel();
-    fixture.setBuilding(command.getBuildingName());
+  public FixtureModel createFixture(FixtureModel fixture) throws Exception {
     fixture.setId(lastUsedId++);
-    fixture.setInventoryNumber(command.getInventoryNumber());
-    fixture.setIpAddress(command.getInetAddress().toString());
-    fixture.setMacAddress(command.getMacAddress().toString());
-    fixture.setPositionHint(command.getPositionHint());
-    fixture.setRoom(command.getRoomNumber());
-    fixture.setSerialNumber(command.getSerialNumber());
     fixture.setVersion(1L);
     fixtures.add(fixture);
     return fixture;

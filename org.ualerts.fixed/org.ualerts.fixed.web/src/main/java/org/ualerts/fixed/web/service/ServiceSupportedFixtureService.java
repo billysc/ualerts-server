@@ -25,9 +25,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindException;
 import org.ualerts.fixed.Fixture;
-import org.ualerts.fixed.service.Command;
 import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
@@ -48,10 +46,18 @@ public class ServiceSupportedFixtureService implements FixtureService {
    * {@inheritDoc}
    */
   @Override
-  public FixtureModel createFixture(AddFixtureCommand command)
-      throws BindException, Exception {
-    Fixture fixture = commandService.invoke(command);
-    return new FixtureModel(fixture);
+  public FixtureModel createFixture(FixtureModel fixture) throws Exception {
+    AddFixtureCommand command = 
+        commandService.newCommand(AddFixtureCommand.class);
+    command.setBuildingName(fixture.getBuilding());
+    command.setInetAddress(fixture.getIpAddressObj());
+    command.setInventoryNumber(fixture.getInventoryNumber());
+    command.setMacAddress(fixture.getMacAddressObj());
+    command.setPositionHint(fixture.getPositionHint());
+    command.setRoomNumber(fixture.getRoom());
+    command.setSerialNumber(fixture.getSerialNumber());
+    Fixture newFixture = commandService.invoke(command);
+    return new FixtureModel(newFixture);
   }
   
   /**
