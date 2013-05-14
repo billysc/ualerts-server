@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
@@ -48,9 +47,9 @@ import org.ualerts.fixed.InetAddress;
 import org.ualerts.fixed.InetAddressEditor;
 import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.MacAddressEditor;
-import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.web.model.FixtureModel;
 import org.ualerts.fixed.web.service.FixtureService;
+import org.ualerts.fixed.web.validator.FixtureValidator;
 
 /**
  * Controller to handle the manual enrollment of a fixture.
@@ -74,6 +73,7 @@ public class ManuallyEnrollFixtureController {
   protected void initBinder(WebDataBinder binder) {
     binder.registerCustomEditor(InetAddress.class, new InetAddressEditor());
     binder.registerCustomEditor(MacAddress.class, new MacAddressEditor());
+    binder.addValidators(new FixtureValidator());
   }
 
   /**
