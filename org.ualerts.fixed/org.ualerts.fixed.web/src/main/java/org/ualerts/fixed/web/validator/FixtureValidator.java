@@ -68,9 +68,7 @@ public class FixtureValidator implements Validator {
 
     if (StringUtils.isNotEmpty(fixture.getIpAddress())) {
       try {
-        InetAddress address =
-            InetAddress.getByAddress(fixture.getIpAddress());
-        fixture.setIpAddressObj(address);
+        InetAddress.getByAddress(fixture.getIpAddress());
       }
       catch (Exception e) {
         errors.rejectValue("ipAddress", MSG_PREFIX + "ipAddress.notValid");
@@ -79,8 +77,7 @@ public class FixtureValidator implements Validator {
 
     if (StringUtils.isNotEmpty(fixture.getMacAddress())) {
       try {
-        MacAddress address = new MacAddress(fixture.getMacAddress());
-        fixture.setMacAddressObj(address);
+        new MacAddress(fixture.getMacAddress());
       }
       catch (Exception e) {
         errors.rejectValue("macAddress", MSG_PREFIX + "macAddress.notValid");

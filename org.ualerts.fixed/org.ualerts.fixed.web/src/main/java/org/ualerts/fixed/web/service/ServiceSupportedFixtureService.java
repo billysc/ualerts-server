@@ -26,6 +26,8 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.ualerts.fixed.Fixture;
+import org.ualerts.fixed.InetAddress;
+import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
@@ -50,9 +52,9 @@ public class ServiceSupportedFixtureService implements FixtureService {
     AddFixtureCommand command = 
         commandService.newCommand(AddFixtureCommand.class);
     command.setBuildingName(fixture.getBuilding());
-    command.setInetAddress(fixture.getIpAddressObj());
+    command.setInetAddress(InetAddress.getByAddress(fixture.getIpAddress()));
     command.setInventoryNumber(fixture.getInventoryNumber());
-    command.setMacAddress(fixture.getMacAddressObj());
+    command.setMacAddress(new MacAddress(fixture.getMacAddress()));
     command.setPositionHint(fixture.getPositionHint());
     command.setRoomNumber(fixture.getRoom());
     command.setSerialNumber(fixture.getSerialNumber());

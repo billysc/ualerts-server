@@ -64,8 +64,8 @@ public class ServiceSupportedFixtureServiceTest {
     
     fixture.setBuilding("A Building");
     fixture.setInventoryNumber("INV-234567890");
-    fixture.setIpAddressObj(InetAddress.getByAddress("192.168.1.1"));
-    fixture.setMacAddressObj(new MacAddress("0A:12:34:0B:56:78"));
+    fixture.setIpAddress("192.168.1.1");
+    fixture.setMacAddress("0A-12-34-0B-56-78");
     fixture.setPositionHint("TOP-RIGHT");
     fixture.setRoom("100");
     fixture.setSerialNumber("0ABCDEF123456");
@@ -98,8 +98,9 @@ public class ServiceSupportedFixtureServiceTest {
     assertEquals(fixtureObj.getVersion(), returnedFixture.getVersion());
     assertEquals(fixture.getBuilding(), command.getBuildingName());
     assertEquals(fixture.getInventoryNumber(), command.getInventoryNumber());
-    assertEquals(fixture.getIpAddressObj(), command.getInetAddress());
-    assertEquals(fixture.getMacAddressObj(), command.getMacAddress());
+    assertEquals(fixture.getIpAddress(), 
+        command.getInetAddress().getHostAddress());
+    assertEquals(fixture.getMacAddress(), command.getMacAddress().toString());
     assertEquals(fixture.getPositionHint(), command.getPositionHint());
     assertEquals(fixture.getRoom(), command.getRoomNumber());
     assertEquals(fixture.getSerialNumber(), command.getSerialNumber());

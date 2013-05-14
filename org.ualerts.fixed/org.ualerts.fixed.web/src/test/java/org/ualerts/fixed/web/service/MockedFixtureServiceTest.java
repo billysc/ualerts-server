@@ -26,8 +26,6 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.ualerts.fixed.InetAddress;
-import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
@@ -49,8 +47,8 @@ public class MockedFixtureServiceTest {
     fixture = new FixtureModel();
     fixture.setBuilding("Burruss Hall");
     fixture.setInventoryNumber("INV-123");
-    fixture.setIpAddressObj(InetAddress.getByAddress("123.123.123.123"));
-    fixture.setMacAddressObj(new MacAddress("0A:12:34:0B:56:78"));
+    fixture.setIpAddress("123.123.123.123");
+    fixture.setMacAddress("0A:12:34:0B:56:78");
     fixture.setPositionHint("TOP-RIGHT");
     fixture.setRoom("110");
     fixture.setSerialNumber("1234567890ABC");
