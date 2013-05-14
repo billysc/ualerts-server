@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
-import org.springframework.validation.BindException;
 import org.ualerts.fixed.Room;
 import org.ualerts.fixed.repository.RoomRepository;
 import org.ualerts.fixed.service.CommandComponent;
@@ -43,8 +42,7 @@ extends AbstractCommand<List<Room>> {
    * {@inheritDoc}
    */
   @Override
-  protected void onValidate() throws BindException,
-  UnspecifiedConstraintException {
+  protected void onValidate() throws Exception {
     super.onValidate();
     Assert.notNull(buildingId, "buildingId is required");
   }
@@ -55,14 +53,6 @@ extends AbstractCommand<List<Room>> {
   @Override
   protected List<Room> onExecute() throws UnspecifiedConstraintException {
     return roomRepository.findRoomsForBuilding(buildingId);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean errorsRequired() {
-    return false;
   }
 
   /**

@@ -46,14 +46,6 @@ extends AbstractCommand<List<PositionHint>> {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean errorsRequired() {
-    return false;
-  }
-
-  /**
    * Sets the {@code positionHintRepository} property.
    * @param positionHintRepository the position hint repository
    */
