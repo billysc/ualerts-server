@@ -9,6 +9,8 @@
     </encoder>
   </appender>
 
+  <!-- logger name="org.ualerts.testing.jpa" level="debug"/ -->
+  
   <root level="info">
     <appender-ref ref="STDOUT" />
   </root>
