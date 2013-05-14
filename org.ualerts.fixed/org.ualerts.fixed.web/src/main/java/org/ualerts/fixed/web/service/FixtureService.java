@@ -32,15 +32,6 @@ import org.ualerts.fixed.web.model.FixtureModel;
  * @author Michael Irwin
  */
 public interface FixtureService {
-
-  /**
-   * Create a command
-   * @param commandClass The class of the command to create.
-   * @return The newly created command object
-   * @throws Exception Any exception that might throw
-   */
-  @SuppressWarnings("rawtypes")
-  <T extends Command> T newCommand(Class<T> commandClass) throws Exception;
   
   /**
    * Execute the provided command and return its newly created Fixture.

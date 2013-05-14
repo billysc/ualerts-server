@@ -44,16 +44,6 @@ public class MockedFixtureService implements FixtureService {
     lastUsedId = 1L;
     fixtures = new ArrayList<FixtureModel>();
   }
-  
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  @SuppressWarnings("rawtypes")
-  public <T extends Command> T newCommand(Class<T> commandClass) 
-      throws Exception {
-    return commandClass.newInstance();
-  }
 
   /**
    * {@inheritDoc}

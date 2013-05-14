@@ -43,15 +43,6 @@ import org.ualerts.fixed.web.model.FixtureModel;
 public class ServiceSupportedFixtureService implements FixtureService {
 
   private CommandService commandService;
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  @SuppressWarnings("rawtypes")
-  public <T extends Command> T newCommand(Class<T> clazz) throws Exception {
-    return commandService.newCommand(clazz);
-  }
   
   /**
    * {@inheritDoc}
@@ -68,7 +59,8 @@ public class ServiceSupportedFixtureService implements FixtureService {
    */
   @Override
   public List<FixtureModel> retrieveAllFixtures() throws Exception {
-    FindAllFixturesCommand command = newCommand(FindAllFixturesCommand.class);
+    FindAllFixturesCommand command = 
+        commandService.newCommand(FindAllFixturesCommand.class);
     List<FixtureModel> fixtures = new ArrayList<FixtureModel>();
     for (Fixture fixture : commandService.invoke(command)) {
       fixtures.add(new FixtureModel(fixture));
