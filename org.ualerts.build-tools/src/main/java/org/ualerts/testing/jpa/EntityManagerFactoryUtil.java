@@ -83,8 +83,12 @@ public final class EntityManagerFactoryUtil {
   public static EntityManagerFactory createEntityManagerFactory(
       String propertiesResource) throws IOException, PersistenceException {
     
-    if (factoryMap.containsKey(propertiesResource))
-      return factoryMap.get(propertiesResource);
+    if (factoryMap.containsKey(propertiesResource)) {
+      EntityManagerFactory emf = factoryMap.get(propertiesResource);
+      if (emf.isOpen()) {
+        return emf;
+      }
+    }
     
     Properties properties = loadProperties(propertiesResource);
     String persistenceUnit = properties.getProperty(PERSISTENCE_UNIT_PROPERTY, 
