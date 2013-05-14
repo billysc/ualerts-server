@@ -30,41 +30,6 @@ import org.ualerts.fixed.Room;
  */
 public class FixtureModel {
   
-  /**
-   * Field reference for the building field
-   */
-  public static final String FIELD_BUILDING = "building";
-  
-  /**
-   * Field reference for the room field
-   */
-  public static final String FIELD_ROOM = "room";
-  
-  /**
-   * Field reference for the position hint
-   */
-  public static final String FIELD_POSITION_HINT = "positionHint";
-  
-  /**
-   * Field reference for the inventory number
-   */
-  public static final String FIELD_INV_NUMBER = "inventoryNumber";
-  
-  /**
-   * Field reference for the serial number
-   */
-  public static final String FIELD_SER_NUMBER = "serialNumber";
-  
-  /**
-   * Field reference for the IP Address
-   */
-  public static final String FIELD_IP_ADDRESS = "ipAddress";
-  
-  /**
-   * Field reference for the MAC Address
-   */
-  public static final String FIELD_MAC_ADDRESS = "macAddress";
-  
   private Long id;
   private Long version;
   private String building;
@@ -77,6 +42,7 @@ public class FixtureModel {
   private InetAddress ipAddressObj;
   private String macAddress;
   private MacAddress macAddressObj;
+  private String installedBy;
   
   /**
    * Create a new, empty instance.
@@ -300,6 +266,22 @@ public class FixtureModel {
    */
   public void setMacAddressObj(MacAddress macAddressObj) {
     this.macAddressObj = macAddressObj;
+  }
+  
+  /**
+   * Gets the {@code installedBy} property.
+   * @return property value
+   */
+  public String getInstalledBy() {
+    return installedBy;
+  }
+  
+  /**
+   * Sets the {@code installedBy} property.
+   * @param installedBy the value to set
+   */
+  public void setInstalledBy(String installedBy) {
+    this.installedBy = installedBy;
   }
   
 }
