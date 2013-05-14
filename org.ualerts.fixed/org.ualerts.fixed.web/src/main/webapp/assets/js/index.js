@@ -42,7 +42,8 @@ function postModalDisplay_enrollFixture($modal) {
     var errorCallback = function() {
       alert("Something happened");
     };
-    submitForm($form, url, requestType, responseType, successCallback, errorCallback)
+    submitForm($form, url, requestType, responseType, successCallback, 
+        errorCallback);
   };
   
   $modal.find(".btn-primary").click(submitEnrollFixture);
