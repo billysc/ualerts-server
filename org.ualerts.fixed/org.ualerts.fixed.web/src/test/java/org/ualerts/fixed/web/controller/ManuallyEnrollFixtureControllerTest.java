@@ -69,11 +69,11 @@ public class ManuallyEnrollFixtureControllerTest {
   @Test
   public void validateFormDisplayedUsingGet() {
     final Model model = context.mock(Model.class);
-    final AddFixtureCommand command = new AddFixtureCommand();
     context.checking(new Expectations() { { 
-      oneOf(model).addAttribute(with("fixture"), with(command));
+      oneOf(model).addAttribute(with("fixture"), with(any(FixtureModel.class)));
     } });
-    String view = controller.displayForm(command, model);
+    String view = controller.displayForm(model);
+    context.assertIsSatisfied();
     Assert.assertEquals("enrollment/manualForm", view);
   }
   
@@ -83,14 +83,16 @@ public class ManuallyEnrollFixtureControllerTest {
    */
   @Test
   public void validatePostHandlerGeneratingHTML() throws Exception {
-    final AddFixtureCommand command = new AddFixtureCommand();
+    final FixtureModel fixture = new FixtureModel();
     final BindingResult result = context.mock(BindingResult.class);
     
     context.checking(new Expectations() { { 
-      oneOf(fixtureService).createFixture(command);
+      oneOf(result).hasErrors();
+      will(returnValue(false));
+      oneOf(fixtureService).createFixture(fixture);
     } });
     
-    String view = controller.handleFormSubmission(command, result);
+    String view = controller.handleFormSubmission(fixture, result);
     context.assertIsSatisfied();
     Assert.assertEquals("enrollment/manualForm", view);
   }
@@ -102,26 +104,29 @@ public class ManuallyEnrollFixtureControllerTest {
   public void validateGoodSubmission() throws Exception {
     final HttpServletRequest request = context.mock(HttpServletRequest.class);
     final HttpServletResponse resp = context.mock(HttpServletResponse.class);
-    final AddFixtureCommand command = new AddFixtureCommand();
-    final BindingResult result = context.mock(BindingResult.class);
     final FixtureModel fixture = new FixtureModel();
+    final FixtureModel returningFixture = new FixtureModel();
+    final BindingResult result = context.mock(BindingResult.class);
     
     fixture.setId(1L);
+    returningFixture.setId(2L);
     
     context.checking(new Expectations() { { 
-      oneOf(fixtureService).createFixture(command);
-      will(returnValue(fixture));
+      oneOf(result).hasErrors();
+      will(returnValue(false));
+      oneOf(fixtureService).createFixture(fixture);
+      will(returnValue(returningFixture));
     } });
     
     Map<String, Object> response = controller.handleFormSubmission(request, 
-        resp, command, result);
+        resp, fixture, result);
     
     context.assertIsSatisfied();
     Assert.assertNotNull(response);
     Assert.assertTrue((Boolean) response.get("success"));
     Assert.assertNotNull(response.get("fixture"));
     Assert.assertEquals(FixtureModel.class, response.get("fixture").getClass());
-    Assert.assertEquals(fixture, response.get("fixture"));
+    Assert.assertEquals(returningFixture, response.get("fixture"));
   }
   
   /**
@@ -133,13 +138,12 @@ public class ManuallyEnrollFixtureControllerTest {
   public void validateErrorHandling() throws Exception  {
     final HttpServletRequest request = context.mock(HttpServletRequest.class);
     final HttpServletResponse resp = context.mock(HttpServletResponse.class);
-    final AddFixtureCommand command = new AddFixtureCommand();
+    final FixtureModel fixture = new FixtureModel();
     final BindingResult result = context.mock(BindingResult.class);
-    final BindException exception = new BindException("", "exception");
     
     context.checking(new Expectations() { { 
-      oneOf(fixtureService).createFixture(command);
-      will(throwException(exception));
+      oneOf(result).hasErrors();
+      will(returnValue(true));
       
       oneOf(result).hasErrors();        
       will(returnValue(true));
@@ -155,7 +159,7 @@ public class ManuallyEnrollFixtureControllerTest {
     } });
     
     Map<String, Object> response = controller.handleFormSubmission(request, 
-        resp, command, result);
+        resp, fixture, result);
     context.assertIsSatisfied();
     Assert.assertNotNull(response);
     Assert.assertFalse((Boolean) response.get("success"));
