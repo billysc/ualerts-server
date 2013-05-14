@@ -70,13 +70,13 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   private static final String INVALID_MAC_ADDRESS = "NOT_A_VALID_MAC_ADDRESS";
   
   // CHECKSTYLE:OFF
-  @ClassRule
-  public static EntityManagerFactoryResource entityManagerFactory =
-      new EntityManagerFactoryResource("persistence-test.properties");
-  
-  @Rule
-  public PersistentDataResource persistentData = 
-      new HibernatePersistentDataResource(entityManagerFactory);  
+   @ClassRule
+   public static EntityManagerFactoryResource entityManagerFactory =
+       new EntityManagerFactoryResource("persistence-test.properties");
+ 
+   @Rule
+   public PersistentDataResource persistentData = 
+       new HibernatePersistentDataResource(entityManagerFactory);  
   // CHECKSTYLE:ON
   
   private static PropertiesAccessor properties;
