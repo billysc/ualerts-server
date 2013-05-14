@@ -24,18 +24,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * A utility for obtaining the context URL for a web application under test.
  *
  * @author Carl Harris
  */
-public class WebContextUtil {
+public final class WebContextUtil {
 
   private static final String RESOURCE_NAME = "etc/web-context.properties";
 
-  private static final String contextUrl;
+  private static final String contextUrl;   // CHECKSTYLE:idiomatic
 
-  private static final String contextPath;
+  private static final String contextPath;  // CHECKSTYLE:idiomatic
+  
+  private WebContextUtil() {
+  }
   
   /**
    * Gets the context URL for the web application under test.
@@ -47,6 +52,7 @@ public class WebContextUtil {
   
   /**
    * Gets the {@code contextPath} property.
+   * @return context path
    */
   public static String getContextPath() {
     return contextPath;
@@ -84,12 +90,7 @@ public class WebContextUtil {
       return properties;
     }
     finally {
-      try {
-        inputStream.close();
-      }
-      catch (IOException ex) {
-        // oh, well
-      }
+      IOUtils.closeQuietly(inputStream);
     }
   }
   
