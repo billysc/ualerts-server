@@ -2,7 +2,9 @@ var fixturesListTable;
 
 
 $(function() {
-  fixturesListTable = $("#fixturesList").dataTable({
+  var fixturesTable = $("#fixturesList");
+  var emptyTable = (fixturesTable.find("tbody tr").size() == 0);
+  fixturesListTable = fixturesTable.dataTable({
 	aaSorting: [ [0, 'asc'], [1, 'asc'] ],
     bPaginate: false,
     bInfo: false,
@@ -15,6 +17,9 @@ $(function() {
       { bSortable: false }
     ]
   });
+  if (emptyTable) {
+	fixturesTable.parent().hide();
+  }
 });
 
 function postModalDisplay_enrollFixture($modal) {
@@ -30,6 +35,7 @@ function postModalDisplay_enrollFixture($modal) {
       $("#fixturesListEmpty").remove();
 
     	//Add the row. Result has index value to retrieve row from dataTables
+      $("#fixturesList").parent().show();
     	var row = $("#fixturesList").show().dataTable().fnAddData([
     	  fixture.buildingAbbreviation + " " + fixture.room,
     	  fixture.positionHint,
