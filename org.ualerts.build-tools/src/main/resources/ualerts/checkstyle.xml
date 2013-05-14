@@ -5,14 +5,14 @@
     This configuration file was written by the eclipse-cs plugin configuration editor
 -->
 <!--
-    Checkstyle-Configuration: Alerts Checks
-    Description: 
-Locally modified modified version of Sun Checks that better matches the default code formatter setting of Eclipse and relaxes some rules.
+    Checkstyle-Configuration: UAlerts Style
+    Description: none
 -->
 <module name="Checker">
   <property name="severity" value="warning"/>
   <module name="TreeWalker">
     <property name="tabWidth" value="4"/>
+    <module name="FileContentsHolder"/>
     <module name="JavadocMethod">
       <property name="scope" value="package"/>
       <property name="allowMissingThrowsTags" value="true"/>
@@ -115,5 +115,12 @@ Locally modified modified version of Sun Checks that better matches the default 
     <property name="format" value="\s+$"/>
     <property name="message" value="Line has trailing spaces."/>
     <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+  </module>
+  <module name="SuppressionCommentFilter"/>
+  <module name="SuppressWithNearbyCommentFilter">
+    <property name="commentFormat" value="SUPPRESS:(\w+)"/>
+  </module>
+  <module name="SuppressionFilter">
+    <property name="file" value="${checkstyle-suppressions.location}"/>
   </module>
 </module>
