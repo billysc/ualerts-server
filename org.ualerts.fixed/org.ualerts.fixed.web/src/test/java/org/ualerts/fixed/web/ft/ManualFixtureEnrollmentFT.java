@@ -19,6 +19,7 @@
 
 package org.ualerts.fixed.web.ft;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -38,6 +39,9 @@ import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlTable;
+import com.gargoylesoftware.htmlunit.html.HtmlTableCell;
+import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 
 import edu.vt.cns.kestrel.common.IntegrationTestRunner;
 
@@ -60,7 +64,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   private static final String HTML_ID_SERIAL_NUMBER = "serialNumberContainer";
   private static final String VALID_BUILDING = DBSetupUtility.BUILDING_NAME;
   private static final String VALID_INVENTORY_NUMBER = "INV-12345";
-  private static final String VALID_MAC_ADDRESS = "0A:12:34:0B:56:78";
+  private static final String VALID_MAC_ADDRESS = "0A-12-34-0B-56-78";
   private static final String VALID_POSITION_HINT = "TOP-RIGHT";
   private static final String VALID_ROOM_NUMBER = "123";
   private static final String VALID_SERIAL_NUMBER = "SER-12345";
@@ -177,6 +181,25 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     submitValidForm(page);
     assertNoErrors(page);
     assertFalse(getModalBody(page).isDisplayed());
+    
+    HtmlTableRow row = page
+        .getFirstByXPath("//table[@id='fixturesList']/tbody/tr[1]");
+
+    int index = 0;
+    assertEquals(DBSetupUtility.BUILDING_ABBR + " " 
+        + DBSetupUtility.FIXTURE_ROOM_NUMBER, getCellContents(row, index++));
+    assertEquals(DBSetupUtility.FIXTURE_POSITION_HINT, 
+        getCellContents(row, index++));
+    assertEquals(DBSetupUtility.FIXTURE_IP_ADDR, getCellContents(row, index++));
+    assertEquals(DBSetupUtility.FIXTURE_MAC_ADDR, 
+        getCellContents(row, index++));
+    assertEquals(DBSetupUtility.FIXTURE_INV_NUMBER, 
+        getCellContents(row, index++)); 
+  }
+  
+  private String getCellContents(HtmlTableRow row, int index) {
+    return ((HtmlTableCell) row.getFirstByXPath("td[" + (index + 1) + "]"))
+        .getTextContent();
   }
   
   /**
