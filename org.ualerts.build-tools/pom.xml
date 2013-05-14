@@ -10,4 +10,19 @@
   <packaging>jar</packaging>
   <name>UAlerts Build Tools</name>
   <description>Tools and configuration used during the UAlerts build.</description>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>    
+  </dependencies>
 </project>
