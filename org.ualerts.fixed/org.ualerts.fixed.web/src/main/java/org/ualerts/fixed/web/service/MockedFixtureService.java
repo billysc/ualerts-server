@@ -25,7 +25,7 @@ import java.util.List;
 import org.springframework.validation.BindException;
 import org.ualerts.fixed.service.Command;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
-import org.ualerts.fixed.web.dto.FixtureDTO;
+import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
  * A mocked implementation of the {@link FixtureService} interface.
@@ -35,14 +35,14 @@ import org.ualerts.fixed.web.dto.FixtureDTO;
 public class MockedFixtureService implements FixtureService {
 
   private Long lastUsedId;
-  private List<FixtureDTO> fixtures;
+  private List<FixtureModel> fixtures;
   
   /**
    * Constructs a new instance of the mocked service.
    */
   public MockedFixtureService() {
     lastUsedId = 1L;
-    fixtures = new ArrayList<FixtureDTO>();
+    fixtures = new ArrayList<FixtureModel>();
   }
   
   /**
@@ -59,9 +59,9 @@ public class MockedFixtureService implements FixtureService {
    * {@inheritDoc}
    */
   @Override
-  public FixtureDTO createFixture(AddFixtureCommand command)
+  public FixtureModel createFixture(AddFixtureCommand command)
       throws BindException, Exception {
-    FixtureDTO fixture = new FixtureDTO();
+    FixtureModel fixture = new FixtureModel();
     fixture.setBuilding(command.getBuildingName());
     fixture.setId(lastUsedId++);
     fixture.setInventoryNumber(command.getInventoryNumber());
@@ -79,7 +79,7 @@ public class MockedFixtureService implements FixtureService {
    * {@inheritDoc}
    */
   @Override
-  public List<FixtureDTO> retrieveAllFixtures() throws Exception {
+  public List<FixtureModel> retrieveAllFixtures() throws Exception {
     return fixtures;
   }
   

@@ -27,7 +27,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.Errors;
-import org.ualerts.fixed.web.dto.FixtureDTO;
+import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
  * Test case of the {@link FixtureValidator} class.
@@ -39,7 +39,7 @@ public class FixtureValidatorTest {
   private Mockery context;
   private Errors errors;
   private FixtureValidator validator;
-  private FixtureDTO fixture;
+  private FixtureModel fixture;
   
   /**
    * Setup for each test
@@ -50,7 +50,7 @@ public class FixtureValidatorTest {
     errors = context.mock(Errors.class);
     
     validator = new FixtureValidator();
-    fixture = new FixtureDTO();
+    fixture = new FixtureModel();
   }
   
   /**
@@ -58,7 +58,7 @@ public class FixtureValidatorTest {
    */
   @Test
   public void supportsFixtureDtoObject() {
-    Assert.assertTrue(validator.supports(FixtureDTO.class));
+    Assert.assertTrue(validator.supports(FixtureModel.class));
   }
   
   /**

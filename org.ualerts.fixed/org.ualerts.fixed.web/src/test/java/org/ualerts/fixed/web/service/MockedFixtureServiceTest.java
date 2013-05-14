@@ -30,7 +30,7 @@ import org.junit.Test;
 import org.ualerts.fixed.InetAddress;
 import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
-import org.ualerts.fixed.web.dto.FixtureDTO;
+import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
  * Test case for the {@link MockedFixtureService} class.
@@ -63,7 +63,7 @@ public class MockedFixtureServiceTest {
    */
   @Test
   public void testCreateFixture() throws Exception {
-    FixtureDTO fixture = service.createFixture(command);
+    FixtureModel fixture = service.createFixture(command);
     assertNotNull(fixture.getId());
     assertNotNull(fixture.getVersion());
   }
@@ -74,7 +74,7 @@ public class MockedFixtureServiceTest {
    */
   @Test
   public void testRetrieveAllFixtures() throws Exception {
-    List<FixtureDTO> fixtures = service.retrieveAllFixtures();
+    List<FixtureModel> fixtures = service.retrieveAllFixtures();
     assertNotNull(fixtures);
     assertEquals(0, fixtures.size());
     

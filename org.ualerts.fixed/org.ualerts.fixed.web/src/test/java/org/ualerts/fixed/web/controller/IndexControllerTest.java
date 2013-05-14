@@ -31,7 +31,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.ualerts.fixed.web.dto.FixtureDTO;
+import org.ualerts.fixed.web.model.FixtureModel;
 import org.ualerts.fixed.web.service.FixtureService;
 
 /**
@@ -64,7 +64,7 @@ public class IndexControllerTest {
    */
   @Test
   public void validateIndexPage() throws Exception {
-    final List<FixtureDTO> fixtures = new ArrayList<FixtureDTO>();
+    final List<FixtureModel> fixtures = new ArrayList<FixtureModel>();
     context.checking(new Expectations() { { 
       oneOf(fixtureService).retrieveAllFixtures();
       will(returnValue(fixtures));

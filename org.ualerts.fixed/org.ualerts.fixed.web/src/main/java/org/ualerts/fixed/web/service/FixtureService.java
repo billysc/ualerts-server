@@ -23,7 +23,7 @@ import java.util.List;
 import org.springframework.validation.BindException;
 import org.ualerts.fixed.service.Command;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
-import org.ualerts.fixed.web.dto.FixtureDTO;
+import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
  * A service object that helps in the standard create, update, retrieve, and
@@ -49,7 +49,7 @@ public interface FixtureService {
    * @throws BindException An validation errors that occur
    * @throws Exception Any other internally-caused exception
    */
-  FixtureDTO createFixture(AddFixtureCommand command) 
+  FixtureModel createFixture(AddFixtureCommand command) 
       throws BindException, Exception;
   
   /**
@@ -57,6 +57,6 @@ public interface FixtureService {
    * @return A list of all Fixtures stored in persistence
    * @throws Exception
    */
-  List<FixtureDTO> retrieveAllFixtures() throws Exception;
+  List<FixtureModel> retrieveAllFixtures() throws Exception;
   
 }

@@ -37,7 +37,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
-import org.ualerts.fixed.web.dto.FixtureDTO;
+import org.ualerts.fixed.web.model.FixtureModel;
 import org.ualerts.fixed.web.service.FixtureService;
 
 /**
@@ -104,7 +104,7 @@ public class ManuallyEnrollFixtureControllerTest {
     final HttpServletResponse resp = context.mock(HttpServletResponse.class);
     final AddFixtureCommand command = new AddFixtureCommand();
     final BindingResult result = context.mock(BindingResult.class);
-    final FixtureDTO fixture = new FixtureDTO();
+    final FixtureModel fixture = new FixtureModel();
     
     fixture.setId(1L);
     
@@ -120,7 +120,7 @@ public class ManuallyEnrollFixtureControllerTest {
     Assert.assertNotNull(response);
     Assert.assertTrue((Boolean) response.get("success"));
     Assert.assertNotNull(response.get("fixture"));
-    Assert.assertEquals(FixtureDTO.class, response.get("fixture").getClass());
+    Assert.assertEquals(FixtureModel.class, response.get("fixture").getClass());
     Assert.assertEquals(fixture, response.get("fixture"));
   }
   

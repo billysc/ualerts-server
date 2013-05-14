@@ -25,7 +25,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.ualerts.fixed.InetAddress;
 import org.ualerts.fixed.MacAddress;
-import org.ualerts.fixed.web.dto.FixtureDTO;
+import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
  * A Validator to be used to validate FixtureDTO objects.
@@ -45,7 +45,7 @@ public class FixtureValidator implements Validator {
    */
   @Override
   public boolean supports(Class<?> clazz) {
-    return FixtureDTO.class.equals(clazz);
+    return FixtureModel.class.equals(clazz);
   }
 
   /**
@@ -53,7 +53,7 @@ public class FixtureValidator implements Validator {
    */
   @Override
   public void validate(Object obj, Errors errors) {
-    FixtureDTO fixture = (FixtureDTO) obj;
+    FixtureModel fixture = (FixtureModel) obj;
 
     rejectIfEmpty(fixture.getBuilding(), errors, "building", "building.empty");
     rejectIfEmpty(fixture.getRoom(), errors, "room", "room.empty");

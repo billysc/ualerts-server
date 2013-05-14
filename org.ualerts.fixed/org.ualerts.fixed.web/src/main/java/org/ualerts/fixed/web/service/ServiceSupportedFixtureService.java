@@ -31,7 +31,7 @@ import org.ualerts.fixed.service.Command;
 import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
-import org.ualerts.fixed.web.dto.FixtureDTO;
+import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
  * An implementation of the {@link FixtureService} class that uses commands from
@@ -57,21 +57,21 @@ public class ServiceSupportedFixtureService implements FixtureService {
    * {@inheritDoc}
    */
   @Override
-  public FixtureDTO createFixture(AddFixtureCommand command)
+  public FixtureModel createFixture(AddFixtureCommand command)
       throws BindException, Exception {
     Fixture fixture = commandService.invoke(command);
-    return new FixtureDTO(fixture);
+    return new FixtureModel(fixture);
   }
   
   /**
    * {@inheritDoc}
    */
   @Override
-  public List<FixtureDTO> retrieveAllFixtures() throws Exception {
+  public List<FixtureModel> retrieveAllFixtures() throws Exception {
     FindAllFixturesCommand command = newCommand(FindAllFixturesCommand.class);
-    List<FixtureDTO> fixtures = new ArrayList<FixtureDTO>();
+    List<FixtureModel> fixtures = new ArrayList<FixtureModel>();
     for (Fixture fixture : commandService.invoke(command)) {
-      fixtures.add(new FixtureDTO(fixture));
+      fixtures.add(new FixtureModel(fixture));
     }
     return fixtures;
   }

@@ -36,7 +36,7 @@ import java.util.Map;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.ualerts.fixed.web.dto.FixtureDTO;
+import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
  * A configuration object to perform various beans.
@@ -54,17 +54,17 @@ public class SpringConfiguration {
   @Bean
   public Map<String, String> errorFieldMapping() {
     Map<String, String> map = new HashMap<String, String>();
-    map.put(INVENTORY_NUMBER_CONFLICT, FixtureDTO.FIELD_INV_NUMBER);
-    map.put(MAC_ADDRESS_CONFLICT, FixtureDTO.FIELD_MAC_ADDRESS);
-    map.put(MISSING_BUILDING_FIELD, FixtureDTO.FIELD_BUILDING);
-    map.put(MISSING_INET_ADDRESS_FIELD, FixtureDTO.FIELD_IP_ADDRESS);
-    map.put(MISSING_INVENTORY_NUMBER_FIELD, FixtureDTO.FIELD_INV_NUMBER);
-    map.put(MISSING_MAC_ADDRESS_FIELD, FixtureDTO.FIELD_MAC_ADDRESS);
-    map.put(MISSING_POSITION_HINT_FIELD, FixtureDTO.FIELD_POSITION_HINT);
-    map.put(MISSING_ROOM_FIELD, FixtureDTO.FIELD_ROOM);
-    map.put(MISSING_SERIAL_NUMBER_FIELD, FixtureDTO.FIELD_SER_NUMBER);
-    map.put(SERIAL_NUMBER_CONFLICT, FixtureDTO.FIELD_SER_NUMBER);
-    map.put(UNKNOWN_BUILDING, FixtureDTO.FIELD_BUILDING);
+    map.put(INVENTORY_NUMBER_CONFLICT, FixtureModel.FIELD_INV_NUMBER);
+    map.put(MAC_ADDRESS_CONFLICT, FixtureModel.FIELD_MAC_ADDRESS);
+    map.put(MISSING_BUILDING_FIELD, FixtureModel.FIELD_BUILDING);
+    map.put(MISSING_INET_ADDRESS_FIELD, FixtureModel.FIELD_IP_ADDRESS);
+    map.put(MISSING_INVENTORY_NUMBER_FIELD, FixtureModel.FIELD_INV_NUMBER);
+    map.put(MISSING_MAC_ADDRESS_FIELD, FixtureModel.FIELD_MAC_ADDRESS);
+    map.put(MISSING_POSITION_HINT_FIELD, FixtureModel.FIELD_POSITION_HINT);
+    map.put(MISSING_ROOM_FIELD, FixtureModel.FIELD_ROOM);
+    map.put(MISSING_SERIAL_NUMBER_FIELD, FixtureModel.FIELD_SER_NUMBER);
+    map.put(SERIAL_NUMBER_CONFLICT, FixtureModel.FIELD_SER_NUMBER);
+    map.put(UNKNOWN_BUILDING, FixtureModel.FIELD_BUILDING);
     return map;
   }
 

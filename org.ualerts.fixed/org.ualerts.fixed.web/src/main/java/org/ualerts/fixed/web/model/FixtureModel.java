@@ -16,7 +16,7 @@
  * limitations under the License.
  *
  */
-package org.ualerts.fixed.web.dto;
+package org.ualerts.fixed.web.model;
 
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.InetAddress;
@@ -28,7 +28,7 @@ import org.ualerts.fixed.Room;
  *
  * @author Michael Irwin
  */
-public class FixtureDTO {
+public class FixtureModel {
   
   /**
    * Field reference for the building field
@@ -81,7 +81,7 @@ public class FixtureDTO {
   /**
    * Create a new, empty instance.
    */
-  public FixtureDTO() {
+  public FixtureModel() {
     
   }
   
@@ -89,7 +89,7 @@ public class FixtureDTO {
    * Create a new instance, based on a Fixture object.
    * @param fixture The object to base construction from.
    */
-  public FixtureDTO(Fixture fixture) {
+  public FixtureModel(Fixture fixture) {
     if (fixture.getRoom() != null) {
       Room room = fixture.getRoom();
       this.building = room.getBuilding().getName();

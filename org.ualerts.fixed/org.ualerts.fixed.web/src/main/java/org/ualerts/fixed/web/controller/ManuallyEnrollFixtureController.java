@@ -49,7 +49,7 @@ import org.ualerts.fixed.InetAddressEditor;
 import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.MacAddressEditor;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
-import org.ualerts.fixed.web.dto.FixtureDTO;
+import org.ualerts.fixed.web.model.FixtureModel;
 import org.ualerts.fixed.web.service.FixtureService;
 
 /**
@@ -121,7 +121,7 @@ public class ManuallyEnrollFixtureController {
     command.setErrors(new BindException(bindingResult));
 
     try {
-      FixtureDTO dto = fixtureService.createFixture(command);
+      FixtureModel dto = fixtureService.createFixture(command);
       responseData.put("fixture", dto);
       responseData.put("success", true);
     }
