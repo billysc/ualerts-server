@@ -44,14 +44,6 @@ public class FindAllBuildingsCommand extends AbstractCommand<List<Building>> {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean errorsRequired() {
-    return false;
-  }
-
-  /**
    * Sets the {@code buildingRepository} property.
    * @param buildingRepository the building repository
    */

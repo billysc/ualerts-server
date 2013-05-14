@@ -20,10 +20,8 @@ package org.ualerts.fixed.service.commands;
 
 import javax.persistence.PersistenceException;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
-import org.springframework.validation.BindException;
 import org.ualerts.fixed.Building;
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.InetAddress;
@@ -36,7 +34,6 @@ import org.ualerts.fixed.repository.PositionHintRepository;
 import org.ualerts.fixed.repository.RoomRepository;
 import org.ualerts.fixed.service.CommandComponent;
 import org.ualerts.fixed.service.DateTimeService;
-import org.ualerts.fixed.service.errors.ErrorCodes;
 import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
 
 /**
@@ -63,69 +60,13 @@ public class UpdateFixtureCommand extends AbstractCommand<Fixture> {
    * {@inheritDoc}
    */
   @Override
-  protected void onValidate() throws BindException,
-      UnspecifiedConstraintException {
+  protected void onValidate() throws Exception {
     super.onValidate();
-    // TODO - Validation is ripe for refactoring, as it has a ton in common
-    // with validation rules in AddFixtureCommand.
     Assert.notNull(id, "id is required");
-    try {
-      validateInetAddress(getErrors());
-      validateLocation(getErrors());
-    }
-    catch (PersistenceException ex) {
-      throw new UnspecifiedConstraintException(ex);
-    }
-    if (getErrors().hasErrors()) {
-      throw getErrors();
-    }
-  }
-  
-  private void validateInetAddress(BindException errors) {
-    if (getInetAddress() == null) {
-      errors.rejectValue("inetAddress",
-          ErrorCodes.MISSING_INET_ADDRESS_FIELD);
-    }
-  }
-  
-  private void validateLocation(BindException errors) {
-    Building building = null;
-    boolean locationComplete = true;
-    if (StringUtils.isBlank(getRoomNumber())) {
-      errors.rejectValue("roomNumber",
-          ErrorCodes.MISSING_ROOM_FIELD);
-      locationComplete = false;
-    }
-    if (StringUtils.isBlank(getBuildingName())) {
-      errors.rejectValue("buildingName",
-          ErrorCodes.MISSING_BUILDING_FIELD);
-      locationComplete = false;
-    }
-    else {
-      building = buildingRepository.findBuildingByName(getBuildingName());
-      if (building == null) {
-        errors.rejectValue("buildingName",
-            ErrorCodes.UNKNOWN_BUILDING);
-        locationComplete = false;
-      }
-    }
-    if (StringUtils.isBlank(getPositionHint())) {
-      errors.rejectValue("positionHint",
-          ErrorCodes.MISSING_POSITION_HINT_FIELD);
-      locationComplete = false;
-    }
-    if (locationComplete) {
-      Room room = roomRepository.findRoom(building.getId(), getRoomNumber());
-      PositionHint hint = positionHintRepository.findHint(getPositionHint());
-      if ((room != null) && (hint != null)) {
-        Fixture fixture =
-            fixtureRepository.findFixtureByLocation(room.getId(),
-                hint.getId());
-        if ((fixture != null) && (fixture.getId() != getId())) {
-          errors.reject(ErrorCodes.LOCATION_CONFLICT);
-        }
-      }
-    }
+    Assert.hasLength(roomNumber, "roomNumber is required");
+    Assert.hasLength(buildingName, "buildingName is required");
+    Assert.hasLength(positionHint, "positionHint is required");
+    Assert.notNull(inetAddress);
   }
   
   /**
