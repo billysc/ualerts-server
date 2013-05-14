@@ -17,6 +17,25 @@
   <build>
     <plugins>
       <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <configuration>
+          <target>
+            <replace dir="${basedir}/target/test-classes" 
+                includes="**/*.sql"
+                replacefilterfile="${basedir}/target/test-classes/persistent-data.properties"/>
+          </target>
+        </configuration>
+        <executions>
+          <execution>
+            <id>run-anttask</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <artifactId>maven-failsafe-plugin</artifactId>
         <configuration>
           <includes>
@@ -115,6 +134,37 @@
         <filtering>true</filtering>
       </testResource>
     </testResources>
+    <pluginManagement>
+      <plugins>
+        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <versionRange>[1.7,)</versionRange>
+                    <goals>
+                      <goal>run</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute>
+                      <runOnIncremental>true</runOnIncremental>
+                    </execute>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
   
   <dependencies>
