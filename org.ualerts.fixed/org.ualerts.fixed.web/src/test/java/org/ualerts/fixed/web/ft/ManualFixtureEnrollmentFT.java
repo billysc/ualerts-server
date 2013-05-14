@@ -19,28 +19,26 @@
 
 package org.ualerts.fixed.web.ft;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import javax.persistence.EntityManager;
-
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ualerts.fixed.web.controller.IndexController;
+import org.ualerts.testing.jpa.EntityManagerFactoryResource;
+import org.ualerts.testing.jpa.HibernatePersistentDataResource;
+import org.ualerts.testing.jpa.PersistentDataResource;
+import org.ualerts.testing.jpa.TestResources;
 
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlTable;
-import com.gargoylesoftware.htmlunit.html.HtmlTableCell;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 
 import edu.vt.cns.kestrel.common.IntegrationTestRunner;
@@ -62,53 +60,37 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   private static final String HTML_ID_POSITION_HINT = "positionHintContainer";
   private static final String HTML_ID_ROOM_NUMBER = "roomContainer";
   private static final String HTML_ID_SERIAL_NUMBER = "serialNumberContainer";
-  private static final String VALID_BUILDING = DBSetupUtility.BUILDING_NAME;
   private static final String VALID_INVENTORY_NUMBER = "INV-12345";
+  private static final String VALID_IP_ADDRESS = "192.168.1.1";
   private static final String VALID_MAC_ADDRESS = "0A-12-34-0B-56-78";
   private static final String VALID_POSITION_HINT = "TOP-RIGHT";
   private static final String VALID_ROOM_NUMBER = "123";
   private static final String VALID_SERIAL_NUMBER = "SER-12345";
+  private static final String INVALID_IP_ADDRESS = "260.0.0.0";
+  private static final String INVALID_MAC_ADDRESS = "NOT_A_VALID_MAC_ADDRESS";
   
-  private static EntityManager entityManager;
+  // CHECKSTYLE:OFF
+  @ClassRule
+  public static EntityManagerFactoryResource entityManagerFactory =
+      new EntityManagerFactoryResource("persistence-test.properties");
+  
+  @Rule
+  public PersistentDataResource persistentData = 
+      new HibernatePersistentDataResource(entityManagerFactory);  
+  // CHECKSTYLE:ON
+  
+  private static PropertiesAccessor properties;
+  private static FixtureViewValidator validator;
+  
 
   /**
-   * One time setup that sets the EntityManager to be used
+   * Performs one-time setup.
    * @throws Exception
    */
   @BeforeClass
-  public static void oneTimeSetup() throws Exception {
-    entityManager = PersistenceTestSupport
-        .createEntityManagerFactory("etc/persistence-test.properties")
-        .createEntityManager();
-  }
-  
-  /**
-   * One-time teardown that clears out the EntityManager
-   * @throws Exception
-   */
-  @AfterClass
-  public static void oneTimeTearDown() throws Exception {
-    if (entityManager != null && entityManager.isOpen()) {
-      entityManager.close();
-    }
-  }
-  
-  /**
-   * Setup a transaction and populate the database for testing
-   * @throws Exception
-   */
-  @Before
-  public void setUp() throws Exception {
-    DBSetupUtility.populateBuildings(entityManager);
-  }
-  
-  /**
-   * Rollback any changes that were performed
-   * @throws Exception
-   */
-  @After
-  public void tearDown() throws Exception {
-    DBSetupUtility.cleanDatabase(entityManager);
+  public static void setUpBeforeClass() throws Exception {
+    properties = PropertiesAccessor.newInstance("persistent-data.properties");
+    validator = new FixtureViewValidator(properties);
   }
   
   /**
@@ -151,8 +133,8 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   public void testValidateInvalidIpAndMacAddresses() throws Exception {
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
     openEnrollFixtureDialog(page);
-    populateField(page, HTML_ID_IP_ADDRESS, "260.0.0.0");
-    populateField(page, HTML_ID_MAC_ADDRESS, "invalidMacAddress");
+    populateField(page, HTML_ID_IP_ADDRESS, INVALID_IP_ADDRESS);
+    populateField(page, HTML_ID_MAC_ADDRESS, INVALID_MAC_ADDRESS);
     clickSubmitButtonAndWait(page);
     assertFieldHasError(page, HTML_ID_IP_ADDRESS, "is required");
     assertFieldHasError(page, HTML_ID_MAC_ADDRESS, "is required");
@@ -176,6 +158,8 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
    * @throws Exception
    */
   @Test
+  @TestResources(prefix = "sql/", before = "ManualFixtureEnrollmentFT_before",
+      after = "ManualFixtureEnrollmentFT_after")
   public void testValidSubmission() throws Exception {
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
     submitValidForm(page);
@@ -185,29 +169,17 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     HtmlTableRow row = page
         .getFirstByXPath("//table[@id='fixturesList']/tbody/tr[1]");
 
-    int index = 0;
-    assertEquals(DBSetupUtility.BUILDING_ABBR + " " 
-        + DBSetupUtility.FIXTURE_ROOM_NUMBER, getCellContents(row, index++));
-    assertEquals(DBSetupUtility.FIXTURE_POSITION_HINT, 
-        getCellContents(row, index++));
-    assertEquals(DBSetupUtility.FIXTURE_IP_ADDR, getCellContents(row, index++));
-    assertEquals(DBSetupUtility.FIXTURE_MAC_ADDR, 
-        getCellContents(row, index++));
-    assertEquals(DBSetupUtility.FIXTURE_INV_NUMBER, 
-        getCellContents(row, index++)); 
+    validator.validateIsFixture1(row);
   }
-  
-  private String getCellContents(HtmlTableRow row, int index) {
-    return ((HtmlTableCell) row.getFirstByXPath("td[" + (index + 1) + "]"))
-        .getTextContent();
-  }
-  
+    
   /**
    * After submitting a valid form, validate that certain fields cannot be use
    * the same value again.
    * @throws Exception
    */
   @Test
+  @TestResources(prefix = "sql/", before = "ManualFixtureEnrollmentFT_before",
+      after = "ManualFixtureEnrollmentFT_after")
   public void testDuplicatingFields() throws Exception {
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
     submitValidForm(page);
@@ -216,7 +188,8 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     populateField(page, HTML_ID_MAC_ADDRESS, VALID_MAC_ADDRESS);
     populateField(page, HTML_ID_SERIAL_NUMBER, VALID_SERIAL_NUMBER);
     populateField(page, HTML_ID_INV_NUMBER, VALID_INVENTORY_NUMBER);
-    populateField(page, HTML_ID_BUILDING, VALID_BUILDING);
+    populateField(page, HTML_ID_BUILDING, 
+        properties.getString("building.1.name"));
     populateField(page, HTML_ID_ROOM_NUMBER, VALID_ROOM_NUMBER);
     populateField(page, HTML_ID_POSITION_HINT, VALID_POSITION_HINT);
     clickSubmitButtonAndWait(page);
@@ -275,11 +248,12 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   
   private void submitValidForm(HtmlPage page) throws Exception {
     openEnrollFixtureDialog(page);
-    populateField(page, "ipAddressContainer", "192.168.1.1");
+    populateField(page, "ipAddressContainer", VALID_IP_ADDRESS);
     populateField(page, "macAddressContainer", VALID_MAC_ADDRESS);
     populateField(page, "serialNumberContainer", VALID_SERIAL_NUMBER);
     populateField(page, "inventoryNumberContainer", VALID_INVENTORY_NUMBER);
-    populateField(page, "buildingContainer", VALID_BUILDING);
+    populateField(page, "buildingContainer", 
+        properties.getString("building.1.name"));
     populateField(page, "roomContainer", VALID_ROOM_NUMBER);
     populateField(page, "positionHintContainer", VALID_POSITION_HINT);
     clickSubmitButtonAndWait(page);
