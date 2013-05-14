@@ -43,4 +43,14 @@
 		<module>org.ualerts.fixed.service</module>
 		<module>org.ualerts.fixed.web</module>
 	</modules>
+	<dependencyManagement>
+	  <dependencies>
+	    <dependency>
+	      <groupId>org.ualerts</groupId>
+	      <artifactId>org.ualerts.build-tools</artifactId>
+	      <version>${project.version}</version>
+	      <scope>test</scope>
+	    </dependency>
+	  </dependencies>
+	</dependencyManagement>
 </project>
