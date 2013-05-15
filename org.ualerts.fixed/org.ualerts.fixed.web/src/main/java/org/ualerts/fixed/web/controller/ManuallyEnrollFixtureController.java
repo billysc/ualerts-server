@@ -44,13 +44,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.ualerts.fixed.InetAddress;
-import org.ualerts.fixed.InetAddressEditor;
-import org.ualerts.fixed.MacAddress;
-import org.ualerts.fixed.MacAddressEditor;
 import org.ualerts.fixed.web.model.FixtureModel;
 import org.ualerts.fixed.web.service.FixtureService;
-import org.ualerts.fixed.web.validator.FixtureValidator;
 
 /**
  * Controller to handle the manual enrollment of a fixture.

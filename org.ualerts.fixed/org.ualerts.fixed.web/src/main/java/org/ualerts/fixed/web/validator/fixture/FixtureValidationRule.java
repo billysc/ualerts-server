@@ -21,7 +21,6 @@ package org.ualerts.fixed.web.validator.fixture;
 
 import org.springframework.validation.Errors;
 import org.ualerts.fixed.web.model.FixtureModel;
-import org.ualerts.fixed.web.validator.FixtureValidator;
 
 /**
  * An interface for validation rules related to a Fixture

@@ -24,8 +24,6 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.Errors;
-import org.ualerts.fixed.Asset;
-import org.ualerts.fixed.repository.AssetRepository;
 import org.ualerts.fixed.web.model.FixtureModel;
 import org.ualerts.fixed.web.validator.FixtureValidator;
 
