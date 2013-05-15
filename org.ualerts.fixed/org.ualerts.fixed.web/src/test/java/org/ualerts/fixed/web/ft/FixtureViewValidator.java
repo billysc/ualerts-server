@@ -101,8 +101,6 @@ public final class FixtureViewValidator {
         getCell(row, index++).getTextContent());
     assertEquals(expectedInventoryNumber, 
         getCell(row, index++).getTextContent());
-
-    assertTrue(getCell(row, index).getTextContent().contains("Details"));
   }
 
   /**
