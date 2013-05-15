@@ -24,12 +24,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URISyntaxException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.ServletContext;
 import javax.sql.DataSource;
 
 import org.hsqldb.server.Server;
@@ -37,8 +35,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
-import org.springframework.web.context.ServletContextAware;
 
 
 /**
@@ -47,7 +45,7 @@ import org.springframework.web.context.ServletContextAware;
  * @author ceharris
  */
 public class EmbeddedHsqlDatabaseServer implements InitializingBean, 
-    DisposableBean, ServletContextAware {
+    DisposableBean {
 
   private static final Logger logger =    // CHECKSTYLE:idiomatic
       LoggerFactory.getLogger(EmbeddedHsqlDatabaseServer.class);
@@ -60,8 +58,6 @@ public class EmbeddedHsqlDatabaseServer implements InitializingBean,
 
   private static final int DB_INDEX = 0;
   
-  private static final String WEB_INF_RESOURCE = "/WEB-INF";
-  
   private static final String URI_SCHEME = "file:";
   
   private static final long MAX_SHUTDOWN_DELAY = 5000;
@@ -73,25 +69,23 @@ public class EmbeddedHsqlDatabaseServer implements InitializingBean,
   /** Default name of the database */
   public static final String DEFAULT_DATABASE_NAME = "embedded_db";
   
-  /** Default path for the database, relative to {@code /WEB-INF} */
-  public static final String DEFAULT_DATABASE_PATH = DEFAULT_DATABASE_NAME;
-  
   /** Default local address to which the database server will bind */
   public static final String DEFAULT_ADDRESS = "127.0.0.1";
   
   /** Default local port to which the database server will bind */
   public static final int DEFAULT_PORT = 9003;
   
-  private ServletContext servletContext;
+  private Resource location;
   private String dataSourceName;
   private Server server;
 
   /**
-   * {@inheritDoc}
+   * Sets a resource that represents the file system location for the
+   * embedded database's content.
+   * @param location the value to set
    */
-  @Override
-  public void setServletContext(ServletContext servletContext) {
-    this.servletContext = servletContext;
+  public void setLocation(Resource location) {
+    this.location = location;
   }
 
   /**
@@ -107,10 +101,11 @@ public class EmbeddedHsqlDatabaseServer implements InitializingBean,
    * {@inheritDoc}
    */
   public void afterPropertiesSet() throws Exception {
+    Assert.notNull(location, "location is required");
     Assert.notNull(dataSourceName, "dataSourceName is required");
     if (!wantEmbeddedDatabase()) return;
     try {
-      server = startServer(getDatabaseURI(DEFAULT_DATABASE_PATH));
+      server = startServer();
     }
     catch (Exception ex) {
       logger.error("database startup error: " + ex, ex);
@@ -152,28 +147,25 @@ public class EmbeddedHsqlDatabaseServer implements InitializingBean,
     return useEmbedded;
   }
 
-  private String getDatabaseURI(String databasePath) throws IOException, 
-      URISyntaxException {
-    String path = servletContext.getRealPath(WEB_INF_RESOURCE);
-    String uri = URI_SCHEME + new File(path, databasePath).getAbsolutePath();
-    return uri;
-  }
-
-  private Server startServer(String path) {
+  private Server startServer() throws IOException {
     Server server = new Server();
     server.setLogWriter(LOG_WRITER);
     server.setErrWriter(ERROR_WRITER);
     server.setAddress(DEFAULT_ADDRESS);
     server.setPort(DEFAULT_PORT);
     server.setDatabaseName(DB_INDEX, DEFAULT_DATABASE_NAME);
-    server.setDatabasePath(DB_INDEX, 
-        new File(path, DEFAULT_DATABASE_NAME).getPath());
+    server.setDatabasePath(DB_INDEX, getDatabaseURI());
     server.start();
     logger.info("database server started @{}:{}",
         server.getAddress(), server.getPort());
     logger.info("database path: {}", 
         new File(server.getDatabasePath(DB_INDEX, true)).getParent());
     return server;
+  }
+
+  private String getDatabaseURI() throws IOException {
+    return URI_SCHEME + 
+        new File(location.getFile(), DEFAULT_DATABASE_NAME).getAbsolutePath();
   }
 
   private void waitForShutdown() {

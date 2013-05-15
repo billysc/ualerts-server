@@ -28,6 +28,7 @@
   
   <bean id="embeddedDatabaseServer"
     class="org.ualerts.fixed.database.EmbeddedHsqlDatabaseServer">
+    <property name="location" value="/WEB-INF/embedded_db"/>
     <property name="dataSourceName"
       value="#{persistenceProperties['hibernate.connection.datasource']}"/>
   </bean>
