@@ -20,7 +20,8 @@ package org.ualerts.fixed.service.commands;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.springframework.util.Assert;
 import org.ualerts.fixed.Room;
 import org.ualerts.fixed.repository.RoomRepository;
@@ -75,7 +76,7 @@ extends AbstractCommand<List<Room>> {
    * Sets the {@code roomRepository} property.
    * @param roomRepository the room repository
    */
-  @Autowired
+  @Resource
   public void setRoomRepository(RoomRepository roomRepository) {
     this.roomRepository = roomRepository;
   }

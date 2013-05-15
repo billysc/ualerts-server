@@ -20,7 +20,8 @@ package org.ualerts.fixed.service.commands;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.ualerts.fixed.PositionHint;
 import org.ualerts.fixed.repository.PositionHintRepository;
 import org.ualerts.fixed.service.CommandComponent;
@@ -49,7 +50,7 @@ extends AbstractCommand<List<PositionHint>> {
    * Sets the {@code positionHintRepository} property.
    * @param positionHintRepository the position hint repository
    */
-  @Autowired
+  @Resource
   public void setPositionHintRepository(
       PositionHintRepository positionHintRepository) {
     this.positionHintRepository = positionHintRepository;
