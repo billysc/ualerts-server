@@ -72,7 +72,7 @@ public class IndexControllerTest {
     
     String view = controller.displayIndex(model);
     context.assertIsSatisfied();
-    assertEquals("index", view);
+    assertEquals("fixtures/index", view);
     assertTrue(model.containsKey("fixtures"));
     assertEquals(fixtures, model.get("fixtures"));
   }

@@ -32,6 +32,7 @@ import org.ualerts.fixed.web.service.FixtureService;
  * @author Michael Irwin
  */
 @Controller
+@RequestMapping("/fixtures")
 public class IndexController {
 
   /** Servlet path for the index resource */
@@ -47,7 +48,7 @@ public class IndexController {
   @RequestMapping(INDEX_PATH)
   public String displayIndex(Map<String, Object> model) throws Exception {
     model.put("fixtures", fixtureService.retrieveAllFixtures());
-    return "index";
+    return "fixtures/index";
   }
   
   /**

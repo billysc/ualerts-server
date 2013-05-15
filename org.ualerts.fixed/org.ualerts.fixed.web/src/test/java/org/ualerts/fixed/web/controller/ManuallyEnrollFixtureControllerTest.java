@@ -32,11 +32,9 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.web.model.FixtureModel;
 import org.ualerts.fixed.web.service.FixtureService;
 
@@ -74,7 +72,7 @@ public class ManuallyEnrollFixtureControllerTest {
     } });
     String view = controller.displayForm(model);
     context.assertIsSatisfied();
-    Assert.assertEquals("enrollment/manualForm", view);
+    Assert.assertEquals("fixtures/enrollment", view);
   }
   
   /**
@@ -94,7 +92,7 @@ public class ManuallyEnrollFixtureControllerTest {
     
     String view = controller.handleFormSubmission(fixture, result);
     context.assertIsSatisfied();
-    Assert.assertEquals("enrollment/manualForm", view);
+    Assert.assertEquals("fixtures/enrollment", view);
   }
   
   /**
