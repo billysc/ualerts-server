@@ -7,7 +7,7 @@ body {
 }
 
 .actionButtons {
-  margin-bottom: 20px;s
+  margin-bottom: 20px;
 }
 
 table.dataTable thead th {
@@ -29,4 +29,8 @@ th.sorting_desc {
 
 body div.container tr.updated td {
   background-color: #FFF9D7;
+}
+
+.no-padding {
+  padding: 0 0;
 }
