@@ -40,7 +40,7 @@ import org.ualerts.fixed.web.model.FixtureModel;
  * @author Michael Irwin
  */
 @Service
-public class ServiceSupportedFixtureService implements FixtureService {
+public class CommandSupportedFixtureService implements FixtureService {
 
   private CommandService commandService;
   
