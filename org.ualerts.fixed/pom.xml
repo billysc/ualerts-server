@@ -34,7 +34,7 @@
 		</dependency>
 	</dependencies>
 	<properties>
-		<hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
+		<hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect>
 		<persistence.unit>fixeddb</persistence.unit>
 		<persistence.dataSource>jdbc/fixedDS</persistence.dataSource>
 		<persistence.provider>org.hibernate.ejb.HibernatePersistence</persistence.provider>
