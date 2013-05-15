@@ -18,8 +18,9 @@
  */
 package org.ualerts.fixed.service;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
@@ -59,7 +60,7 @@ public class SpringPrototypeBeanCommandService
    * Sets the {@code commandInvoker} property.
    * @param commandInvoker the property value to set
    */
-  @Autowired
+  @Resource
   public void setCommandInvoker(CommandInvoker commandInvoker) {
     this.commandInvoker = commandInvoker;
   }

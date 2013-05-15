@@ -18,9 +18,9 @@
  */
 package org.ualerts.fixed.service.commands;
 
+import javax.annotation.Resource;
 import javax.persistence.PersistenceException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.ualerts.fixed.Asset;
 import org.ualerts.fixed.Building;
@@ -277,7 +277,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
    * Sets the {@code assetRepository} property.
    * @param assetRepository the value to set
    */
-  @Autowired
+  @Resource
   public void setAssetRepository(AssetRepository assetRepository) {
     this.assetRepository = assetRepository;
   }
@@ -286,7 +286,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
    * Sets the {@code buildingRepository} property.
    * @param buildingRepository the value to set
    */
-  @Autowired
+  @Resource
   public void setBuildingRepository(BuildingRepository buildingRepository) {
     this.buildingRepository = buildingRepository;
   }
@@ -295,7 +295,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
    * Sets the {@code roomRepository} property.
    * @param roomRepository the value to set
    */
-  @Autowired
+  @Resource
   public void setRoomRepository(RoomRepository roomRepository) {
     this.roomRepository = roomRepository;
   }
@@ -304,7 +304,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
    * Sets the {@code positionHintRepository} property.
    * @param positionHintRepository the value to set
    */
-  @Autowired
+  @Resource
   public void setPositionHintRepository(
       PositionHintRepository positionHintRepository) {
     this.positionHintRepository = positionHintRepository;
@@ -314,7 +314,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
    * Sets the {@code repository} property.
    * @param repository the fixed repository
    */
-  @Autowired
+  @Resource
   public void setFixtureRepository(FixtureRepository repository) {
     this.fixtureRepository = repository;
   }
@@ -323,7 +323,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
    * Sets the {@code dateService} property.
    * @param dateService the value to set
    */
-  @Autowired
+  @Resource
   public void setDateService(DateTimeService dateService) {
     this.dateService = dateService;
   }

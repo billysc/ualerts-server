@@ -18,7 +18,8 @@
  */
 package org.ualerts.fixed.service.commands;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.springframework.util.Assert;
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.repository.FixtureRepository;
@@ -71,7 +72,7 @@ public class FindFixtureCommand extends AbstractCommand<Fixture> {
    * Sets the {@code repository} property.
    * @param repository the fixed repository
    */
-  @Autowired
+  @Resource
   public void setFixtureRepository(FixtureRepository repository) {
     this.fixtureRepository = repository;
   }
