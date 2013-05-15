@@ -26,7 +26,13 @@
     </property>
   </bean>
   
-  <bean id="entityManagerFactory"
+  <bean id="embeddedDatabaseServer"
+    class="org.ualerts.fixed.database.EmbeddedHsqlDatabaseServer">
+    <property name="dataSourceName"
+      value="#{persistenceProperties['hibernate.connection.datasource']}"/>
+  </bean>
+  
+  <bean id="entityManagerFactory" depends-on="embeddedDatabaseServer"
     class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
     <property name="persistenceUnitName" 
       value="#{persistenceProperties['persistence.unit']}"/>
