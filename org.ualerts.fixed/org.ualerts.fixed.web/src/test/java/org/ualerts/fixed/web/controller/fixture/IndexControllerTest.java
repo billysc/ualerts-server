@@ -17,7 +17,7 @@
  *
  */
 
-package org.ualerts.fixed.web.controller;
+package org.ualerts.fixed.web.controller.fixture;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

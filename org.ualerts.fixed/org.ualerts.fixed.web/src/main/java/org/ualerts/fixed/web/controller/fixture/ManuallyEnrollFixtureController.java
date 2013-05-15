@@ -16,7 +16,7 @@
  * limitations under the License.
  *
  */
-package org.ualerts.fixed.web.controller;
+package org.ualerts.fixed.web.controller.fixture;
 
 import java.util.ArrayList;
 import java.util.HashMap;
