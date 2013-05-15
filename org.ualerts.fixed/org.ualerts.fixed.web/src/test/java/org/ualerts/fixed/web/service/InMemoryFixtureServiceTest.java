@@ -29,13 +29,13 @@ import org.junit.Test;
 import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
- * Test case for the {@link MockedFixtureService} class.
+ * Test case for the {@link InMemoryFixtureService} class.
  *
  * @author Michael Irwin
  */
-public class MockedFixtureServiceTest {
+public class InMemoryFixtureServiceTest {
 
-  private MockedFixtureService service;
+  private InMemoryFixtureService service;
   private FixtureModel fixture;
   
   /**
@@ -43,7 +43,7 @@ public class MockedFixtureServiceTest {
    */
   @Before
   public void setup() {
-    service = new MockedFixtureService();
+    service = new InMemoryFixtureService();
     fixture = new FixtureModel();
     fixture.setBuilding("Burruss Hall");
     fixture.setInventoryNumber("INV-123");

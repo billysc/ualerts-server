@@ -32,7 +32,7 @@ import org.ualerts.fixed.web.model.FixtureModel;
  *
  * @author Michael Irwin
  */
-public class MockedFixtureService implements FixtureService {
+public class InMemoryFixtureService implements FixtureService {
 
   private Long lastUsedId;
   private List<FixtureModel> fixtures;
@@ -40,7 +40,7 @@ public class MockedFixtureService implements FixtureService {
   /**
    * Constructs a new instance of the mocked service.
    */
-  public MockedFixtureService() {
+  public InMemoryFixtureService() {
     lastUsedId = 1L;
     fixtures = new ArrayList<FixtureModel>();
   }
