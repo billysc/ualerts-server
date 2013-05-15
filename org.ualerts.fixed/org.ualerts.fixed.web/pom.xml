@@ -234,11 +234,6 @@
     	<artifactId>htmlunit</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.ualerts</groupId>
       <artifactId>org.ualerts.build-tools</artifactId>
     </dependency>

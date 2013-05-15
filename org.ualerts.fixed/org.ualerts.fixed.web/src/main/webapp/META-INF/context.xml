@@ -1,0 +1,13 @@
+<Context>
+  
+  <Resource name="jdbc/fixedDS"
+    auth="Container"
+    type="javax.sql.DataSource"
+    username="sa"
+    password=""
+    driverClassName="org.hsqldb.jdbc.JDBCDriver"
+    url="jdbc:hsqldb:hsql://127.0.0.1:9003/embedded_db"
+    maxActive="8"
+    maxIdle="4"/>
+
+</Context>
