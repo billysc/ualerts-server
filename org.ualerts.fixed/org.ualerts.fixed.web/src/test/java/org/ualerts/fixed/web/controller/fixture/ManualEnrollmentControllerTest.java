@@ -39,15 +39,15 @@ import org.ualerts.fixed.web.model.FixtureModel;
 import org.ualerts.fixed.web.service.FixtureService;
 
 /**
- * Test case for the {@link ManuallyEnrollFixtureController} class.
+ * Test case for the {@link ManualEnrollmentController} class.
  *
  * @author Michael Irwin
  */
-public class ManuallyEnrollFixtureControllerTest {
+public class ManualEnrollmentControllerTest {
 
   private Mockery context;
   private FixtureService fixtureService;
-  private ManuallyEnrollFixtureController controller;
+  private ManualEnrollmentController controller;
   
   /**
    * Setup to be performed before each test
@@ -57,7 +57,7 @@ public class ManuallyEnrollFixtureControllerTest {
     context = new Mockery();
     fixtureService = context.mock(FixtureService.class);
 
-    controller = new ManuallyEnrollFixtureController();
+    controller = new ManualEnrollmentController();
     controller.setFixtureService(fixtureService);
   }
   

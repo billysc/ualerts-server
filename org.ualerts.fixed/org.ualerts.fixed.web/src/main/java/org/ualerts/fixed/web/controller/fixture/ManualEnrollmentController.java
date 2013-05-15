@@ -52,7 +52,7 @@ import org.ualerts.fixed.web.service.FixtureService;
  */
 @Controller
 @RequestMapping("/fixtures")
-public class ManuallyEnrollFixtureController {
+public class ManualEnrollmentController {
   
   private MessageSource messageSource;
   private FixtureService fixtureService;
