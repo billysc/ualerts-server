@@ -18,13 +18,12 @@
  */
 package org.ualerts.fixed.service.commands;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.springframework.util.Assert;
-import org.springframework.validation.BindException;
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.repository.FixtureRepository;
 import org.ualerts.fixed.service.CommandComponent;
-import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
 
 /**
  * Command to find a fixture in the UAlerts system.
@@ -40,8 +39,7 @@ public class FindFixtureCommand extends AbstractCommand<Fixture> {
    * {@inheritDoc}
    */
   @Override
-  protected void onValidate() throws BindException,
-      UnspecifiedConstraintException {
+  protected void onValidate() throws Exception {
     super.onValidate();
     Assert.notNull(getId(), "id is required");
   }
@@ -52,14 +50,6 @@ public class FindFixtureCommand extends AbstractCommand<Fixture> {
   @Override
   protected Fixture onExecute() throws Exception {
     return fixtureRepository.findFixtureById(getId());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean errorsRequired() {
-    return false;
   }
 
   /**
@@ -82,7 +72,7 @@ public class FindFixtureCommand extends AbstractCommand<Fixture> {
    * Sets the {@code repository} property.
    * @param repository the fixed repository
    */
-  @Autowired
+  @Resource
   public void setFixtureRepository(FixtureRepository repository) {
     this.fixtureRepository = repository;
   }

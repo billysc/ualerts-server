@@ -1,5 +1,5 @@
 /*
- * File created on May 2, 2013
+ * File created on May 14, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -16,34 +16,25 @@
  * limitations under the License.
  *
  */
-package org.ualerts.fixed.web.service;
 
-import java.util.List;
+package org.ualerts.fixed.web.validator.fixture;
 
+import org.springframework.validation.Errors;
 import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
- * A service object that helps in the standard create, update, retrieve, and
- * delete operations around Fixture objects.
+ * An interface for validation rules related to a Fixture
  *
  * @author Michael Irwin
  */
-public interface FixtureService {
+public interface FixtureValidationRule {
   
   /**
-   * Save the provided fixture into persistence
-   * 
-   * @param fixture The fixture to be created
-   * @throws Exception Any other internally-caused exception
-   * @return A new model of the newly saved fixture
+   * Perform validation related to this specific rule on the provided 
+   * FixtureModel
+   * @param fixture The fixture to be validated
+   * @param errors The object to bind errors to
    */
-  FixtureModel createFixture(FixtureModel fixture) throws Exception;
-  
-  /**
-   * Retrieve all Fixtures stored in persistence
-   * @return A list of all Fixtures stored in persistence
-   * @throws Exception
-   */
-  List<FixtureModel> retrieveAllFixtures() throws Exception;
+  void validate(FixtureModel fixture, Errors errors);
   
 }

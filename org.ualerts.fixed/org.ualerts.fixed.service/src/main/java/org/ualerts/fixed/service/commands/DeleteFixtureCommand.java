@@ -18,13 +18,12 @@
  */
 package org.ualerts.fixed.service.commands;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.springframework.util.Assert;
-import org.springframework.validation.BindException;
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.repository.FixtureRepository;
 import org.ualerts.fixed.service.CommandComponent;
-import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
 
 /**
  * Command to delete a specific fixture from the UAlerts system.
@@ -40,8 +39,7 @@ public class DeleteFixtureCommand extends AbstractCommand<Void> {
    * {@inheritDoc}
    */
   @Override
-  protected void onValidate() throws BindException,
-      UnspecifiedConstraintException {
+  protected void onValidate() throws Exception {
     super.onValidate();
     Assert.notNull(getId(), "id is required");
   }
@@ -54,14 +52,6 @@ public class DeleteFixtureCommand extends AbstractCommand<Void> {
     Fixture fixture = fixtureRepository.findFixtureById(getId());
     fixtureRepository.deleteFixture(fixture);
     return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean errorsRequired() {
-    return false;
   }
 
   /**
@@ -84,7 +74,7 @@ public class DeleteFixtureCommand extends AbstractCommand<Void> {
    * Sets the {@code repository} property.
    * @param repository the fixed repository
    */
-  @Autowired
+  @Resource
   public void setFixtureRepository(FixtureRepository repository) {
     this.fixtureRepository = repository;
   }

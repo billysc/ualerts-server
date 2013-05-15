@@ -24,13 +24,9 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.ualerts.fixed.InetAddress;
-import org.ualerts.fixed.MacAddress;
-import org.ualerts.fixed.service.commands.AddFixtureCommand;
-import org.ualerts.fixed.web.dto.FixtureDTO;
+import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
  * Test case for the {@link MockedFixtureService} class.
@@ -40,7 +36,7 @@ import org.ualerts.fixed.web.dto.FixtureDTO;
 public class MockedFixtureServiceTest {
 
   private MockedFixtureService service;
-  private AddFixtureCommand command;
+  private FixtureModel fixture;
   
   /**
    * Setup function
@@ -48,14 +44,14 @@ public class MockedFixtureServiceTest {
   @Before
   public void setup() {
     service = new MockedFixtureService();
-    command = new AddFixtureCommand();
-    command.setBuildingName("Burruss Hall");
-    command.setInventoryNumber("INV-123");
-    command.setInetAddress(InetAddress.getByAddress("123.123.123.123"));
-    command.setMacAddress(new MacAddress("0A:12:34:0B:56:78"));
-    command.setPositionHint("TOP-RIGHT");
-    command.setRoomNumber("110");
-    command.setSerialNumber("1234567890ABC");
+    fixture = new FixtureModel();
+    fixture.setBuilding("Burruss Hall");
+    fixture.setInventoryNumber("INV-123");
+    fixture.setIpAddress("123.123.123.123");
+    fixture.setMacAddress("0A:12:34:0B:56:78");
+    fixture.setPositionHint("TOP-RIGHT");
+    fixture.setRoom("110");
+    fixture.setSerialNumber("1234567890ABC");
   }
   
   /**
@@ -63,9 +59,9 @@ public class MockedFixtureServiceTest {
    */
   @Test
   public void testCreateFixture() throws Exception {
-    FixtureDTO fixture = service.createFixture(command);
-    assertNotNull(fixture.getId());
-    assertNotNull(fixture.getVersion());
+    FixtureModel returnedFixture = service.createFixture(fixture);
+    assertNotNull(returnedFixture.getId());
+    assertNotNull(returnedFixture.getVersion());
   }
   
   /**
@@ -74,11 +70,11 @@ public class MockedFixtureServiceTest {
    */
   @Test
   public void testRetrieveAllFixtures() throws Exception {
-    List<FixtureDTO> fixtures = service.retrieveAllFixtures();
+    List<FixtureModel> fixtures = service.retrieveAllFixtures();
     assertNotNull(fixtures);
     assertEquals(0, fixtures.size());
     
-    service.createFixture(command);
+    service.createFixture(fixture);
     fixtures = service.retrieveAllFixtures();
     assertNotNull(fixtures);
     assertEquals(1, fixtures.size());

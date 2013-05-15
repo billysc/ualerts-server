@@ -20,7 +20,8 @@ package org.ualerts.fixed.service.commands;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.repository.FixtureRepository;
 import org.ualerts.fixed.service.CommandComponent;
@@ -44,18 +45,10 @@ public class FindAllFixturesCommand extends AbstractCommand<List<Fixture>> {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean errorsRequired() {
-    return false;
-  }
-
-  /**
    * Sets the {@code fixtureRepository} property.
    * @param fixtureRepository the fixed repository
    */
-  @Autowired
+  @Resource
   public void setFixtureRepository(FixtureRepository fixtureRepository) {
     this.fixtureRepository = fixtureRepository;
   }

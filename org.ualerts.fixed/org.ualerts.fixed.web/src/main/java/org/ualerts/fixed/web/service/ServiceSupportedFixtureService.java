@@ -25,13 +25,13 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindException;
 import org.ualerts.fixed.Fixture;
-import org.ualerts.fixed.service.Command;
+import org.ualerts.fixed.InetAddress;
+import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
-import org.ualerts.fixed.web.dto.FixtureDTO;
+import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
  * An implementation of the {@link FixtureService} class that uses commands from
@@ -43,35 +43,35 @@ import org.ualerts.fixed.web.dto.FixtureDTO;
 public class ServiceSupportedFixtureService implements FixtureService {
 
   private CommandService commandService;
-
+  
   /**
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("rawtypes")
-  public <T extends Command> T newCommand(Class<T> clazz) throws Exception {
-    return commandService.newCommand(clazz);
+  public FixtureModel createFixture(FixtureModel fixture) throws Exception {
+    AddFixtureCommand command = 
+        commandService.newCommand(AddFixtureCommand.class);
+    command.setBuildingName(fixture.getBuilding());
+    command.setInetAddress(InetAddress.getByAddress(fixture.getIpAddress()));
+    command.setInventoryNumber(fixture.getInventoryNumber());
+    command.setMacAddress(new MacAddress(fixture.getMacAddress()));
+    command.setPositionHint(fixture.getPositionHint());
+    command.setRoomNumber(fixture.getRoom());
+    command.setSerialNumber(fixture.getSerialNumber());
+    Fixture newFixture = commandService.invoke(command);
+    return new FixtureModel(newFixture);
   }
   
   /**
    * {@inheritDoc}
    */
   @Override
-  public FixtureDTO createFixture(AddFixtureCommand command)
-      throws BindException, Exception {
-    Fixture fixture = commandService.invoke(command);
-    return new FixtureDTO(fixture);
-  }
-  
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public List<FixtureDTO> retrieveAllFixtures() throws Exception {
-    FindAllFixturesCommand command = newCommand(FindAllFixturesCommand.class);
-    List<FixtureDTO> fixtures = new ArrayList<FixtureDTO>();
+  public List<FixtureModel> retrieveAllFixtures() throws Exception {
+    FindAllFixturesCommand command = 
+        commandService.newCommand(FindAllFixturesCommand.class);
+    List<FixtureModel> fixtures = new ArrayList<FixtureModel>();
     for (Fixture fixture : commandService.invoke(command)) {
-      fixtures.add(new FixtureDTO(fixture));
+      fixtures.add(new FixtureModel(fixture));
     }
     return fixtures;
   }

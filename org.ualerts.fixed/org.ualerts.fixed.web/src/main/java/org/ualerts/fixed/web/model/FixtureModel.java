@@ -16,54 +16,17 @@
  * limitations under the License.
  *
  */
-package org.ualerts.fixed.web.dto;
+package org.ualerts.fixed.web.model;
 
 import org.ualerts.fixed.Fixture;
-import org.ualerts.fixed.InetAddress;
-import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.Room;
 
 /**
- * A Data Transfer Object representing a fixture.
+ * A model object representing a fixture.
  *
  * @author Michael Irwin
  */
-public class FixtureDTO {
-  
-  /**
-   * Field reference for the building field
-   */
-  public static final String FIELD_BUILDING = "building";
-  
-  /**
-   * Field reference for the room field
-   */
-  public static final String FIELD_ROOM = "room";
-  
-  /**
-   * Field reference for the position hint
-   */
-  public static final String FIELD_POSITION_HINT = "positionHint";
-  
-  /**
-   * Field reference for the inventory number
-   */
-  public static final String FIELD_INV_NUMBER = "inventoryNumber";
-  
-  /**
-   * Field reference for the serial number
-   */
-  public static final String FIELD_SER_NUMBER = "serialNumber";
-  
-  /**
-   * Field reference for the IP Address
-   */
-  public static final String FIELD_IP_ADDRESS = "ipAddress";
-  
-  /**
-   * Field reference for the MAC Address
-   */
-  public static final String FIELD_MAC_ADDRESS = "macAddress";
+public class FixtureModel {
   
   private Long id;
   private Long version;
@@ -74,14 +37,13 @@ public class FixtureDTO {
   private String inventoryNumber;
   private String serialNumber;
   private String ipAddress;
-  private InetAddress ipAddressObj;
   private String macAddress;
-  private MacAddress macAddressObj;
+  private String installedBy;
   
   /**
    * Create a new, empty instance.
    */
-  public FixtureDTO() {
+  public FixtureModel() {
     
   }
   
@@ -89,7 +51,7 @@ public class FixtureDTO {
    * Create a new instance, based on a Fixture object.
    * @param fixture The object to base construction from.
    */
-  public FixtureDTO(Fixture fixture) {
+  public FixtureModel(Fixture fixture) {
     if (fixture.getRoom() != null) {
       Room room = fixture.getRoom();
       this.building = room.getBuilding().getName();
@@ -255,22 +217,6 @@ public class FixtureDTO {
   }
   
   /**
-   * Gets the {@code ipAddressObj} property.
-   * @return property value
-   */
-  public InetAddress getIpAddressObj() {
-    return ipAddressObj;
-  }
-  
-  /**
-   * Sets the {@code ipAddressObj} property.
-   * @param ipAddressObj the value to set
-   */
-  public void setIpAddressObj(InetAddress ipAddressObj) {
-    this.ipAddressObj = ipAddressObj;
-  }
-  
-  /**
    * Gets the {@code macAddress} property.
    * @return property value
    */
@@ -287,19 +233,19 @@ public class FixtureDTO {
   }
   
   /**
-   * Gets the {@code macAddressObj} property.
+   * Gets the {@code installedBy} property.
    * @return property value
    */
-  public MacAddress getMacAddressObj() {
-    return macAddressObj;
+  public String getInstalledBy() {
+    return installedBy;
   }
   
   /**
-   * Sets the {@code macAddressObj} property.
-   * @param macAddressObj the value to set
+   * Sets the {@code installedBy} property.
+   * @param installedBy the value to set
    */
-  public void setMacAddressObj(MacAddress macAddressObj) {
-    this.macAddressObj = macAddressObj;
+  public void setInstalledBy(String installedBy) {
+    this.installedBy = installedBy;
   }
   
 }

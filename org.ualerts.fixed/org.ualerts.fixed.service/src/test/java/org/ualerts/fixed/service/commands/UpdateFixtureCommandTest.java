@@ -28,7 +28,6 @@ import org.jmock.Mockery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.validation.BindException;
 import org.ualerts.fixed.Building;
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.InetAddress;
@@ -39,7 +38,6 @@ import org.ualerts.fixed.repository.FixtureRepository;
 import org.ualerts.fixed.repository.PositionHintRepository;
 import org.ualerts.fixed.repository.RoomRepository;
 import org.ualerts.fixed.service.DateTimeService;
-import org.ualerts.fixed.service.errors.ErrorCodes;
 
 /**
  * Unit tests for {@link UpdateFixtureCommand}.
@@ -52,7 +50,7 @@ public class UpdateFixtureCommandTest {
   private static final String BUILDING_ID = "buildingId";
   private static final String ROOM_NUMBER = "roomNumber";
   private static final String POSITION_HINT = "hint";
-  
+
   private Mockery context;
   private BuildingRepository buildingRepository;
   private RoomRepository roomRepository;
@@ -98,203 +96,56 @@ public class UpdateFixtureCommandTest {
    */
   @Test
   public void testOnValidate() throws Exception {
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
     populateCommand(command);
-    context.checking(new Expectations() { {
-      oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-      will(returnValue(building));
-      oneOf(roomRepository).findRoom(BUILDING_ID, ROOM_NUMBER);
-      will(returnValue(room));
-      oneOf(positionHintRepository).findHint(POSITION_HINT);
-      will(returnValue(hint));
-      oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
-      will(returnValue(null));
-    } });
     command.onValidate();
-    context.assertIsSatisfied();
   }
 
   /**
    * Test method with missing building for
    * {@link UpdateFixtureCommand#onValidate()}.
    */
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testOnValidateBlankBuilding() throws Exception {
-    try {
-      populateCommand(command);
-      command.setBuildingName(null);
-      command.onValidate();
-      fail("Expected exception did not occur.");
-    }
-    catch (BindException ex) {
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.MISSING_BUILDING_FIELD,
-          ex.getAllErrors().get(0).getCode());
-    }
+    populateCommand(command);
+    command.setBuildingName(null);
+    command.onValidate();
+    fail("Expected exception did not occur.");
   }
 
   /**
    * Test method with missing INET address for
    * {@link UpdateFixtureCommand#onValidate()}.
    */
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testOnValidateBlankInetAddress() throws Exception {
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
-    try {
-      populateCommand(command);
-      command.setInetAddress(null);
-      context.checking(new Expectations() { {
-        oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-        will(returnValue(building));
-        oneOf(roomRepository).findRoom(BUILDING_ID, ROOM_NUMBER);
-        will(returnValue(room));
-        oneOf(positionHintRepository).findHint(POSITION_HINT);
-        will(returnValue(hint));
-        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
-        will(returnValue(null));
-      } });
-      command.onValidate();
-      fail("Did not receive expected exception.");
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.MISSING_INET_ADDRESS_FIELD,
-          ex.getAllErrors().get(0).getCode());
-    }
+    populateCommand(command);
+    command.setInetAddress(null);
+    command.onValidate();
+    fail("Did not receive expected exception.");
   }
 
   /**
    * Test method with missing position hint for
    * {@link UpdateFixtureCommand#onValidate()}.
    */
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testOnValidateBlankPositionHint() throws Exception {
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
-    try {
-      populateCommand(command);
-      command.setPositionHint(null);
-      context.checking(new Expectations() { {
-        oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-        will(returnValue(building));
-      } });
-      command.onValidate();
-      fail("Expected exception did not occur.");
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.MISSING_POSITION_HINT_FIELD,
-          ex.getAllErrors().get(0).getCode());
-    }
+    populateCommand(command);
+    command.setPositionHint(null);
+    command.onValidate();
+    fail("Expected exception did not occur.");
   }
 
   /**
    * Test method with missing room for
    * {@link UpdateFixtureCommand#onValidate()}.
    */
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testOnValidateBlankRoom() throws Exception {
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
-    try {
-      populateCommand(command);
-      command.setRoomNumber(null);
-      context.checking(new Expectations() { {
-        oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-        will(returnValue(building));
-      } });
-      command.onValidate();
-      fail("Expected exception did not occur.");
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.MISSING_ROOM_FIELD,
-          ex.getAllErrors().get(0).getCode());
-    }
-  }
-
-  /**
-   * Test method with a bad building name for
-   * {@link UpdateFixtureCommand#onValidate()}.
-   */
-  @Test
-  public void testOnValidateBadBuildingName() throws Exception {
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
-    try {
-      populateCommand(command);
-      context.checking(new Expectations() { {
-        oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-        will(returnValue(null));
-      } });
-      command.onValidate();
-      fail("Expected exception did not occur.");
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.UNKNOWN_BUILDING,
-          ex.getAllErrors().get(0).getCode());
-    }
-  }
-
-  /**
-   * Test method with a location conflict for
-   * {@link UpdateFixtureCommand#onValidate()}.
-   */
-  @Test
-  public void testOnValidateLocationConflict() throws Exception {
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
-    final Fixture fixture = new Fixture();
-    try {
-      populateCommand(command);
-      context.checking(new Expectations() { {
-        oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-        will(returnValue(building));
-        oneOf(roomRepository).findRoom(BUILDING_ID, ROOM_NUMBER);
-        will(returnValue(room));
-        oneOf(positionHintRepository).findHint(POSITION_HINT);
-        will(returnValue(hint));
-        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
-        will(returnValue(fixture));
-      } });
-      command.onValidate();
-      fail("Expected exception did not occur.");
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.LOCATION_CONFLICT,
-          ex.getAllErrors().get(0).getCode());
-    }
+    populateCommand(command);
+    command.setRoomNumber(null);
+    command.onValidate();
+    fail("Expected exception did not occur.");
   }
 
   /**
@@ -379,7 +230,7 @@ public class UpdateFixtureCommandTest {
       oneOf(positionHintRepository).findHint(POSITION_HINT);
       will(returnValue(null));
       oneOf(positionHintRepository)
-        .addPositionHint(with(any(PositionHint.class)));
+      .addPositionHint(with(any(PositionHint.class)));
       oneOf(dateService).getCurrentDate();
       will(returnValue(date));
       oneOf(fixtureRepository).findFixtureById(1L);
@@ -395,7 +246,6 @@ public class UpdateFixtureCommandTest {
     command.setBuildingName(BUILDING_NAME);
     command.setPositionHint(POSITION_HINT);
     command.setInetAddress(InetAddress.getByAddress(IP_ADDRESS));
-    command.setErrors(new BindException(command, "testCommand"));
   }
 
 }

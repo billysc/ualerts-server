@@ -70,13 +70,13 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   private static final String INVALID_MAC_ADDRESS = "NOT_A_VALID_MAC_ADDRESS";
   
   // CHECKSTYLE:OFF
-  @ClassRule
-  public static EntityManagerFactoryResource entityManagerFactory =
-      new EntityManagerFactoryResource("persistence-test.properties");
-  
-  @Rule
-  public PersistentDataResource persistentData = 
-      new HibernatePersistentDataResource(entityManagerFactory);  
+   @ClassRule
+   public static EntityManagerFactoryResource entityManagerFactory =
+       new EntityManagerFactoryResource("persistence-test.properties");
+ 
+   @Rule
+   public PersistentDataResource persistentData = 
+       new HibernatePersistentDataResource(entityManagerFactory);  
   // CHECKSTYLE:ON
   
   private static PropertiesAccessor properties;
@@ -136,8 +136,8 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     populateField(page, HTML_ID_IP_ADDRESS, INVALID_IP_ADDRESS);
     populateField(page, HTML_ID_MAC_ADDRESS, INVALID_MAC_ADDRESS);
     clickSubmitButtonAndWait(page);
-    assertFieldHasError(page, HTML_ID_IP_ADDRESS, "is required");
-    assertFieldHasError(page, HTML_ID_MAC_ADDRESS, "is required");
+    assertFieldHasError(page, HTML_ID_IP_ADDRESS, "provide a valid");
+    assertFieldHasError(page, HTML_ID_MAC_ADDRESS, "provide a valid");
   }
   
   /**
@@ -150,7 +150,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     openEnrollFixtureDialog(page);
     populateField(page, HTML_ID_BUILDING, "Unknown Building");
     clickSubmitButtonAndWait(page);
-    assertFieldHasError(page, HTML_ID_BUILDING, "does not exist");
+    assertFieldHasError(page, HTML_ID_BUILDING, "is not known");
   }
   
   /**
@@ -184,7 +184,9 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
     submitValidForm(page);
     assertNoErrors(page);
+    
     openEnrollFixtureDialog(page);
+    
     populateField(page, HTML_ID_MAC_ADDRESS, VALID_MAC_ADDRESS);
     populateField(page, HTML_ID_SERIAL_NUMBER, VALID_SERIAL_NUMBER);
     populateField(page, HTML_ID_INV_NUMBER, VALID_INVENTORY_NUMBER);
@@ -192,7 +194,9 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
         properties.getString("building.1.name"));
     populateField(page, HTML_ID_ROOM_NUMBER, VALID_ROOM_NUMBER);
     populateField(page, HTML_ID_POSITION_HINT, VALID_POSITION_HINT);
+    
     clickSubmitButtonAndWait(page);
+    
     assertFieldHasError(page, HTML_ID_MAC_ADDRESS, "already in use");
     assertFieldHasError(page, HTML_ID_SERIAL_NUMBER, "already in use");
     assertFieldHasError(page, HTML_ID_INV_NUMBER, "already in use");
@@ -200,7 +204,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     
     assertTrue(((HtmlDivision) page.getFirstByXPath("//div[@id='" 
         + HTML_ID_GLOBAL_ERRORS + "']" + "/div")).getTextContent()
-        .contains("combination is already in use"));
+        .contains("the same building, room, and position hint"));
   }
 
   private void openEnrollFixtureDialog(HtmlPage page) throws Exception {

@@ -5,7 +5,7 @@ $(function() {
   var fixturesTable = $("#fixturesList");
   var emptyTable = (fixturesTable.find("tbody tr").size() == 0);
   fixturesListTable = fixturesTable.dataTable({
-  aaSorting: [ [0, 'asc'], [1, 'asc'] ],
+    aaSorting: [ [0, 'asc'], [1, 'asc'] ],
     bPaginate: false,
     bInfo: false,
     aoColumns: [
@@ -18,7 +18,7 @@ $(function() {
     ]
   });
   if (emptyTable) {
-  fixturesTable.parent().hide();
+    fixturesTable.parent().hide();
   }
 });
 

@@ -19,7 +19,6 @@
 package org.ualerts.fixed.service.commands;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Date;
@@ -29,7 +28,6 @@ import org.jmock.Mockery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.validation.BindException;
 import org.ualerts.fixed.Asset;
 import org.ualerts.fixed.Building;
 import org.ualerts.fixed.Fixture;
@@ -43,7 +41,6 @@ import org.ualerts.fixed.repository.FixtureRepository;
 import org.ualerts.fixed.repository.PositionHintRepository;
 import org.ualerts.fixed.repository.RoomRepository;
 import org.ualerts.fixed.service.DateTimeService;
-import org.ualerts.fixed.service.errors.ErrorCodes;
 
 /**
  * Unit tests for {@link AddFixtureCommand}.
@@ -60,7 +57,7 @@ public class AddFixtureCommandTest {
   private static final String ROOM_NUMBER = "roomNumber";
   private static final String POSITION_HINT = "hint";
   private static final String INSTALLED_BY = "installedBy";
-  
+
   private Mockery context;
   private AssetRepository assetRepository;
   private BuildingRepository buildingRepository;
@@ -110,59 +107,20 @@ public class AddFixtureCommandTest {
    */
   @Test
   public void testOnValidate() throws Exception {
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
     populateCommand(command);
-    context.checking(new Expectations() { {
-      oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-      will(returnValue(building));
-      oneOf(assetRepository).findAssetBySerialNumber(SERIAL_NUMBER);
-      will(returnValue(null));
-      oneOf(assetRepository).findAssetByInventoryNumber(INVENTORY_NUMBER);
-      will(returnValue(null));
-      oneOf(assetRepository).findAssetByMacAddress(MAC_ADDRESS);
-      will(returnValue(null));
-      oneOf(roomRepository).findRoom(BUILDING_ID, ROOM_NUMBER);
-      will(returnValue(room));
-      oneOf(positionHintRepository).findHint(POSITION_HINT);
-      will(returnValue(hint));
-      oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
-      will(returnValue(null));
-    } });
     command.onValidate();
-    context.assertIsSatisfied();
   }
 
   /**
    * Test method with missing building for
    * {@link AddFixtureCommand#onValidate()}.
    */
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testOnValidateBlankBuilding() throws Exception {
-    try {
-      populateCommand(command);
-      command.setBuildingName(null);
-      context.checking(new Expectations() { {
-        oneOf(assetRepository).findAssetBySerialNumber(SERIAL_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByInventoryNumber(INVENTORY_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByMacAddress(MAC_ADDRESS);
-        will(returnValue(null));
-      } });
-      command.onValidate();
-      fail("Expected exception did not occur.");
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.MISSING_BUILDING_FIELD,
-          ex.getAllErrors().get(0).getCode());
-    }
+    populateCommand(command);
+    command.setBuildingName(null);
+    command.onValidate();
+    fail("Expected exception did not occur.");
   }
 
   /**
@@ -171,28 +129,8 @@ public class AddFixtureCommandTest {
    */
   @Test
   public void testOnValidateBlankInventory() throws Exception {
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
     populateCommand(command);
     command.setInventoryNumber(null);
-    context.checking(new Expectations() { {
-      oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-      will(returnValue(building));
-      oneOf(assetRepository).findAssetBySerialNumber(SERIAL_NUMBER);
-      will(returnValue(null));
-      oneOf(assetRepository).findAssetByMacAddress(MAC_ADDRESS);
-      will(returnValue(null));
-      oneOf(roomRepository).findRoom(BUILDING_ID, ROOM_NUMBER);
-      will(returnValue(room));
-      oneOf(positionHintRepository).findHint(POSITION_HINT);
-      will(returnValue(hint));
-      oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
-      will(returnValue(null));
-    } });
     command.onValidate();
   }
 
@@ -200,395 +138,60 @@ public class AddFixtureCommandTest {
    * Test method with missing INET address for
    * {@link AddFixtureCommand#onValidate()}.
    */
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testOnValidateBlankInetAddress() throws Exception {
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
-    try {
-      populateCommand(command);
-      command.setInetAddress(null);
-      context.checking(new Expectations() { {
-        oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-        will(returnValue(building));
-        oneOf(assetRepository).findAssetBySerialNumber(SERIAL_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByInventoryNumber(INVENTORY_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByMacAddress(MAC_ADDRESS);
-        will(returnValue(null));
-        oneOf(roomRepository).findRoom(BUILDING_ID, ROOM_NUMBER);
-        will(returnValue(room));
-        oneOf(positionHintRepository).findHint(POSITION_HINT);
-        will(returnValue(hint));
-        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
-        will(returnValue(null));
-      } });
-      command.onValidate();
-      fail("Expected exception did not occur.");
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.MISSING_INET_ADDRESS_FIELD,
-          ex.getAllErrors().get(0).getCode());
-    }
+    populateCommand(command);
+    command.setInetAddress(null);
+    command.onValidate();
+    fail("Expected exception did not occur.");
   }
 
   /**
    * Test method with missing MAC address for
    * {@link AddFixtureCommand#onValidate()}.
    */
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testOnValidateBlankMacAddress() throws Exception {
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
-    try {
-      populateCommand(command);
-      command.setMacAddress(null);
-      context.checking(new Expectations() { {
-        oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-        will(returnValue(building));
-        oneOf(assetRepository).findAssetBySerialNumber(SERIAL_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByInventoryNumber(INVENTORY_NUMBER);
-        will(returnValue(null));
-        oneOf(roomRepository).findRoom(BUILDING_ID, ROOM_NUMBER);
-        will(returnValue(room));
-        oneOf(positionHintRepository).findHint(POSITION_HINT);
-        will(returnValue(hint));
-        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
-        will(returnValue(null));
-      } });
-      command.onValidate();
-      fail("Expected exception did not occur.");
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.MISSING_MAC_ADDRESS_FIELD,
-          ex.getAllErrors().get(0).getCode());
-    }
+    populateCommand(command);
+    command.setMacAddress(null);
+    command.onValidate();
+    fail("Expected exception did not occur.");
   }
 
   /**
    * Test method with missing position hint for
    * {@link AddFixtureCommand#onValidate()}.
    */
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testOnValidateBlankPositionHint() throws Exception {
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
-    try {
-      populateCommand(command);
-      command.setPositionHint(null);
-      context.checking(new Expectations() { {
-        oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-        will(returnValue(building));
-        oneOf(assetRepository).findAssetBySerialNumber(SERIAL_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByInventoryNumber(INVENTORY_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByMacAddress(MAC_ADDRESS);
-        will(returnValue(null));
-      } });
-      command.onValidate();
-      fail("Expected exception did not occur.");
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.MISSING_POSITION_HINT_FIELD,
-          ex.getAllErrors().get(0).getCode());
-    }
+    populateCommand(command);
+    command.setPositionHint(null);
+    command.onValidate();
+    fail("Expected exception did not occur.");
   }
 
   /**
    * Test method with missing room for
    * {@link AddFixtureCommand#onValidate()}.
    */
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testOnValidateBlankRoom() throws Exception {
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
-    try {
-      populateCommand(command);
-      command.setRoomNumber(null);
-      context.checking(new Expectations() { {
-        oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-        will(returnValue(building));
-        oneOf(assetRepository).findAssetBySerialNumber(SERIAL_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByInventoryNumber(INVENTORY_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByMacAddress(MAC_ADDRESS);
-        will(returnValue(null));
-      } });
-      command.onValidate();
-      fail("Expected exception did not occur.");
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.MISSING_ROOM_FIELD,
-          ex.getAllErrors().get(0).getCode());
-    }
+    populateCommand(command);
+    command.setRoomNumber(null);
+    command.onValidate();
+    fail("Expected exception did not occur.");
   }
 
   /**
    * Test method with missing serial number for
    * {@link AddFixtureCommand#onValidate()}.
    */
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testOnValidateBlankSerialNumber() throws Exception {
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
-    try {
-      populateCommand(command);
-      command.setSerialNumber(null);
-      context.checking(new Expectations() { {
-        oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-        will(returnValue(building));
-        oneOf(assetRepository).findAssetByInventoryNumber(INVENTORY_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByMacAddress(MAC_ADDRESS);
-        will(returnValue(null));
-        oneOf(roomRepository).findRoom(BUILDING_ID, ROOM_NUMBER);
-        will(returnValue(room));
-        oneOf(positionHintRepository).findHint(POSITION_HINT);
-        will(returnValue(hint));
-        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
-        will(returnValue(null));
-      } });
-      command.onValidate();
-      fail("Expected exception did not occur.");
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.MISSING_SERIAL_NUMBER_FIELD,
-          ex.getAllErrors().get(0).getCode());
-    }
-  }
-
-  /**
-   * Test method with a bad building name for
-   * {@link AddFixtureCommand#onValidate()}.
-   */
-  @Test
-  public void testOnValidateBadBuildingName() throws Exception {
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
-    try {
-      populateCommand(command);
-      context.checking(new Expectations() { {
-        oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetBySerialNumber(SERIAL_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByInventoryNumber(INVENTORY_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByMacAddress(MAC_ADDRESS);
-        will(returnValue(null));
-      } });
-      command.onValidate();
-      fail("Expected exception did not occur.");
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.UNKNOWN_BUILDING,
-          ex.getAllErrors().get(0).getCode());
-    }
-  }
-
-  /**
-   * Test method with an inventory number conflict for
-   * {@link AddFixtureCommand#onValidate()}.
-   */
-  @Test
-  public void testOnValidateInventoryNumberConflict() throws Exception {
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Asset asset = new Asset();
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
-    try {
-      populateCommand(command);
-      context.checking(new Expectations() { {
-        oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-        will(returnValue(building));
-        oneOf(assetRepository).findAssetBySerialNumber(SERIAL_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByInventoryNumber(INVENTORY_NUMBER);
-        will(returnValue(asset));
-        oneOf(assetRepository).findAssetByMacAddress(MAC_ADDRESS);
-        will(returnValue(null));
-        oneOf(roomRepository).findRoom(BUILDING_ID, ROOM_NUMBER);
-        will(returnValue(room));
-        oneOf(positionHintRepository).findHint(POSITION_HINT);
-        will(returnValue(hint));
-        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
-        will(returnValue(null));
-      } });
-      command.onValidate();
-      fail("Expected exception did not occur.");
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.INVENTORY_NUMBER_CONFLICT,
-          ex.getAllErrors().get(0).getCode());
-    }
-  }
-
-  /**
-   * Test method with a serial number conflict for
-   * {@link AddFixtureCommand#onValidate()}.
-   */
-  @Test
-  public void testOnValidateSerialNumberConflict() throws Exception {
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Asset asset = new Asset();
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
-    try {
-      populateCommand(command);
-      context.checking(new Expectations() { {
-        oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-        will(returnValue(building));
-        oneOf(assetRepository).findAssetBySerialNumber(SERIAL_NUMBER);
-        will(returnValue(asset));
-        oneOf(assetRepository).findAssetByInventoryNumber(INVENTORY_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByMacAddress(MAC_ADDRESS);
-        will(returnValue(null));
-        oneOf(roomRepository).findRoom(BUILDING_ID, ROOM_NUMBER);
-        will(returnValue(room));
-        oneOf(positionHintRepository).findHint(POSITION_HINT);
-        will(returnValue(hint));
-        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
-        will(returnValue(null));
-      } });
-      command.onValidate();
-      fail("Expected exception did not occur.");
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.SERIAL_NUMBER_CONFLICT,
-          ex.getAllErrors().get(0).getCode());
-    }
-  }
-
-  /**
-   * Test method with a MAC address conflict for
-   * {@link AddFixtureCommand#onValidate()}.
-   */
-  @Test
-  public void testOnValidateMacAddressConflict() throws Exception {
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Asset asset = new Asset();
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
-    try {
-      populateCommand(command);
-      context.checking(new Expectations() { {
-        oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-        will(returnValue(building));
-        oneOf(assetRepository).findAssetBySerialNumber(SERIAL_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByInventoryNumber(INVENTORY_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByMacAddress(MAC_ADDRESS);
-        will(returnValue(asset));
-        oneOf(roomRepository).findRoom(BUILDING_ID, ROOM_NUMBER);
-        will(returnValue(room));
-        oneOf(positionHintRepository).findHint(POSITION_HINT);
-        will(returnValue(hint));
-        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
-        will(returnValue(null));
-      } });
-      command.onValidate();
-      fail("Expected exception did not occur.");
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.MAC_ADDRESS_CONFLICT,
-          ex.getAllErrors().get(0).getCode());
-    }
-  }
-
-  /**
-   * Test method with a location conflict for
-   * {@link AddFixtureCommand#onValidate()}.
-   */
-  @Test
-  public void testOnValidateLocationConflict() throws Exception {
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
-    final Fixture fixture = new Fixture();
-    try {
-      populateCommand(command);
-      context.checking(new Expectations() { {
-        oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-        will(returnValue(building));
-        oneOf(assetRepository).findAssetBySerialNumber(SERIAL_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByInventoryNumber(INVENTORY_NUMBER);
-        will(returnValue(null));
-        oneOf(assetRepository).findAssetByMacAddress(MAC_ADDRESS);
-        will(returnValue(null));
-        oneOf(roomRepository).findRoom(BUILDING_ID, ROOM_NUMBER);
-        will(returnValue(room));
-        oneOf(positionHintRepository).findHint(POSITION_HINT);
-        will(returnValue(hint));
-        oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
-        will(returnValue(fixture));
-      } });
-      command.onValidate();
-      fail("Expected exception did not occur.");
-    }
-    catch (BindException ex) {
-      context.assertIsSatisfied();
-      assertEquals(1, ex.getAllErrors().size());
-      assertEquals(ErrorCodes.LOCATION_CONFLICT,
-          ex.getAllErrors().get(0).getCode());
-    }
+    populateCommand(command);
+    command.setSerialNumber(null);
+    command.onValidate();
+    fail("Expected exception did not occur.");
   }
 
   /**
@@ -597,34 +200,11 @@ public class AddFixtureCommandTest {
    */
   @Test
   public void testOnValidateNoInstalledBy() throws Exception {
-    // At lest currently, this field is not required, so having it null
+    // At least currently, this field is not required, so having it null
     // should not cause an exception.
-    final Building building = new Building();
-    building.setId(BUILDING_ID);
-    final Room room = new Room();
-    room.setId(1L);
-    final PositionHint hint = new PositionHint();
-    hint.setId(2L);
     populateCommand(command);
     command.setInstalledBy(null);
-    context.checking(new Expectations() { {
-      oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
-      will(returnValue(building));
-      oneOf(assetRepository).findAssetBySerialNumber(SERIAL_NUMBER);
-      will(returnValue(null));
-      oneOf(assetRepository).findAssetByInventoryNumber(INVENTORY_NUMBER);
-      will(returnValue(null));
-      oneOf(assetRepository).findAssetByMacAddress(MAC_ADDRESS);
-      will(returnValue(null));
-      oneOf(roomRepository).findRoom(BUILDING_ID, ROOM_NUMBER);
-      will(returnValue(room));
-      oneOf(positionHintRepository).findHint(POSITION_HINT);
-      will(returnValue(hint));
-      oneOf(fixtureRepository).findFixtureByLocation(1L, 2L);
-      will(returnValue(null));
-    } });
     command.onValidate();
-    context.assertIsSatisfied();
   }
 
   /**
@@ -731,7 +311,6 @@ public class AddFixtureCommandTest {
     command.setSerialNumber(SERIAL_NUMBER);
     command.setInventoryNumber(INVENTORY_NUMBER);
     command.setInstalledBy(INSTALLED_BY);
-    command.setErrors(new BindException(command, "testCommand"));
   }
 
 }

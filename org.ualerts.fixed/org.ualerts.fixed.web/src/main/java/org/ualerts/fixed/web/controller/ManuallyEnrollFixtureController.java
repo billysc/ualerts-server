@@ -33,23 +33,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.ualerts.fixed.InetAddress;
-import org.ualerts.fixed.InetAddressEditor;
-import org.ualerts.fixed.MacAddress;
-import org.ualerts.fixed.MacAddressEditor;
-import org.ualerts.fixed.service.commands.AddFixtureCommand;
-import org.ualerts.fixed.web.dto.FixtureDTO;
+import org.ualerts.fixed.web.model.FixtureModel;
 import org.ualerts.fixed.web.service.FixtureService;
 
 /**
@@ -65,6 +60,7 @@ public class ManuallyEnrollFixtureController {
 
   private MessageSource messageSource;
   private FixtureService fixtureService;
+  private Validator fixtureValidator;
 
   /**
    * Sets the validator to be used for the controller
@@ -72,31 +68,17 @@ public class ManuallyEnrollFixtureController {
    */
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.registerCustomEditor(InetAddress.class, new InetAddressEditor());
-    binder.registerCustomEditor(MacAddress.class, new MacAddressEditor());
-  }
-  
-  /**
-   * Helper method to generate the fixture command to be used throughout the
-   * controller
-   * @return The command to be used for the form
-   * @throws Exception Any exception due to command creation
-   */
-  @ModelAttribute("fixture")
-  public AddFixtureCommand generateFixtureCommand() throws Exception {
-    return fixtureService.newCommand(AddFixtureCommand.class);
+    binder.addValidators(fixtureValidator);
   }
 
   /**
    * Display the fixture enrollment form.
-   * @param command A command object
    * @param model The model for the UI
    * @return The name of the view to display
    */
   @RequestMapping(value = "/enrollment", method = RequestMethod.GET)
-  public String displayForm(
-      @ModelAttribute("fixture") AddFixtureCommand command, Model model) {
-    model.addAttribute("fixture", command);
+  public String displayForm(Model model) {
+    model.addAttribute("fixture", new FixtureModel());
     return "enrollment/manualForm";
   }
 
@@ -104,7 +86,7 @@ public class ManuallyEnrollFixtureController {
    * Handle the form submission, producing a JSON result.
    * @param request The incoming request
    * @param response The outgoing response
-   * @param command The command object that the user submitted
+   * @param fixture The fixture model submitted in the request
    * @param bindingResult Results of binding failures/errors
    * @return A Map to be used for marshalling into JSON
    * @throws Exception Only internal exceptions that cannot be handled
@@ -114,20 +96,19 @@ public class ManuallyEnrollFixtureController {
       produces = { "application/json" })
   public Map<String, Object> handleFormSubmission(HttpServletRequest request,
       HttpServletResponse response, 
-      @Valid @ModelAttribute("fixture") AddFixtureCommand command,
+      @Valid @ModelAttribute("fixture") FixtureModel fixture,
       BindingResult bindingResult) throws Exception {
 
     Map<String, Object> responseData = new HashMap<String, Object>();
-    command.setErrors(new BindException(bindingResult));
-
-    try {
-      FixtureDTO dto = fixtureService.createFixture(command);
-      responseData.put("fixture", dto);
-      responseData.put("success", true);
-    }
-    catch (BindException errorCollection) {
+    if (bindingResult.hasErrors()) {
       responseData.put("success", false);
       responseData.put("errors", getMappedErrors(bindingResult));
+    }
+    else {
+      fixture.setInstalledBy(""); //TODO Replace this with real data
+      FixtureModel dto = fixtureService.createFixture(fixture);
+      responseData.put("success", true);
+      responseData.put("fixture", dto);
     }
 
     return responseData;
@@ -135,18 +116,20 @@ public class ManuallyEnrollFixtureController {
 
   /**
    * Handles form submission, producing a HTML output.
-   * @param command The command object, based on the POST data
+   * @param fixture The fixture model, based on submitted data in request
    * @param result Any binding errors/failures
    * @return Name of the view to be rendered
    */
   @RequestMapping(value = "/enrollment", method = RequestMethod.POST, 
       produces = { "text/html" })
   public String handleFormSubmission(
-      @ModelAttribute("fixture") @Valid AddFixtureCommand command,
+      @ModelAttribute("fixture") @Valid FixtureModel fixture,
       BindingResult result) throws Exception {
-    
-    command.setErrors(new BindException(result));
-    fixtureService.createFixture(command);
+
+    fixture.setInstalledBy("");
+    if (!result.hasErrors()) {
+      fixtureService.createFixture(fixture);
+    }
     return "enrollment/manualForm";
   }
 
@@ -209,4 +192,13 @@ public class ManuallyEnrollFixtureController {
     this.messageSource = messageSource;
   }
 
+  /**
+   * Sets the {@code fixtureValidator} property.
+   * @param fixtureValidator the value to set
+   */
+  @Resource(name = "fixtureValidator")
+  public void setFixtureValidator(Validator fixtureValidator) {
+    this.fixtureValidator = fixtureValidator;
+  }
+  
 }

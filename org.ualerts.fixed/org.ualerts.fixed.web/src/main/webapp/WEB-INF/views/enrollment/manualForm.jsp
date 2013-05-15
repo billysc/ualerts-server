@@ -6,10 +6,10 @@
   </div>
 
   <div class="control-group" id="ipAddressContainer">
-    <sf:label path="inetAddress" cssClass="control-label">IP Address</sf:label>
+    <sf:label path="ipAddress" cssClass="control-label">IP Address</sf:label>
     <div class="controls">
-      <sf:input path="inetAddress" />
-      <br /><div class="error" data-for="inetAddress"></div>
+      <sf:input path="ipAddress" />
+      <br /><div class="error" data-for="ipAddress"></div>
     </div>
   </div>
   <div class="control-group" id="macAddressContainer">
@@ -35,17 +35,17 @@
   </div>
 
   <div class="control-group" id="buildingContainer">
-    <sf:label path="buildingName" cssClass="control-label">Building</sf:label>
+    <sf:label path="building" cssClass="control-label">Building</sf:label>
     <div class="controls">
-      <sf:input path="buildingName" />
-      <br /><div class="error" data-for="buildingName"></div>
+      <sf:input path="building" />
+      <br /><div class="error" data-for="building"></div>
     </div>
   </div>
   <div class="control-group" id="roomContainer">
-    <sf:label path="roomNumber" cssClass="control-label">Room</sf:label>
+    <sf:label path="room" cssClass="control-label">Room</sf:label>
     <div class="controls">
-      <sf:input path="roomNumber" />
-      <br /><div class="error" data-for="roomNumber"></div>
+      <sf:input path="room" />
+      <br /><div class="error" data-for="room"></div>
     </div>
   </div>
   <div class="control-group" id="positionHintContainer">
