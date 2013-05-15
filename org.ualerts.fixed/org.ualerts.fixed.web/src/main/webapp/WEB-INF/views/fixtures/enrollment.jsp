@@ -1,5 +1,59 @@
-Unstaged changes after reset:
-D	org.ualerts.fixed/org.ualerts.fixed.web/src/main/webapp/WEB-INF/views/enrollment/manualForm.jsp
-M	org.ualerts.fixed/org.ualerts.fixed.web/src/main/webapp/WEB-INF/views/fixtures/enrollment.jsp
-M	org.ualerts.fixed/org.ualerts.fixed.web/src/main/webapp/assets/css/styles.css
-M	org.ualerts.fixed/org.ualerts.fixed.web/src/test/java/org/ualerts/fixed/web/ft/FixtureViewValidator.java
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
+<form:form cssClass="form-horizontal" commandName="fixture" action="${pageContext.request.contextPath}/ui/enrollment">
+  <div id="globalErrorContainer">
+    <div class="error" data-for="_global"></div>
+  </div>
+
+  <div class="control-group" id="ipAddressContainer">
+    <form:label path="ipAddress" cssClass="control-label">IP Address</form:label>
+    <div class="controls">
+      <form:input path="ipAddress" />
+      <br /><div class="error" data-for="ipAddress"></div>
+    </div>
+  </div>
+  <div class="control-group" id="macAddressContainer">
+    <form:label path="macAddress" cssClass="control-label">MAC Address</form:label>
+    <div class="controls">
+      <form:input path="macAddress" />
+      <br /><div class="error" data-for="macAddress"></div>
+    </div>
+  </div>
+  <div class="control-group" id="serialNumberContainer">
+    <form:label path="serialNumber" cssClass="control-label">Serial Number</form:label>
+    <div class="controls">
+      <form:input path="serialNumber" />
+      <br /><div class="error" data-for="serialNumber"></div>
+    </div>
+  </div>
+  <div class="control-group" id="inventoryNumberContainer">
+    <form:label path="inventoryNumber" cssClass="control-label">Inventory Number</form:label>
+    <div class="controls">
+      <form:input path="inventoryNumber" />
+      <br /><div class="error" data-for="inventoryNumber"></div>
+    </div>
+  </div>
+
+  <div class="control-group" id="buildingContainer">
+    <form:label path="building" cssClass="control-label">Building</form:label>
+    <div class="controls">
+      <form:input path="building" />
+      <br /><div class="error" data-for="building"></div>
+    </div>
+  </div>
+  <div class="control-group" id="roomContainer">
+    <form:label path="room" cssClass="control-label">Room</form:label>
+    <div class="controls">
+      <form:input path="room" />
+      <br /><div class="error" data-for="room"></div>
+    </div>
+  </div>
+  <div class="control-group" id="positionHintContainer">
+    <form:label path="positionHint" cssClass="control-label">Position Hint</form:label>
+    <div class="controls">
+      <form:input path="positionHint" />
+      <br /><div class="error" data-for="positionHint"></div>
+    </div>
+  </div>
+  
+</form:form>
