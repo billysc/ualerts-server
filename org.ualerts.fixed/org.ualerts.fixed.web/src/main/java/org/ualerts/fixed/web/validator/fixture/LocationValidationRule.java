@@ -50,26 +50,25 @@ public class LocationValidationRule extends AbstractFixtureValidationRule {
    */
   @Override
   public void doValidate(FixtureModel fixture) {
-    String building = fixture.getBuilding();
-    String room = fixture.getRoom();
-    String positionHint = fixture.getPositionHint();
+    String buildingText = fixture.getBuilding();
+    String roomText = fixture.getRoom();
+    String hintText = fixture.getPositionHint();
 
-    validateBuilding(building);
-    roomIsValid(room);
-    positionHintIsValid(positionHint);
+    validateBuilding(buildingText);
+    roomIsValid(roomText);
+    positionHintIsValid(hintText);
 
     if (!hasAddedErrors()) {
-      Building buildingObj = buildingRepository.findBuildingByName(building);
-      Room roomObj = roomRepository.findRoom(buildingObj.getId(), room);
-      PositionHint hint = positionHintRepository.findHint(positionHint);
+      Building building = buildingRepository.findBuildingByName(buildingText);
+      Room room = roomRepository.findRoom(building.getId(), roomText);
+      PositionHint hint = positionHintRepository.findHint(hintText);
       if ((room != null) && (hint != null)) {
-        if (fixtureRepository.findFixtureByLocation(roomObj.getId(),
+        if (fixtureRepository.findFixtureByLocation(room.getId(),
             hint.getId()) != null) {
           reject("location.conflict");
         }
       }
     }
-
   }
   
   /**
