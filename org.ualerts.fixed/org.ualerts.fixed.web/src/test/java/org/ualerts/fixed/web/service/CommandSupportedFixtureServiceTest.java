@@ -40,16 +40,16 @@ import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
 import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
- * Test case for the {@link ServiceSupportedFixtureService} class.
+ * Test case for the {@link CommandSupportedFixtureService} class.
  *
  * @author Michael Irwin
  */
-public class ServiceSupportedFixtureServiceTest {
+public class CommandSupportedFixtureServiceTest {
 
   private Mockery context;
   private FixtureModel fixture;
   private CommandService commandService;
-  private ServiceSupportedFixtureService service;
+  private CommandSupportedFixtureService service;
   
   /**
    * Setup for each test
@@ -59,7 +59,7 @@ public class ServiceSupportedFixtureServiceTest {
     context = new Mockery();
     fixture = new FixtureModel();
     commandService = context.mock(CommandService.class);
-    service = new ServiceSupportedFixtureService();
+    service = new CommandSupportedFixtureService();
     service.setCommandService(commandService);
     
     fixture.setBuilding("A Building");
