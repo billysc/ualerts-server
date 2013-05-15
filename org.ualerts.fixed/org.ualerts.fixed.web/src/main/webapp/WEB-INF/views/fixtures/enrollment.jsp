@@ -1,6 +1,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<form:form cssClass="form-horizontal" commandName="fixture" action="${pageContext.request.contextPath}/ui/enrollment">
+<form:form cssClass="form-horizontal" commandName="fixture" action="${pageContext.request.contextPath}/ui/fixtures/enrollment.json">
   <div id="globalErrorContainer">
     <div class="error" data-for="_global"></div>
   </div>
