@@ -19,7 +19,8 @@
 
 package org.ualerts.fixed.web.validator;
 
-import static org.ualerts.fixed.web.validator.FixtureValidator.MSG_PREFIX;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -28,6 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.Errors;
 import org.ualerts.fixed.web.model.FixtureModel;
+import org.ualerts.fixed.web.validator.fixture.FixtureValidationRule;
 
 /**
  * Test case of the {@link FixtureValidator} class.
@@ -40,113 +42,45 @@ public class FixtureValidatorTest {
   private Errors errors;
   private FixtureValidator validator;
   private FixtureModel fixture;
+  private List<FixtureValidationRule> rules;
+  
   
   /**
    * Setup for each test
    */
   @Before
   public void setup() {
+    fixture = new FixtureModel();
+    rules = new ArrayList<FixtureValidationRule>();
+
     context = new Mockery();
     errors = context.mock(Errors.class);
-    
     validator = new FixtureValidator();
-    fixture = new FixtureModel();
+    validator.setValidationRules(rules);
   }
   
   /**
-   * Validate the Validator supports the FixtureDTO class
+   * Validate the Validator supports the FixtureModel class
    */
   @Test
-  public void supportsFixtureDtoObject() {
+  public void testSupportsFixtureModelObject() {
     Assert.assertTrue(validator.supports(FixtureModel.class));
   }
   
   /**
-   * Validate that if nothing is set on the fixture, errors are added for each
-   * of the fields that require a value.  Also validates that the fields that
-   * the IP and MAC address syntax validations do NOT occur, since there is no
-   * value.
+   * Validate that the Validator passes validation to its rules
    */
   @Test
-  public void validateEmptyChecking() {
-    context.checking(new Expectations() { {
-      oneOf(errors).rejectValue("building", MSG_PREFIX + "building.empty");
-      oneOf(errors).rejectValue("room", MSG_PREFIX + "room.empty");
-      oneOf(errors).rejectValue("positionHint", 
-          MSG_PREFIX + "positionHint.empty");
-      oneOf(errors).rejectValue("serialNumber", 
-          MSG_PREFIX + "serialNumber.empty");
-      oneOf(errors).rejectValue("ipAddress", MSG_PREFIX + "ipAddress.empty");
-      oneOf(errors).rejectValue("macAddress", MSG_PREFIX + "macAddress.empty");
+  public void testValidationExecution() {
+    final FixtureValidationRule rule = 
+        context.mock(FixtureValidationRule.class);
+    rules.add(rule);
+    
+    context.checking(new Expectations() { { 
+      oneOf(rule).validate(fixture, errors);
     } });
     validator.validate(fixture, errors);
-  }
-  
-  /**
-   * Validate that an invalid IP address is not allowed.
-   */
-  @Test
-  public void shouldntAllowInvalidIpAddress() {
-    setupFixture();
-    
-    context.checking(new Expectations() { {
-      exactly(2).of(errors).rejectValue("ipAddress", 
-          MSG_PREFIX + "ipAddress.notValid");
-    } });
-    
-    fixture.setIpAddress("256.1.4.6");
-    validator.validate(fixture, errors);
-    
-    fixture.setIpAddress("Some other value");
-    validator.validate(fixture, errors);
-
     context.assertIsSatisfied();
-  }
-  
-  /**
-   * Validate that an invalid MAC address is not allowed
-   */
-  @Test
-  public void shouldntAllowInvalidMacAddress() {
-    setupFixture();
-    context.checking(new Expectations() { {
-      exactly(2).of(errors).rejectValue("macAddress", 
-          MSG_PREFIX + "macAddress.notValid");
-    } });
-
-    fixture.setMacAddress("AZ:VA:DC:12:34");
-    validator.validate(fixture, errors);
-
-    fixture.setMacAddress("Clearly not a mac");
-    validator.validate(fixture, errors);
-    
-    context.assertIsSatisfied();
-  }
-  
-  /**
-   * Validate that the rejectIfEmpty method works as expected
-   */
-  @Test
-  public void verifyRejection() {
-    final String key = "someKey";
-    final String msgProp = "someProp";
-    context.checking(new Expectations() { {
-      exactly(2).of(errors).rejectValue(key, MSG_PREFIX + msgProp);
-    } });
-    validator.rejectIfEmpty(null, errors, key, msgProp);
-    validator.rejectIfEmpty("", errors, key, msgProp);
-    validator.rejectIfEmpty("should.go.through", errors, key, msgProp);
-    context.assertIsSatisfied();
-  }
-  
-  private void setupFixture() {
-    fixture.setBuilding("A building");
-    fixture.setInventoryNumber("INV-12345678");
-    fixture.setIpAddress("192.168.1.1");
-    fixture.setMacAddress("0A:12:34:0B:56:78");
-    fixture.setPositionHint("TOP-RIGHT");
-    fixture.setRoom("110");
-    fixture.setSerialNumber("ABCD-123456789");
   }
   
 }

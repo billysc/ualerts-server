@@ -37,6 +37,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -64,6 +65,7 @@ public class ManuallyEnrollFixtureController {
 
   private MessageSource messageSource;
   private FixtureService fixtureService;
+  private Validator fixtureValidator;
 
   /**
    * Sets the validator to be used for the controller
@@ -71,9 +73,7 @@ public class ManuallyEnrollFixtureController {
    */
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.registerCustomEditor(InetAddress.class, new InetAddressEditor());
-    binder.registerCustomEditor(MacAddress.class, new MacAddressEditor());
-    binder.addValidators(new FixtureValidator());
+    binder.addValidators(fixtureValidator);
   }
 
   /**
@@ -104,13 +104,13 @@ public class ManuallyEnrollFixtureController {
       @Valid @ModelAttribute("fixture") FixtureModel fixture,
       BindingResult bindingResult) throws Exception {
 
-    fixture.setInstalledBy("");
     Map<String, Object> responseData = new HashMap<String, Object>();
     if (bindingResult.hasErrors()) {
       responseData.put("success", false);
       responseData.put("errors", getMappedErrors(bindingResult));
     }
     else {
+      fixture.setInstalledBy(""); //TODO Replace this with real data
       FixtureModel dto = fixtureService.createFixture(fixture);
       responseData.put("success", true);
       responseData.put("fixture", dto);
@@ -197,4 +197,13 @@ public class ManuallyEnrollFixtureController {
     this.messageSource = messageSource;
   }
 
+  /**
+   * Sets the {@code fixtureValidator} property.
+   * @param fixtureValidator the value to set
+   */
+  @Resource(name = "fixtureValidator")
+  public void setFixtureValidator(Validator fixtureValidator) {
+    this.fixtureValidator = fixtureValidator;
+  }
+  
 }

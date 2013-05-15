@@ -19,8 +19,6 @@
 package org.ualerts.fixed.web.model;
 
 import org.ualerts.fixed.Fixture;
-import org.ualerts.fixed.InetAddress;
-import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.Room;
 
 /**

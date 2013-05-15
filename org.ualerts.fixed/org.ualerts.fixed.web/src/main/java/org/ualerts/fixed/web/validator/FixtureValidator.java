@@ -19,20 +19,22 @@
 
 package org.ualerts.fixed.web.validator;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.List;
+
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import org.ualerts.fixed.InetAddress;
-import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.web.model.FixtureModel;
+import org.ualerts.fixed.web.validator.fixture.FixtureValidationRule;
 
 /**
  * A Validator to be used to validate FixtureDTO objects.
  * 
  * @author Michael Irwin
  */
-@Component
+@Component("fixtureValidator")
 public class FixtureValidator implements Validator {
 
   /**
@@ -40,12 +42,14 @@ public class FixtureValidator implements Validator {
    */
   public static final String MSG_PREFIX = "validation.fixture.";
 
+  private List<FixtureValidationRule> validationRules;
+
   /**
    * {@inheritDoc}
    */
   @Override
-  public boolean supports(Class<?> clazz) {
-    return FixtureModel.class.equals(clazz);
+  public boolean supports(Class<?> modelClass) {
+    return FixtureModel.class.equals(modelClass);
   }
 
   /**
@@ -54,51 +58,18 @@ public class FixtureValidator implements Validator {
   @Override
   public void validate(Object obj, Errors errors) {
     FixtureModel fixture = (FixtureModel) obj;
-
-    rejectIfEmpty(fixture.getBuilding(), errors, "building", "building.empty");
-    rejectIfEmpty(fixture.getRoom(), errors, "room", "room.empty");
-    rejectIfEmpty(fixture.getPositionHint(), errors, "positionHint",
-        "positionHint.empty");
-    rejectIfEmpty(fixture.getSerialNumber(), errors, "serialNumber",
-        "serialNumber.empty");
-    rejectIfEmpty(fixture.getIpAddress(), errors, "ipAddress",
-        "ipAddress.empty");
-    rejectIfEmpty(fixture.getMacAddress(), errors, "macAddress",
-        "macAddress.empty");
-
-    if (StringUtils.isNotEmpty(fixture.getIpAddress())) {
-      try {
-        InetAddress.getByAddress(fixture.getIpAddress());
-      }
-      catch (Exception e) {
-        errors.rejectValue("ipAddress", MSG_PREFIX + "ipAddress.notValid");
-      }
+    for (FixtureValidationRule rule : validationRules) {
+      rule.validate(fixture, errors);
     }
-
-    if (StringUtils.isNotEmpty(fixture.getMacAddress())) {
-      try {
-        new MacAddress(fixture.getMacAddress());
-      }
-      catch (Exception e) {
-        errors.rejectValue("macAddress", MSG_PREFIX + "macAddress.notValid");
-      }
-    }
-
   }
 
   /**
-   * Helper class that rejects the provided value if it is null or empty
-   * @param value The value to validate
-   * @param errors The Errors object that the rejection will be applied to if 
-   * needed
-   * @param fieldName The fieldname to be applied if a rejectValue is needed
-   * @param msgProp The message property to be applied, without the prefix
+   * Sets the {@code validationRules} property.
+   * @param validationRules the value to set
    */
-  protected void rejectIfEmpty(String value, Errors errors, String fieldName,
-      String msgProp) {
-
-    if (value == null || value.isEmpty())
-      errors.rejectValue(fieldName, MSG_PREFIX + msgProp);
+  @Resource
+  public void setValidationRules(List<FixtureValidationRule> validationRules) {
+    this.validationRules = validationRules;
   }
-
+  
 }
