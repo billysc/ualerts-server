@@ -29,6 +29,8 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.ualerts.fixed.web.controller.fixture.IndexController;
 import org.ualerts.testing.jpa.EntityManagerFactoryResource;
 import org.ualerts.testing.jpa.HibernatePersistentDataResource;
@@ -44,6 +46,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlListItem;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
+import com.gargoylesoftware.htmlunit.javascript.host.Event;
 import com.gargoylesoftware.htmlunit.javascript.host.KeyboardEvent;
 
 import edu.vt.cns.kestrel.common.IntegrationTestRunner;
@@ -55,6 +58,8 @@ import edu.vt.cns.kestrel.common.IntegrationTestRunner;
  */
 @RunWith(IntegrationTestRunner.class)
 public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
+  
+  private static final Logger logger = LoggerFactory.getLogger(ManualFixtureEnrollmentFT.class);
   
   private static final String AUTOCOMPLETE_FORMAT_BUILDING = "(%s) - %s";
   
@@ -225,28 +230,33 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     String buildingName = properties.getString("building.1.name");
     String buildingId = properties.getString("building.1.id");
     String buildingAbbr = properties.getString("building.1.abbreviation");
+    String buildingDisplay = 
+        String.format(AUTOCOMPLETE_FORMAT_BUILDING, buildingAbbr, buildingName);
 
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
     openEnrollFixtureDialog(page);
     
+    // Type first two characters into input
     HtmlInput input = getInputField(page, HTML_ID_BUILDING);
     input.type(buildingName.substring(0, 2));
+    input.fireEvent(Event.TYPE_KEY_UP);
     getClient().waitForBackgroundJavaScript(JS_LONG_DELAY);
     
-    HtmlUnorderedList dropdown = getAutocompleteList(page);
+    // Validate that the building appears in autocomplete
+    HtmlUnorderedList dropdown = getAutocompleteList(page, HTML_ID_BUILDING);
     assertTrue(dropdown.getChildElementCount() > 0);
     HtmlListItem item = dropdown.getFirstByXPath("li[1]");
-    assertEquals(
-        String.format(AUTOCOMPLETE_FORMAT_BUILDING, buildingAbbr, buildingName),
-        item.getTextContent());
+    assertEquals(buildingDisplay, item.getTextContent());
     
-    input.type(KeyboardEvent.DOM_VK_ENTER);
-    getClient().waitForBackgroundJavaScriptStartingBefore(JS_LONG_DELAY);
+    // Select the building
+    input.type(KeyboardEvent.DOM_VK_TAB);
+    input.fireEvent(Event.TYPE_BLUR);
+    getClient().waitForBackgroundJavaScriptStartingBefore(JS_SHORT_DELAY);
     
-    assertEquals(
-        String.format(AUTOCOMPLETE_FORMAT_BUILDING, buildingAbbr, buildingName),
-        input.getValueAttribute());
+    // Validate that the field is populated with the building
+    assertEquals(buildingDisplay, input.getValueAttribute());
     
+    // Validate that the id field is populated with the id of the building
     HtmlHiddenInput buildingIdElement = 
         page.getHtmlElementById(HTML_ID_BUILDING_ID);
     assertEquals(buildingId, buildingIdElement.getValueAttribute());
@@ -311,8 +321,10 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     clickSubmitButtonAndWait(page);
   }
   
-  private HtmlUnorderedList getAutocompleteList(HtmlPage page) {
-    return page.getFirstByXPath("//ul[@class='typeahead dropdown-menu']");
+  private HtmlUnorderedList getAutocompleteList(HtmlPage page, String fieldId) {
+    logger.info(page.asXml());
+    return page.getFirstByXPath("//div[@id='" + fieldId + "']//"
+    		+ "ul[@class='typeahead dropdown-menu']");
   }
   
 }
