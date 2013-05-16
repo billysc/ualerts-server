@@ -64,6 +64,18 @@ Array.prototype.clean = function() {
   return this;
 };
 
+/**
+ * Function to test if an array contains a value
+ */
+Array.prototype.contains = function(needle) {
+  for (var i = 0; i < this.length; i++) {
+    if (this[i] === needle) {
+      return true;
+    }
+  }
+  return false;
+};
+
 
 /**
  * Allows formatting of strings such as "Hello {0}".format("world")
