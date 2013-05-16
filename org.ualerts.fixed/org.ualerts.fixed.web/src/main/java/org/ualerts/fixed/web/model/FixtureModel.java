@@ -30,6 +30,7 @@ public class FixtureModel {
   
   private Long id;
   private Long version;
+  private String buildingId;
   private String building;
   private String buildingAbbreviation;
   private String room;
@@ -102,6 +103,22 @@ public class FixtureModel {
    */
   public void setVersion(Long version) {
     this.version = version;
+  }
+  
+  /**
+   * Gets the {@code buildingId} property.
+   * @return property value
+   */
+  public String getBuildingId() {
+    return buildingId;
+  }
+  
+  /**
+   * Sets the {@code buildingId} property.
+   * @param buildingId the value to set
+   */
+  public void setBuildingId(String buildingId) {
+    this.buildingId = buildingId;
   }
   
   /**
