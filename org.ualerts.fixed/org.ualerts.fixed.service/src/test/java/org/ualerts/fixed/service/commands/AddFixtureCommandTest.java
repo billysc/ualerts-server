@@ -19,7 +19,6 @@
 package org.ualerts.fixed.service.commands;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import java.util.Date;
 
@@ -48,7 +47,6 @@ import org.ualerts.fixed.service.DateTimeService;
  * @author Brian Early
  */
 public class AddFixtureCommandTest {
-  private static final String BUILDING_NAME = "buildingName";
   private static final String SERIAL_NUMBER = "serialNumber";
   private static final String INVENTORY_NUMBER = "inventoryNumber";
   private static final String MAC_ADDRESS = "0A-1B-2C-3D-4E-5F";
@@ -118,9 +116,8 @@ public class AddFixtureCommandTest {
   @Test(expected = IllegalArgumentException.class)
   public void testOnValidateBlankBuilding() throws Exception {
     populateCommand(command);
-    command.setBuildingName(null);
+    command.setBuildingId(null);
     command.onValidate();
-    fail("Expected exception did not occur.");
   }
 
   /**
@@ -143,7 +140,6 @@ public class AddFixtureCommandTest {
     populateCommand(command);
     command.setInetAddress(null);
     command.onValidate();
-    fail("Expected exception did not occur.");
   }
 
   /**
@@ -155,7 +151,6 @@ public class AddFixtureCommandTest {
     populateCommand(command);
     command.setMacAddress(null);
     command.onValidate();
-    fail("Expected exception did not occur.");
   }
 
   /**
@@ -167,7 +162,6 @@ public class AddFixtureCommandTest {
     populateCommand(command);
     command.setPositionHint(null);
     command.onValidate();
-    fail("Expected exception did not occur.");
   }
 
   /**
@@ -179,7 +173,6 @@ public class AddFixtureCommandTest {
     populateCommand(command);
     command.setRoomNumber(null);
     command.onValidate();
-    fail("Expected exception did not occur.");
   }
 
   /**
@@ -191,7 +184,6 @@ public class AddFixtureCommandTest {
     populateCommand(command);
     command.setSerialNumber(null);
     command.onValidate();
-    fail("Expected exception did not occur.");
   }
 
   /**
@@ -221,7 +213,7 @@ public class AddFixtureCommandTest {
     populateCommand(command);
 
     context.checking(new Expectations() { {
-      oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
+      oneOf(buildingRepository).findBuildingById(BUILDING_ID);
       will(returnValue(building));
       oneOf(roomRepository).findRoom(BUILDING_ID, ROOM_NUMBER);
       will(returnValue(room));
@@ -252,7 +244,7 @@ public class AddFixtureCommandTest {
     populateCommand(command);
 
     context.checking(new Expectations() { {
-      oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
+      oneOf(buildingRepository).findBuildingById(BUILDING_ID);
       will(returnValue(building));
       oneOf(roomRepository).findRoom(BUILDING_ID, ROOM_NUMBER);
       will(returnValue(null));
@@ -283,7 +275,7 @@ public class AddFixtureCommandTest {
     populateCommand(command);
 
     context.checking(new Expectations() { {
-      oneOf(buildingRepository).findBuildingByName(BUILDING_NAME);
+      oneOf(buildingRepository).findBuildingById(BUILDING_ID);
       will(returnValue(building));
       oneOf(roomRepository).findRoom(BUILDING_ID, ROOM_NUMBER);
       will(returnValue(room));
@@ -304,7 +296,7 @@ public class AddFixtureCommandTest {
 
   private void populateCommand(AddFixtureCommand command) {
     command.setRoomNumber(ROOM_NUMBER);
-    command.setBuildingName(BUILDING_NAME);
+    command.setBuildingId(BUILDING_ID);
     command.setPositionHint(POSITION_HINT);
     command.setInetAddress(InetAddress.getByAddress(IP_ADDRESS));
     command.setMacAddress(new MacAddress(MAC_ADDRESS));
