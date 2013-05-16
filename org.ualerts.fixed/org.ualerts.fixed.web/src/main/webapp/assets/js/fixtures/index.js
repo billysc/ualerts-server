@@ -27,7 +27,6 @@ $(function() {
 function postModalDisplay_enrollFixture() {
   var $modal = $(this);
   
-  console.log("SETTING UP MODAL STUFF");
   $("#building").typeahead({
 	source: function(query, process) {
       if (allBuildings != null && buildingNames != null) {
