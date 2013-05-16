@@ -73,6 +73,14 @@ public abstract class AbstractFunctionalTest {
   }
   
   /**
+   * Get the context url
+   * @return The context url
+   */
+  protected String getContextUrl() {
+    return contextUrl;
+  }
+  
+  /**
    * Get the web client
    * @return The web client
    */
