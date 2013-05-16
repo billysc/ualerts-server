@@ -71,7 +71,7 @@ function displayFixture(fixture) {
   
   // Get new row and wrap as jQuery object
   var $newRow = $( fixturesListTable.fnGetNodes( row[0] ) );
-  $newRow.attr("data-entity-id", fixture.id);
+  $newRow.data("entity-id", fixture.id);
   var currentColor = $newRow.css("backgroundColor");
   $newRow.addClass("updated");
   
