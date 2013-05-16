@@ -19,7 +19,10 @@
 
 package org.ualerts.fixed.web.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.ualerts.fixed.Building;
@@ -30,6 +33,7 @@ import org.ualerts.fixed.Building;
  * @author Michael Irwin
  */
 @XmlRootElement(name = "building")
+@XmlAccessorType(XmlAccessType.PROPERTY)
 public class BuildingModel {
 
   private String id;
@@ -74,7 +78,7 @@ public class BuildingModel {
    * Gets the {@code name} property.
    * @return property value
    */
-  @XmlAttribute
+  @XmlElement
   public String getName() {
     return name;
   }
@@ -91,7 +95,7 @@ public class BuildingModel {
    * Gets the {@code abbreviation} property.
    * @return property value
    */
-  @XmlAttribute
+  @XmlElement
   public String getAbbreviation() {
     return abbreviation;
   }

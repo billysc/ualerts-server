@@ -21,6 +21,8 @@ package org.ualerts.fixed.web.model;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -30,9 +32,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Michael Irwin
  */
 @XmlRootElement(name = "buildings")
+@XmlAccessorType(XmlAccessType.PROPERTY)
 public class BuildingsModel {
 
-  @XmlElement(name = "building")
   private BuildingModel[] buildings;
 
   /**
@@ -54,6 +56,7 @@ public class BuildingsModel {
    * Gets the {@code buildings} property.
    * @return property value
    */
+  @XmlElement(name = "building")
   public BuildingModel[] getBuildings() {
     return buildings;
   }
