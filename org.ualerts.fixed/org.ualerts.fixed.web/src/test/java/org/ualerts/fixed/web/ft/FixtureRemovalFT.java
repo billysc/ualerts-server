@@ -1,0 +1,101 @@
+/*
+ * File created on May 9, 2013
+ *
+ * Copyright 2008-2013 Virginia Polytechnic Institute and State University
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package org.ualerts.fixed.web.ft;
+
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.ualerts.testing.jpa.EntityManagerFactoryResource;
+import org.ualerts.testing.jpa.HibernatePersistentDataResource;
+import org.ualerts.testing.jpa.PersistentDataResource;
+
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlTable;
+
+import edu.vt.cns.kestrel.common.IntegrationTestRunner;
+
+/**
+ * Functional tests for fixture removal.
+ *
+ * @author Carl Harris
+ */
+@RunWith(IntegrationTestRunner.class)
+public class FixtureRemovalFT extends AbstractFunctionalTest {
+
+  private static final String HTML_ID_FIXTURE_TABLE = "fixturesList";
+  
+  // CHECKSTYLE:OFF
+  @ClassRule
+  public static EntityManagerFactoryResource entityManagerFactory = 
+      new EntityManagerFactoryResource("persistence-test.properties");
+  
+  @Rule
+  public PersistentDataResource persistentData =
+     new HibernatePersistentDataResource(entityManagerFactory);
+  // CHECKSTYLE:ON
+  
+  private static PropertiesAccessor properties;
+      
+  /**
+   * Perform one-time set up tasks
+   * @throws Exception
+   */
+  @BeforeClass
+  public static void setUpBeforeClass() throws Exception {
+    properties = PropertiesAccessor.newInstance("persistent-data.properties");
+  }
+  
+  /**
+   * Tests that when the remove dialog is canceled, the fixture is not
+   * removed.
+   * @throws Exception
+   */
+  @Test
+  public void testNotRemovedWhenDialogCanceled() throws Exception {
+    org.junit.Assert.fail("not implemented");
+  }
+  
+  /**
+   * Tests that when the remove confirmation dialog is canceled, the fixture
+   * is not removed.
+   * @throws Exception
+   */
+  @Test
+  public void testNotRemovedWhenConfirmationCanceled() throws Exception {    
+    org.junit.Assert.fail("not implemented");
+  }
+  
+  /**
+   * Tests that when the removal is confirmed, the fixture is removed.
+   * @throws Exception
+   */
+  @Test
+  public void testRemovedWhenConfirmed() throws Exception {
+    org.junit.Assert.fail("not implemented");
+  }
+
+  private HtmlTable getFixtureTable(HtmlPage page) {
+    return (HtmlTable) page
+        .getFirstByXPath("//table[@id='" + HTML_ID_FIXTURE_TABLE + "']");
+  }
+  
+}
