@@ -1,3 +1,5 @@
+var CONTEXT_URL = "/fixed";
+
 
 $(function() {
   
@@ -44,7 +46,7 @@ $(function() {
     if (typeof $this.data("postmodalcallback") == "string") {
       var fn = $this.data("postmodalcallback");
       if (typeof window[fn] == "function") {
-        $target.on('loaded', window[fn]($target));
+        $target.on('loaded', window[fn]);
       }
     }
     
