@@ -34,7 +34,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
  */
 public abstract class AbstractFunctionalTest {
   
-  private static final String UI_PATH = "/ui";    // TODO repeated in web.xml
+  private static final String UI_PATH = "/ui/fixtures";
+      // TODO repeated in web.xml
   
   /**
    * Short delay for Javascript wait time. Intended for short functions that

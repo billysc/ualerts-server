@@ -1,4 +1,4 @@
 /**
  * Controllers for handling web requests
  */
-package org.ualerts.fixed.web.controller;
+package org.ualerts.fixed.web.controller.fixture;

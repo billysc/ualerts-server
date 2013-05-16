@@ -17,7 +17,7 @@
  *
  */
 
-package org.ualerts.fixed.web.controller;
+package org.ualerts.fixed.web.controller.fixture;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -32,24 +32,22 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.web.model.FixtureModel;
 import org.ualerts.fixed.web.service.FixtureService;
 
 /**
- * Test case for the {@link ManuallyEnrollFixtureController} class.
+ * Test case for the {@link ManualEnrollmentController} class.
  *
  * @author Michael Irwin
  */
-public class ManuallyEnrollFixtureControllerTest {
+public class ManualEnrollmentControllerTest {
 
   private Mockery context;
   private FixtureService fixtureService;
-  private ManuallyEnrollFixtureController controller;
+  private ManualEnrollmentController controller;
   
   /**
    * Setup to be performed before each test
@@ -59,7 +57,7 @@ public class ManuallyEnrollFixtureControllerTest {
     context = new Mockery();
     fixtureService = context.mock(FixtureService.class);
 
-    controller = new ManuallyEnrollFixtureController();
+    controller = new ManualEnrollmentController();
     controller.setFixtureService(fixtureService);
   }
   
@@ -74,7 +72,7 @@ public class ManuallyEnrollFixtureControllerTest {
     } });
     String view = controller.displayForm(model);
     context.assertIsSatisfied();
-    Assert.assertEquals("enrollment/manualForm", view);
+    Assert.assertEquals("fixtures/enrollment", view);
   }
   
   /**
@@ -94,7 +92,7 @@ public class ManuallyEnrollFixtureControllerTest {
     
     String view = controller.handleFormSubmission(fixture, result);
     context.assertIsSatisfied();
-    Assert.assertEquals("enrollment/manualForm", view);
+    Assert.assertEquals("fixtures/enrollment", view);
   }
   
   /**

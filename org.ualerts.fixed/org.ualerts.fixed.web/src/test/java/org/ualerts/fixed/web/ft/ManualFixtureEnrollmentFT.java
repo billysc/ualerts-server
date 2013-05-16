@@ -28,7 +28,7 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.ualerts.fixed.web.controller.IndexController;
+import org.ualerts.fixed.web.controller.fixture.IndexController;
 import org.ualerts.testing.jpa.EntityManagerFactoryResource;
 import org.ualerts.testing.jpa.HibernatePersistentDataResource;
 import org.ualerts.testing.jpa.PersistentDataResource;

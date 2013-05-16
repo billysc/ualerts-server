@@ -39,8 +39,8 @@ function postModalDisplay_enrollFixture($modal) {
         $(".modal-body").scrollTop(0);
       }
     };
-    var errorCallback = function() {
-      alert("Something happened");
+    var errorCallback = function(request, status, ex) {
+      alert("Something happened: " + status + ": " + ex);
     };
     submitForm($form, url, requestType, responseType, successCallback, 
         errorCallback);
@@ -59,17 +59,19 @@ function displayFixture(fixture) {
   $("#fixturesList").parent().show();
 
   //Add the row. Return value has index value to retrieve row from dataTables
+  var rowControls = $("#rowControls").html();
   var row = $("#fixturesList").show().dataTable().fnAddData([
     fixture.buildingAbbreviation + " " + fixture.room,
     fixture.positionHint,
     fixture.ipAddress,
     fixture.macAddress,
     fixture.inventoryNumber,
-    "<a href='#'>Details</a>"
+    rowControls
   ]);
   
   // Get new row and wrap as jQuery object
   var $newRow = $( fixturesListTable.fnGetNodes( row[0] ) );
+  $newRow.attr("data-entity-id", fixture.id);
   var currentColor = $newRow.css("backgroundColor");
   $newRow.addClass("updated");
   

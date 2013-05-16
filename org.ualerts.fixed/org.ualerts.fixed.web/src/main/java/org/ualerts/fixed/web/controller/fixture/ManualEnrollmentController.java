@@ -16,7 +16,7 @@
  * limitations under the License.
  *
  */
-package org.ualerts.fixed.web.controller;
+package org.ualerts.fixed.web.controller.fixture;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,8 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,11 +51,9 @@ import org.ualerts.fixed.web.service.FixtureService;
  * @author Michael Irwin
  */
 @Controller
-public class ManuallyEnrollFixtureController {
+@RequestMapping("/fixtures")
+public class ManualEnrollmentController {
   
-  private static final Logger LOGGER = 
-      LoggerFactory.getLogger(ManuallyEnrollFixtureController.class);
-
   private MessageSource messageSource;
   private FixtureService fixtureService;
   private Validator fixtureValidator;
@@ -76,10 +72,10 @@ public class ManuallyEnrollFixtureController {
    * @param model The model for the UI
    * @return The name of the view to display
    */
-  @RequestMapping(value = "/enrollment", method = RequestMethod.GET)
+  @RequestMapping(value = "/enrollment.html", method = RequestMethod.GET)
   public String displayForm(Model model) {
     model.addAttribute("fixture", new FixtureModel());
-    return "enrollment/manualForm";
+    return "fixtures/enrollment";
   }
 
   /**
@@ -92,7 +88,7 @@ public class ManuallyEnrollFixtureController {
    * @throws Exception Only internal exceptions that cannot be handled
    */
   @ResponseBody
-  @RequestMapping(value = "/enrollment", method = RequestMethod.POST, 
+  @RequestMapping(value = "/enrollment.json", method = RequestMethod.POST, 
       produces = { "application/json" })
   public Map<String, Object> handleFormSubmission(HttpServletRequest request,
       HttpServletResponse response, 
@@ -120,7 +116,7 @@ public class ManuallyEnrollFixtureController {
    * @param result Any binding errors/failures
    * @return Name of the view to be rendered
    */
-  @RequestMapping(value = "/enrollment", method = RequestMethod.POST, 
+  @RequestMapping(value = "/enrollment.html", method = RequestMethod.POST, 
       produces = { "text/html" })
   public String handleFormSubmission(
       @ModelAttribute("fixture") @Valid FixtureModel fixture,
@@ -130,7 +126,7 @@ public class ManuallyEnrollFixtureController {
     if (!result.hasErrors()) {
       fixtureService.createFixture(fixture);
     }
-    return "enrollment/manualForm";
+    return "fixtures/enrollment";
   }
 
   private Map<String, Object> getMappedErrors(Errors errors) {

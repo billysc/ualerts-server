@@ -17,7 +17,7 @@
  *
  */
 
-package org.ualerts.fixed.web.controller;
+package org.ualerts.fixed.web.controller.fixture;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -72,7 +72,7 @@ public class IndexControllerTest {
     
     String view = controller.displayIndex(model);
     context.assertIsSatisfied();
-    assertEquals("index", view);
+    assertEquals("fixtures/index", view);
     assertTrue(model.containsKey("fixtures"));
     assertEquals(fixtures, model.get("fixtures"));
   }

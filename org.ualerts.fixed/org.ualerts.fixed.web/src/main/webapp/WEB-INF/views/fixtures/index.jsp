@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fixtures" tagdir="/WEB-INF/tags/fixtures" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -29,7 +30,7 @@
 	    <div class="row">
 	      <div class="span12">
 	        <div class="text-right actionButtons">
-	          <a id="addFixture" class="btn modalTrigger" href="${pageContext.request.contextPath}/ui/enrollment" data-target="#modal" data-title="Add Fixture" data-primarybuttontext="Submit New Fixture" data-cancelbuttontext="Cancel" data-postmodalcallback="postModalDisplay_enrollFixture">
+	          <a id="addFixture" class="btn modalTrigger" href="${pageContext.request.contextPath}/ui/fixtures/enrollment.html" data-target="#modal" data-title="Add Fixture" data-primarybuttontext="Submit New Fixture" data-cancelbuttontext="Cancel" data-postmodalcallback="postModalDisplay_enrollFixture">
 	            <i class="icon-plus"></i> Add Fixture
 	          </a>
 	        </div>
@@ -51,13 +52,15 @@
 	          </thead>
 	          <tbody>
 	            <c:forEach items="${fixtures}" var="fixture">
-	              <tr>
+	              <tr data-entity-id="${fixture.id}">
 	                <td>${fixture.buildingAbbreviation} ${fixture.room}</td>
 	                <td>${fixture.positionHint}</td>
 	                <td>${fixture.ipAddress}</td>
 	                <td>${fixture.macAddress}</td>
 	                <td>${fixture.inventoryNumber}</td>
-	                <td><a href="#">Details</a></td>
+	                <td>
+	                  <fixtures:rowControls/>
+	                </td>
 	              </tr>
 	            </c:forEach>
 	          </tbody>
@@ -79,12 +82,16 @@
 	    </div>
 	  </div>
 	    
+	  <div id="rowControls" class="hide">
+      <fixtures:rowControls/>
+	  </div>
+	  
 	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery.min.js"></script>
 	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery-ui.custom.min.js"></script>
 	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/bootstrap.min.js"></script>
 	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery.dataTables.min.js"></script>
 	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/global.js"></script>
-	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/index.js"></script>
+	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/fixtures/index.js"></script>
 	  
 	</body>
 </html>

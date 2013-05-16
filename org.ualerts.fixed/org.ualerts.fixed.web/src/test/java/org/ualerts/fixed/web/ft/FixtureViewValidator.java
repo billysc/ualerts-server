@@ -20,7 +20,6 @@
 package org.ualerts.fixed.web.ft;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import com.gargoylesoftware.htmlunit.html.HtmlTableCell;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
@@ -101,8 +100,6 @@ public final class FixtureViewValidator {
         getCell(row, index++).getTextContent());
     assertEquals(expectedInventoryNumber, 
         getCell(row, index++).getTextContent());
-
-    assertTrue(getCell(row, index).getTextContent().contains("Details"));
   }
 
   /**

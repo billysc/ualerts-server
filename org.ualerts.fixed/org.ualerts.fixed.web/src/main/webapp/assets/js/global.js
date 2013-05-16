@@ -31,7 +31,7 @@ $(function() {
       $primaryButton.addClass("hide");
     
     if (typeof cancelButtonText == "string")
-      $cancelButton.removeClass("hide").text(cancelButtonText)
+      $cancelButton.removeClass("hide").text(cancelButtonText);
     else
       $cancelButton.addClass("hide");
     
@@ -69,7 +69,7 @@ function submitForm($form, url, requestType, responseType, successCallback, erro
     dataType: responseType,
     success: successCallback,
     error: errorCallback
-  })
+  });
 }
 
 function displayErrorsOnForm($form, errors) {
