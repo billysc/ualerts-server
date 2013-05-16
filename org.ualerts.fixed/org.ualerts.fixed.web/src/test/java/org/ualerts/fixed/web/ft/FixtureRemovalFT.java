@@ -19,17 +19,24 @@
 
 package org.ualerts.fixed.web.ft;
 
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.ualerts.fixed.web.controller.fixture.IndexController;
 import org.ualerts.testing.jpa.EntityManagerFactoryResource;
 import org.ualerts.testing.jpa.HibernatePersistentDataResource;
 import org.ualerts.testing.jpa.PersistentDataResource;
+import org.ualerts.testing.jpa.TestResources;
 
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
+import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 
 import edu.vt.cns.kestrel.common.IntegrationTestRunner;
 
@@ -55,6 +62,11 @@ public class FixtureRemovalFT extends AbstractFunctionalTest {
   
   private static PropertiesAccessor properties;
       
+  private HtmlPage page;
+  private HtmlTable table;
+  private HtmlTableRow row;
+  private HtmlAnchor control;
+  
   /**
    * Perform one-time set up tasks
    * @throws Exception
@@ -64,22 +76,34 @@ public class FixtureRemovalFT extends AbstractFunctionalTest {
     properties = PropertiesAccessor.newInstance("persistent-data.properties");
   }
   
+  @Before
+  public void setUp() throws Exception {
+    page = getHtmlPage(IndexController.INDEX_PATH);
+    table = getFixtureTable(page);
+    row = getFirstTableRow(table);
+    control = getRemoveControl(row);    
+  }
+  
   /**
    * Tests that when the remove dialog is canceled, the fixture is not
    * removed.
    * @throws Exception
    */
   @Test
+  @TestResources(prefix = "sql/", before = "FixtureRemovalFT_before",
+      after = "FixtureRemovalFT_after")
   public void testNotRemovedWhenDialogCanceled() throws Exception {
     org.junit.Assert.fail("not implemented");
   }
-  
+
   /**
    * Tests that when the remove confirmation dialog is canceled, the fixture
    * is not removed.
    * @throws Exception
    */
   @Test
+  @TestResources(prefix = "sql/", before = "FixtureRemovalFT_before",
+      after = "FixtureRemovalFT_after")
   public void testNotRemovedWhenConfirmationCanceled() throws Exception {    
     org.junit.Assert.fail("not implemented");
   }
@@ -89,13 +113,30 @@ public class FixtureRemovalFT extends AbstractFunctionalTest {
    * @throws Exception
    */
   @Test
+  @TestResources(prefix = "sql/", before = "FixtureRemovalFT_before",
+      after = "FixtureRemovalFT_after")
   public void testRemovedWhenConfirmed() throws Exception {
     org.junit.Assert.fail("not implemented");
   }
 
+  private HtmlAnchor getRemoveControl(HtmlTableRow row) {
+    HtmlAnchor control = (HtmlAnchor) row.getFirstByXPath(
+        "//a[@href='#remove']");
+    assertNotNull(control);
+    return control;
+  }
+
+  private HtmlTableRow getFirstTableRow(HtmlTable table) {
+    HtmlTableRow row = (HtmlTableRow) table.getFirstByXPath("//tbody/tr[1]");
+    assertNotNull(row);
+    return row;
+  }
+
   private HtmlTable getFixtureTable(HtmlPage page) {
-    return (HtmlTable) page
+    HtmlTable table = (HtmlTable) page
         .getFirstByXPath("//table[@id='" + HTML_ID_FIXTURE_TABLE + "']");
+    assertNotNull(table);
+    return table;
   }
   
 }
