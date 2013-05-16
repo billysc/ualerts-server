@@ -19,6 +19,7 @@
 
 package org.ualerts.fixed.web.ft;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -37,9 +38,13 @@ import org.ualerts.testing.jpa.TestResources;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
+import com.gargoylesoftware.htmlunit.html.HtmlHiddenInput;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlListItem;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
+import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
+import com.gargoylesoftware.htmlunit.javascript.host.KeyboardEvent;
 
 import edu.vt.cns.kestrel.common.IntegrationTestRunner;
 
@@ -51,9 +56,12 @@ import edu.vt.cns.kestrel.common.IntegrationTestRunner;
 @RunWith(IntegrationTestRunner.class)
 public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   
+  private static final String AUTOCOMPLETE_FORMAT_BUILDING = "(%s) - %s";
+  
   private static final String HTML_ID_GLOBAL_ERRORS = "globalErrorContainer";
   private static final String HTML_ID_IP_ADDRESS = "ipAddressContainer";
   private static final String HTML_ID_BUILDING = "buildingContainer";
+  private static final String HTML_ID_BUILDING_ID = "buildingId";
   private static final String HTML_ID_FIXTURE_BUTTON = "addFixture";
   private static final String HTML_ID_INV_NUMBER = "inventoryNumberContainer";
   private static final String HTML_ID_MAC_ADDRESS = "macAddressContainer";
@@ -206,6 +214,43 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
         + HTML_ID_GLOBAL_ERRORS + "']" + "/div")).getTextContent()
         .contains("the same building, room, and position hint"));
   }
+  
+  /**
+   * Validate that the building autocomplete works
+   */
+  @Test
+  @TestResources(prefix = "sql/", before = "ManualFixtureEnrollmentFT_before",
+      after = "ManualFixtureEnrollmentFT_after")
+  public void validateBuildingAutoComplete() throws Exception {
+    String buildingName = properties.getString("building.1.name");
+    String buildingId = properties.getString("building.1.id");
+    String buildingAbbr = properties.getString("building.1.abbreviation");
+
+    HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
+    openEnrollFixtureDialog(page);
+    
+    HtmlInput input = getInputField(page, HTML_ID_BUILDING);
+    input.type(buildingName.substring(0, 2));
+    getClient().waitForBackgroundJavaScript(JS_LONG_DELAY);
+    
+    HtmlUnorderedList dropdown = getAutocompleteList(page);
+    assertTrue(dropdown.getChildElementCount() > 0);
+    HtmlListItem item = dropdown.getFirstByXPath("li[1]");
+    assertEquals(
+        String.format(AUTOCOMPLETE_FORMAT_BUILDING, buildingAbbr, buildingName),
+        item.getTextContent());
+    
+    input.type(KeyboardEvent.DOM_VK_ENTER);
+    getClient().waitForBackgroundJavaScriptStartingBefore(JS_LONG_DELAY);
+    
+    assertEquals(
+        String.format(AUTOCOMPLETE_FORMAT_BUILDING, buildingAbbr, buildingName),
+        input.getValueAttribute());
+    
+    HtmlHiddenInput buildingIdElement = 
+        page.getHtmlElementById(HTML_ID_BUILDING_ID);
+    assertEquals(buildingId, buildingIdElement.getValueAttribute());
+  }
 
   private void openEnrollFixtureDialog(HtmlPage page) throws Exception {
     HtmlAnchor fixtureButton = page.getHtmlElementById(HTML_ID_FIXTURE_BUTTON);
@@ -246,8 +291,11 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   
   private void populateField(HtmlPage page, String fieldId, String value) 
       throws Exception {
-    ((HtmlInput) page.getFirstByXPath("//div[@id='" + fieldId + "']//input"))
-      .setValueAttribute(value);
+    getInputField(page, fieldId).type(value);
+  }
+  
+  private HtmlInput getInputField(HtmlPage page, String fieldId) {
+    return page.getFirstByXPath("//div[@id='" + fieldId + "']//input"); 
   }
   
   private void submitValidForm(HtmlPage page) throws Exception {
@@ -261,6 +309,10 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     populateField(page, "roomContainer", VALID_ROOM_NUMBER);
     populateField(page, "positionHintContainer", VALID_POSITION_HINT);
     clickSubmitButtonAndWait(page);
+  }
+  
+  private HtmlUnorderedList getAutocompleteList(HtmlPage page) {
+    return page.getFirstByXPath("//ul[@class='typeahead dropdown-menu']");
   }
   
 }
