@@ -1,5 +1,7 @@
 var fixturesListTable;
-
+var allBuildings = null;
+var buildingNames = null;
+var autoComplete_buildingFormat = "({0}) - {1}";
 
 $(function() {
   var fixturesTable = $("#fixturesList");
@@ -22,7 +24,39 @@ $(function() {
   }
 });
 
-function postModalDisplay_enrollFixture($modal) {
+function postModalDisplay_enrollFixture() {
+  var $modal = $(this);
+  
+  console.log("SETTING UP MODAL STUFF");
+  $("#building").typeahead({
+	source: function(query, process) {
+      if (allBuildings != null && buildingNames != null) {
+    	return buildingNames;
+      }
+      $.get(CONTEXT_URL + "/api/buildings", function(data) {
+    	allBuildings = data.buildings;
+    	buildingNames = Array();
+    	for (key in allBuildings) {
+          var building = allBuildings[key];
+          var display = autoComplete_buildingFormat.format(building.abbreviation, building.name); 
+          buildingNames.push(display);
+          allBuildings[key].display = display;
+    	}
+    	process(buildingNames);
+      }, 'json');
+    }
+  }).blur(function() {
+  	var value = $(this).val();
+    if (!buildingNames.contains(value)) {
+      return $(this).val('');
+    }
+    for (key in allBuildings) {
+	  if (allBuildings[key].display == value) {
+        return $("#buildingId").val( allBuildings[key].id );
+      }
+    }
+  });
+  
   var submitEnrollFixture = function() {
     var $form = $modal.find("form");
     var url = $form.attr("action");

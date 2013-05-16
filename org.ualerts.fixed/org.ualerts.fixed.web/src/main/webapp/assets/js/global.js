@@ -1,5 +1,3 @@
-var CONTEXT_URL = "/fixed";
-
 
 $(function() {
   
