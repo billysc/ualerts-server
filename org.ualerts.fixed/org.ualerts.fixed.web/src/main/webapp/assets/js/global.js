@@ -65,6 +65,17 @@ Array.prototype.clean = function() {
 };
 
 
+/**
+ * Allows formatting of strings such as "Hello {0}".format("world")
+ */
+String.prototype.format = function() {
+  var args = arguments;
+  return this.replace(/{(\d+)}/g, function(match, number) { 
+    return typeof args[number] != 'undefined' ? args[number] : match;
+  });
+};
+
+
 function submitForm($form, url, requestType, responseType, successCallback, errorCallback) {
   $.ajax({
     url: url,
