@@ -7,112 +7,112 @@
 
   <named-query name="findBuildingById">
     <query>
-      select distinct building
-      from Building building
-      where building.id = :id
+      select distinct b
+      from Building b
+      where b.id = :id
     </query>
   </named-query>
 
   <named-query name="findBuildingByName">
     <query>
-      select distinct building
-      from Building building
-      where upper(building.name) = upper(:name)
+      select distinct b
+      from Building b
+      where upper(b.name) = upper(:name)
     </query>
   </named-query>
 
   <named-query name="findAllBuildings">
     <query>
-      select distinct building
-      from Building building
+      select distinct b
+      from Building b
     </query>
   </named-query>
 
   <named-query name="findRoom">
     <query>
-      select distinct room
-      from Room room
-      where room.building.id = :buildingId
-      and room.roomNumber = :roomNumber
+      select distinct r
+      from Room r
+      where r.building.id = :buildingId
+      and r.roomNumber = :roomNumber
     </query>
   </named-query>
 
   <named-query name="findRoomsForBuilding">
     <query>
-      select distinct room
-      from Room room
-      where room.building.id = :buildingId
-      order by room.roomNumber
+      select distinct r
+      from Room r
+      where r.building.id = :buildingId
+      order by r.roomNumber
     </query>
   </named-query>
 
   <named-query name="findAllPositionHints">
     <query>
-      select distinct positionHint
-      from PositionHint positionHint
-      order by positionHint.hintText
+      select distinct p
+      from PositionHint p
+      order by p.hintText
     </query>
   </named-query>
 
   <named-query name="findPositionHint">
     <query>
-      select distinct positionHint
-      from PositionHint positionHint
-      where positionHint.hintText = :hintText
+      select distinct p
+      from PositionHint p
+      where p.hintText = :hintText
     </query>
   </named-query>
 
   <named-query name="findAssetBySerialNumber">
     <query>
-      select distinct asset
-      from Asset asset
-      where asset.serialNumber = :serialNumber
+      select distinct a
+      from Asset a
+      where a.serialNumber = :serialNumber
     </query>
   </named-query>
 
   <named-query name="findAssetByInventoryNumber">
     <query>
-      select distinct asset
-      from Asset asset
-      where asset.inventoryNumber = :inventoryNumber
+      select distinct a
+      from Asset a
+      where a.inventoryNumber = :inventoryNumber
     </query>
   </named-query>
 
   <named-query name="findAssetByMacAddress">
     <query>
-      select distinct asset
-      from Asset asset
-      where asset.macAddress = :macAddress
+      select distinct a
+      from Asset a
+      where a.macAddress = :macAddress
     </query>
   </named-query>
 
   <named-query name="findFixtureByLocation">
     <query>
-      select distinct fixture
-      from Fixture fixture
-      where fixture.room.id = :roomId
-      and fixture.positionHint.id = :hintId
+      select distinct f
+      from Fixture f
+      where f.room.id = :roomId
+      and f.positionHint.id = :hintId
     </query>
   </named-query>
 
   <named-query name="findAllFixtureDetails">
     <query>
-      select distinct fixture
-      from Fixture fixture
-      left outer join fetch fixture.room rm
+      select distinct f
+      from Fixture f
+      left outer join fetch f.room rm
       left outer join fetch rm.building
-      left outer join fetch fixture.asset
+      left outer join fetch f.asset
     </query>
   </named-query>
 
   <named-query name="findFixtureById">
     <query>
-      select distinct fixture
-      from Fixture fixture
-      left outer join fetch fixture.room rm
+      select distinct f
+      from Fixture f
+      left outer join fetch f.room rm
       left outer join fetch rm.building
-      left outer join fetch fixture.asset
-      where fixture.id = :id
+      left outer join fetch f.asset
+      where f.id = :id
     </query>
   </named-query>
 
