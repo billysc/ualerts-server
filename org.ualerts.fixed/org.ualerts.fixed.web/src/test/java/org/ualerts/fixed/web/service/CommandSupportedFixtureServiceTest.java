@@ -92,7 +92,7 @@ public class CommandSupportedFixtureServiceTest {
     context.assertIsSatisfied();
     assertEquals(fixtureObj.getId(), returnedFixture.getId());
     assertEquals(fixtureObj.getVersion(), returnedFixture.getVersion());
-    assertEquals(fixture.getBuilding(), command.getBuildingName());
+    assertEquals(fixture.getBuildingId(), command.getBuildingId());
     assertEquals(fixture.getInventoryNumber(), command.getInventoryNumber());
     assertEquals(fixture.getIpAddress(), 
         command.getInetAddress().getHostAddress());

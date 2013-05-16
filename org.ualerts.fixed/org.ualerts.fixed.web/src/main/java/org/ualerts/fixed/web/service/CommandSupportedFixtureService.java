@@ -51,7 +51,7 @@ public class CommandSupportedFixtureService implements FixtureService {
   public FixtureModel createFixture(FixtureModel fixture) throws Exception {
     AddFixtureCommand command = 
         commandService.newCommand(AddFixtureCommand.class);
-    command.setBuildingName(fixture.getBuilding());
+    command.setBuildingId(fixture.getBuildingId());
     command.setInetAddress(InetAddress.getByAddress(fixture.getIpAddress()));
     command.setInventoryNumber(fixture.getInventoryNumber());
     command.setMacAddress(new MacAddress(fixture.getMacAddress()));
