@@ -26,12 +26,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.ualerts.fixed.web.controller.fixture.IndexController;
 import org.ualerts.testing.jpa.EntityManagerFactoryResource;
 import org.ualerts.testing.jpa.HibernatePersistentDataResource;
@@ -59,8 +56,6 @@ import edu.vt.cns.kestrel.common.IntegrationTestRunner;
  */
 @RunWith(IntegrationTestRunner.class)
 public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
-  
-  private static final Logger logger = LoggerFactory.getLogger(ManualFixtureEnrollmentFT.class);
   
   private static final String HTML_ID_GLOBAL_ERRORS = "globalErrorContainer";
   private static final String HTML_ID_IP_ADDRESS = "ipAddressContainer";
@@ -247,8 +242,6 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     
     // Validate that the field is populated with the building
     assertEquals(buildingName, input.getValueAttribute());
-    
-    logger.info(getModalBody(page).asXml());
     
     // Validate that the id field is populated with the id of the building
     HtmlHiddenInput buildingIdElement = 

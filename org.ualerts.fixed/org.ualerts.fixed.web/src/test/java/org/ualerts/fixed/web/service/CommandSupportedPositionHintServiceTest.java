@@ -32,7 +32,6 @@ import org.junit.Test;
 import org.ualerts.fixed.PositionHint;
 import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.FindAllPositionHintsCommand;
-import org.ualerts.fixed.web.model.BuildingModel;
 import org.ualerts.fixed.web.model.PositionHintsModel;
 
 /**
