@@ -40,7 +40,7 @@ import org.ualerts.fixed.web.model.FixtureModel;
  * @author Michael Irwin
  */
 @Service
-public class ServiceSupportedFixtureService implements FixtureService {
+public class CommandSupportedFixtureService implements FixtureService {
 
   private CommandService commandService;
   
@@ -51,7 +51,7 @@ public class ServiceSupportedFixtureService implements FixtureService {
   public FixtureModel createFixture(FixtureModel fixture) throws Exception {
     AddFixtureCommand command = 
         commandService.newCommand(AddFixtureCommand.class);
-    command.setBuildingName(fixture.getBuilding());
+    command.setBuildingId(fixture.getBuildingId());
     command.setInetAddress(InetAddress.getByAddress(fixture.getIpAddress()));
     command.setInventoryNumber(fixture.getInventoryNumber());
     command.setMacAddress(new MacAddress(fixture.getMacAddress()));

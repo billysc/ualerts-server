@@ -37,7 +37,8 @@
   <div class="control-group" id="buildingContainer">
     <form:label path="building" cssClass="control-label">Building</form:label>
     <div class="controls">
-      <form:input path="building" />
+      <input id="building" type="text" />
+      <form:hidden path="buildingId" />
       <br /><div class="error" data-for="building"></div>
     </div>
   </div>

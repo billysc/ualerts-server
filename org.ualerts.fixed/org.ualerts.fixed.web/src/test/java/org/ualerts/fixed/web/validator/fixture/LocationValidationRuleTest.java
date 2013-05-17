@@ -95,14 +95,14 @@ public class LocationValidationRuleTest {
    */
   @Test
   public void testInvalidBuilding() {
-    final String buildingName = "BUILDING1";
+    final String buildingId = "BUILDING1";
     context.checking(new Expectations() { { 
-      oneOf(buildingRepository).findBuildingByName(buildingName);
+      oneOf(buildingRepository).findBuildingById(buildingId);
       will(returnValue(null));
       oneOf(errors).rejectValue("building", MSG_PREFIX + "building.unknown");
     } });
     rule.setErrors(errors);
-    rule.validateBuilding(buildingName);
+    rule.validateBuilding(buildingId);
     context.assertIsSatisfied();
   }
   
@@ -168,7 +168,7 @@ public class LocationValidationRuleTest {
   @Test
   public void testValidCheckBuildingGood() {
     Building building = new Building();
-    building.setName("BUILDING1");
+    building.setId("BUILDING1");
     testValidCheckRoute(building, null, null);
   }
   
@@ -197,7 +197,7 @@ public class LocationValidationRuleTest {
   @Test
   public void testValidCheckBuildingAndRoomGood() {
     Building building = new Building();
-    building.setName("BUILDING1");
+    building.setId("BUILDING1");
     testValidCheckRoute(building, "ROOM", null);
   }
   
@@ -208,7 +208,7 @@ public class LocationValidationRuleTest {
   @Test
   public void testValidCheckBuildingAndPositionHintGood() {
     Building building = new Building();
-    building.setName("BUILDING1");
+    building.setId("BUILDING1");
     testValidCheckRoute(building, null, "TOP-RIGHT");
   }
   
@@ -245,13 +245,14 @@ public class LocationValidationRuleTest {
     final String macAddress = "01-12-23-34-45-56";
     
     fixture.setBuilding(building);
+    fixture.setBuildingId(buildingId);
     fixture.setIpAddress(ipAddress);
     fixture.setMacAddress(macAddress);
     fixture.setPositionHint(positionHint);
     fixture.setRoom(room);
     
     context.checking(new Expectations() { { 
-      exactly(2).of(buildingRepository).findBuildingByName(building);
+      exactly(2).of(buildingRepository).findBuildingById(buildingId);
       will(returnValue(buildingObj));
       
       oneOf(roomRepository).findRoom(buildingId, room);
@@ -277,8 +278,9 @@ public class LocationValidationRuleTest {
     
     if (building != null) {
       fixture.setBuilding(building.getName());
+      fixture.setBuildingId(building.getId());
       context.checking(new Expectations() { { 
-        oneOf(buildingRepository).findBuildingByName(building.getName());
+        oneOf(buildingRepository).findBuildingById(building.getId());
         will(returnValue(building));
       } });
     }

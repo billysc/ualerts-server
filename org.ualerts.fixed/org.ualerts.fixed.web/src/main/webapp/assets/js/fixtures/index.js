@@ -1,5 +1,7 @@
 var fixturesListTable;
-
+var allBuildings = null;
+var buildingNames = null;
+var autoComplete_buildingFormat = "({0}) - {1}";
 
 $(function() {
   var fixturesTable = $("#fixturesList");
@@ -22,28 +24,60 @@ $(function() {
   }
 });
 
-function postModalDisplay_enrollFixture($modal) {
-  var submitEnrollFixture = function() {
+function postModalDisplay_enrollFixture() {
+  var $modal = $(this);
+  
+  $("#building").typeahead({
+	source: function(query, process) {
+      if (allBuildings != null && buildingNames != null) {
+    	return buildingNames;
+      }
+      $.get(CONTEXT_URL + "/api/buildings", function(data) {
+    	allBuildings = data.buildings;
+    	buildingNames = Array();
+    	for (key in allBuildings) {
+          var building = allBuildings[key];
+          var display = autoComplete_buildingFormat.format(building.abbreviation, building.name); 
+          buildingNames.push(display);
+          allBuildings[key].display = display;
+    	}
+    	process(buildingNames);
+      }, 'json');
+    }
+  }).blur(function() {
+  	var value = $(this).val();
+    if (!buildingNames.contains(value)) {
+      $("#buildingId").val('');
+      return $(this).val('');
+    }
+    for (key in allBuildings) {
+	  if (allBuildings[key].display == value) {
+        return $("#buildingId").val( allBuildings[key].id );
+      }
+    }
+  });
+  
+  var submitEnrollFixture = function(event) {
+	event.stopPropagation();
     var $form = $modal.find("form");
-    var url = $form.attr("action");
-    var requestType = "POST";
-    var responseType = "json";
-    var successCallback = function(data) {
-      if (data.success) {
-        var fixture = data.fixture;
-        displayFixture(fixture);
+    var successCallback = function(response) {
+      if (response.success) {
+        displayFixture(response.fixture);
         $modal.modal('hide');
       }
       else {
-        displayErrorsOnForm($form, data.errors);
+        displayErrorsOnForm($form, response.errors);
         $(".modal-body").scrollTop(0);
       }
     };
+    
     var errorCallback = function(request, status, ex) {
       alert("Something happened: " + status + ": " + ex);
     };
-    submitForm($form, url, requestType, responseType, successCallback, 
+    
+    submitForm($form, $form.attr("action"), "POST", "json", successCallback, 
         errorCallback);
+    return false;
   };
   
   $modal.find(".btn-primary").click(submitEnrollFixture);
