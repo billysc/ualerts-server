@@ -35,7 +35,10 @@ $(function() {
     else
       $cancelButton.addClass("hide");
     
-    if (typeof $this.data("post-modal-callback") == "string") {
+    if (typeof $this.data("post-modal-callback") == "function") {
+      $this.data("post-modal-callback")($target);
+    }
+    else if (typeof $this.data("post-modal-callback") == "string") {
       var fn = $this.data("post-modal-callback");
       window[fn]($target);
     }
