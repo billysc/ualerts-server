@@ -47,6 +47,7 @@ function postModalDisplay_enrollFixture() {
   }).blur(function() {
   	var value = $(this).val();
     if (!buildingNames.contains(value)) {
+      $("#buildingId").val('');
       return $(this).val('');
     }
     for (key in allBuildings) {
@@ -56,27 +57,27 @@ function postModalDisplay_enrollFixture() {
     }
   });
   
-  var submitEnrollFixture = function() {
+  var submitEnrollFixture = function(event) {
+	event.stopPropagation();
     var $form = $modal.find("form");
-    var url = $form.attr("action");
-    var requestType = "POST";
-    var responseType = "json";
-    var successCallback = function(data) {
-      if (data.success) {
-        var fixture = data.fixture;
-        displayFixture(fixture);
+    var successCallback = function(response) {
+      if (response.success) {
+        displayFixture(response.fixture);
         $modal.modal('hide');
       }
       else {
-        displayErrorsOnForm($form, data.errors);
+        displayErrorsOnForm($form, response.errors);
         $(".modal-body").scrollTop(0);
       }
     };
+    
     var errorCallback = function(request, status, ex) {
       alert("Something happened: " + status + ": " + ex);
     };
-    submitForm($form, url, requestType, responseType, successCallback, 
+    
+    submitForm($form, $form.attr("action"), "POST", "json", successCallback, 
         errorCallback);
+    return false;
   };
   
   $modal.find(".btn-primary").click(submitEnrollFixture);
