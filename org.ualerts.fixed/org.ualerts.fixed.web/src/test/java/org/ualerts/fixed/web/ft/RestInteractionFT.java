@@ -120,8 +120,9 @@ public class RestInteractionFT extends AbstractFunctionalTest {
    * Test the retrieval of all position hints, using XML
    */
   @Test
-  @TestResources(prefix = "sql/", before = "RestInteractionFT_buildings_before",
-      after = "RestInteractionFT_buildings_after")
+  @TestResources(prefix = "sql/", 
+      before = "RestInteractionFT_positionHints_before",
+      after = "RestInteractionFT_positionHints_after")
   public void testGetPositionHintsXml() {
     PositionHintsModel hintsModel = getPositionHints("application/xml");
     assertNotNull(hintsModel);
@@ -136,8 +137,9 @@ public class RestInteractionFT extends AbstractFunctionalTest {
    * Test the retrieval of all position hints, using JSON
    */
   @Test
-  @TestResources(prefix = "sql/", before = "RestInteractionFT_buildings_before",
-      after = "RestInteractionFT_buildings_after")
+  @TestResources(prefix = "sql/", 
+      before = "RestInteractionFT_positionHints_before",
+      after = "RestInteractionFT_positionHints_after")
   public void testGetPositionHintsJson() {
     PositionHintsModel hintsModel = getPositionHints("application/json");
     assertNotNull(hintsModel);
