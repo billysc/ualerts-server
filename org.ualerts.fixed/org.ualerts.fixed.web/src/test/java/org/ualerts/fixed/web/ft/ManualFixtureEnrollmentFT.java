@@ -30,6 +30,8 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.ualerts.fixed.web.controller.fixture.IndexController;
 import org.ualerts.testing.jpa.EntityManagerFactoryResource;
 import org.ualerts.testing.jpa.HibernatePersistentDataResource;
@@ -45,6 +47,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlListItem;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
+import com.gargoylesoftware.htmlunit.javascript.host.Event;
 import com.gargoylesoftware.htmlunit.javascript.host.KeyboardEvent;
 
 import edu.vt.cns.kestrel.common.IntegrationTestRunner;
@@ -56,6 +59,8 @@ import edu.vt.cns.kestrel.common.IntegrationTestRunner;
  */
 @RunWith(IntegrationTestRunner.class)
 public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
+  
+  private static final Logger logger = LoggerFactory.getLogger(ManualFixtureEnrollmentFT.class);
   
   private static final String HTML_ID_GLOBAL_ERRORS = "globalErrorContainer";
   private static final String HTML_ID_IP_ADDRESS = "ipAddressContainer";
@@ -215,11 +220,10 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   /**
    * Validate that the building autocomplete works
    */
-  @Ignore
   @Test
   @TestResources(prefix = "sql/", before = "ManualFixtureEnrollmentFT_before",
       after = "ManualFixtureEnrollmentFT_after")
-  public void validateBuildingAutoComplete() throws Exception {
+  public void testAutoCompletionOfBuildingFindsMatch() throws Exception {
     String buildingName = properties.getString("building.1.name");
     String buildingId = properties.getString("building.1.id");
     
@@ -238,11 +242,13 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     
     // Select the building
     input.type(KeyboardEvent.DOM_VK_TAB);
-    input.type(KeyboardEvent.DOM_VK_TAB);
+    input.fireEvent(Event.TYPE_BLUR);
     getClient().waitForBackgroundJavaScriptStartingBefore(JS_SHORT_DELAY);
     
     // Validate that the field is populated with the building
     assertEquals(buildingName, input.getValueAttribute());
+    
+    logger.info(getModalBody(page).asXml());
     
     // Validate that the id field is populated with the id of the building
     HtmlHiddenInput buildingIdElement = 
@@ -254,7 +260,6 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
    * Verify that a non-existing building cannot be used
    * @throws Exception
    */
-  @Ignore
   @Test
   public void testValidateInvalidBuilding() throws Exception {
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
@@ -264,6 +269,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     HtmlInput input = populateAutocompeteField(page, HTML_ID_BUILDING, "Z_Z_Z");
 
     input.type(KeyboardEvent.DOM_VK_TAB);
+    input.fireEvent(Event.TYPE_BLUR);
     getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
     assertEmpty(input.getValueAttribute());
     
