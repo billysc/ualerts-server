@@ -1,49 +1,40 @@
-function AddFixtureController() {
+function AddFixtureController(buildingService) {
+  this.buildingService = buildingService;
 }
 
 AddFixtureController.prototype.modalReady = function(source, $modal) {
-
+  var controller = this;
   var $building = $("#building");
   $building.typeahead({
     source: function(query, process) {
-      if (allBuildings != null && buildingNames != null) {
-        return buildingNames;
-      }
-      var getCallback = function(data) {
-        allBuildings = data.buildings;
-        buildingNames = Array();
-        for (key in allBuildings) {
-          var building = allBuildings[key];
-          var display = autoComplete_buildingFormat.format(building.abbreviation, building.name); 
-          buildingNames.push(display);
-          allBuildings[key].display = display;
-        }
-        process(buildingNames);
-      };
-      $.get(CONTEXT_URL + "/api/buildings", getCallback, 'json');
+      controller.buildingService.getAllBuildings(process);
     }
   });
   
   $building.blur(function() {
-    var value = $(this).val();
-    if (!buildingNames.contains(value)) {
-      $("#buildingId").val('');
-      return $(this).val('');
-    }
-    for (key in allBuildings) {
-    if (allBuildings[key].display == value) {
-        return $("#buildingId").val( allBuildings[key].id );
-      }
-    }
+    controller.whenBuildingSelected(this);
   });
   
-  var controller = this;
   $modal.find(".btn-primary").click(function() {
     controller.submitForm(this, $modal);
   });
+  
   $modal.find("form").submit(function() {
     controller.submitForm(this, $modal);
   });
+};
+
+AddFixtureController.prototype.whenBuildingSelected = function(buildingElement) {
+  var value = $(buildingElement).val();
+  var building = this.buildingService.findMatchingBuilding(value);
+  if (building == null) {
+    $('#buildingId').val('');
+    $(buildingElement).val('');
+  }
+  else {
+    $("#buildingId").val(building.id);
+    $(buildingElement).val(building.name);
+  }
 };
 
 AddFixtureController.prototype.submitForm = function(source, $modal) {

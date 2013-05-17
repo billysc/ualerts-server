@@ -1,8 +1,6 @@
 var fixturesListTable;
-var addFixtureController = new AddFixtureController();
-var allBuildings = null;
-var buildingNames = null;
-var autoComplete_buildingFormat = "({0}) - {1}";
+var buildingService = new BuildingService();
+var addFixtureController = new AddFixtureController(buildingService);
 
 $(function() {
   var fixturesTable = $("#fixturesList");
