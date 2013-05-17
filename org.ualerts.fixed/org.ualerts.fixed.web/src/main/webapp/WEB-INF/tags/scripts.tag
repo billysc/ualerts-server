@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ attribute name="javascriptBase" required="true" rtexprvalue="true" %>
 <script type="text/javascript">
   var CONTEXT_URL = '${pageContext.request.contextPath}';
