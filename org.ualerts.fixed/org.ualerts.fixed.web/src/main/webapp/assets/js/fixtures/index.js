@@ -1,5 +1,8 @@
 var fixturesListTable;
 var addFixtureController = new AddFixtureController();
+var allBuildings = null;
+var buildingNames = null;
+var autoComplete_buildingFormat = "({0}) - {1}";
 
 $(function() {
   var fixturesTable = $("#fixturesList");
@@ -17,12 +20,13 @@ $(function() {
       { bSortable: false }
     ]
   });
+  
   if (emptyTable) {
     fixturesTable.parent().hide();
   }
   
   $("#addFixture").data("post-modal-callback", function($modal) { 
-    addFixtureController.modalReady(this, $modal);
+	  addFixtureController.modalReady(this, $modal);
   });
   
 });

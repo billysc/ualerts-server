@@ -91,6 +91,9 @@
       <fixtures:rowControls/>
 	  </div>
 	  
+    <script type="text/javascript">
+      var CONTEXT_URL = '${pageContext.request.contextPath}';
+    </script>
 	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery.min.js"></script>
 	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery-ui.custom.min.js"></script>
 	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/bootstrap.min.js"></script>

@@ -72,6 +72,7 @@ public class EntityManagerFactoryResource extends ExternalResource
    * {@inheritDoc}
    */
   @Override
+  @SuppressWarnings("rawtypes")
   public EntityManager createEntityManager(Map properties) {
     return delegate.createEntityManager(properties);
   }

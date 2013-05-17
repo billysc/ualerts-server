@@ -50,16 +50,16 @@ public class LocationValidationRule extends AbstractFixtureValidationRule {
    */
   @Override
   public void doValidate(FixtureModel fixture) {
-    String buildingText = fixture.getBuilding();
+    String buildingId = fixture.getBuildingId();
     String roomText = fixture.getRoom();
     String hintText = fixture.getPositionHint();
 
-    validateBuilding(buildingText);
+    validateBuilding(buildingId);
     roomIsValid(roomText);
     positionHintIsValid(hintText);
 
     if (!hasAddedErrors()) {
-      Building building = buildingRepository.findBuildingByName(buildingText);
+      Building building = buildingRepository.findBuildingById(buildingId);
       Room room = roomRepository.findRoom(building.getId(), roomText);
       PositionHint hint = positionHintRepository.findHint(hintText);
       if ((room != null) && (hint != null)) {
@@ -73,13 +73,13 @@ public class LocationValidationRule extends AbstractFixtureValidationRule {
   
   /**
    * Validate that the building isn't empty and exists
-   * @param building The name of the building
+   * @param buildingId The id of the building
    */
-  protected void validateBuilding(String building) {
-    if (StringUtils.isBlank(building)) {
+  protected void validateBuilding(String buildingId) {
+    if (StringUtils.isBlank(buildingId)) {
       rejectValue("building", "building.empty");
     }
-    else if (buildingRepository.findBuildingByName(building) == null) {
+    else if (buildingRepository.findBuildingById(buildingId) == null) {
       rejectValue("building", "building.unknown");
     }
   }

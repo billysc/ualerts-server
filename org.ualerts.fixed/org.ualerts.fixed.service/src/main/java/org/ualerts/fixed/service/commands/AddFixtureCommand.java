@@ -46,8 +46,7 @@ import org.ualerts.fixed.service.errors.UnspecifiedConstraintException;
 @CommandComponent
 public class AddFixtureCommand extends AbstractCommand<Fixture> {
   private String roomNumber;
-  // TODO - This will change to buildingId in a future task
-  private String buildingName;
+  private String buildingId;
   private String positionHint;
   private InetAddress inetAddress;
   private String serialNumber;
@@ -69,7 +68,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   protected void onValidate() throws Exception {
     super.onValidate();
     Assert.hasLength(roomNumber, "roomNumber is required");
-    Assert.hasLength(buildingName, "buildingName is required");
+    Assert.hasLength(buildingId, "buildingId is required");
     Assert.hasLength(positionHint, "positionHint is required");
     Assert.notNull(inetAddress, "inetAddress is required");
     Assert.hasLength(serialNumber, "serialNumber is required");
@@ -83,7 +82,7 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   protected Fixture onExecute() throws UnspecifiedConstraintException {
     try {
       Building building =
-          buildingRepository.findBuildingByName(getBuildingName());
+          buildingRepository.findBuildingById(getBuildingId());
       Room room = findOrCreateRoom(building);
       PositionHint hint = findOrCreatePositionHint();
       Asset asset = createAsset();
@@ -154,19 +153,19 @@ public class AddFixtureCommand extends AbstractCommand<Fixture> {
   }
 
   /**
-   * Gets the {@code buildingName} property.
+   * Gets the {@code buildingId} property.
    * @return property value
    */
-  public String getBuildingName() {
-    return buildingName;
+  public String getBuildingId() {
+    return buildingId;
   }
-
+  
   /**
-   * Sets the {@code buildingName} property.
-   * @param buildingName the value to set
+   * Sets the {@code buildingId} property.
+   * @param buildingId the value to set
    */
-  public void setBuildingName(String buildingName) {
-    this.buildingName = buildingName;
+  public void setBuildingId(String buildingId) {
+    this.buildingId = buildingId;
   }
 
   /**

@@ -1,5 +1,5 @@
 /*
- * File created on May 7, 2013 
+ * File created on May 15, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -16,33 +16,23 @@
  * limitations under the License.
  *
  */
-package org.ualerts.fixed;
 
-import java.beans.PropertyEditorSupport;
+package org.ualerts.fixed.web.service;
 
-import org.apache.commons.lang.StringUtils;
+import org.ualerts.fixed.web.model.BuildingsModel;
 
 /**
- * A {@code PropertyEditor} for an {@link InetAddress}.
+ * A service to provide interaction with Building data.
  *
- * @author Carl Harris
+ * @author Michael Irwin
  */
-public class InetAddressEditor extends PropertyEditorSupport {
+public interface BuildingService {
 
-  @Override
-  public String getAsText() {
-    if (getValue() == null) return null;
-    return ((InetAddress) getValue()).getHostAddress();
-  }
-
-  @Override
-  public void setAsText(String text) throws IllegalArgumentException {
-    if (StringUtils.isBlank(text)) {
-      setValue(null);
-    }
-    else {
-      setValue(InetAddress.getByAddress(text));  
-    }
-  }
-
+  /**
+   * Get all known buildings.
+   * @return All of the buildings
+   * @throws Exception Any exception that occurs during retrieval of buildings
+   */
+  BuildingsModel getAllBuildings() throws Exception;
+  
 }

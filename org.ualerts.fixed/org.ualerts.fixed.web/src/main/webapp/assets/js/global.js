@@ -14,15 +14,22 @@ $(function() {
     var primaryButtonText = $this.data("primary-button-text");
     var cancelButtonText = $this.data("cancel-button-text");
     
-    var opts = {};
-    if (typeof remote != "undefined") {
-      opts.remote = remote;
-    }
-    
     // Remove any lingering click handlers
     var $primaryButton = $target.find(".btn-primary").unbind("click");
     var $cancelButton = $target.find(".btn.cancel").unbind("click");
     
+    $target.unbind("hidden");
+    $target.unbind("loaded");
+    var fn = $this.data("post-modal-callback");
+    if (typeof fn == "function") {      
+      $target.on('loaded', fn);
+    }
+      
+    var opts = {};
+    if (typeof remote != "undefined") {
+      opts.remote = remote;
+    }
+
     $target.modal(opts);
     $target.find(".modal-header h3").text(title);
     if (typeof primaryButtonText == "string")
@@ -35,14 +42,6 @@ $(function() {
     else
       $cancelButton.addClass("hide");
     
-    if (typeof $this.data("post-modal-callback") == "function") {
-      $this.data("post-modal-callback")($target);
-    }
-    else if (typeof $this.data("post-modal-callback") == "string") {
-      var fn = $this.data("post-modal-callback");
-      window[fn]($target);
-    }
-    
     // Destroy the modal when closed to force URL fetch
     $target.on('hidden', function() {
       $(this).removeData('modal');
@@ -52,6 +51,9 @@ $(function() {
   });
 });
 
+/**
+ * Function that removes all empty strings or null values from Array
+ */
 Array.prototype.clean = function() {
   for (var i = 0; i < this.length; i++) {
     if (this[i] == null || this[i] == "") {         
@@ -60,6 +62,29 @@ Array.prototype.clean = function() {
     }
   }
   return this;
+};
+
+/**
+ * Function to test if an array contains a value
+ */
+Array.prototype.contains = function(needle) {
+  for (var i = 0; i < this.length; i++) {
+    if (this[i] === needle) {
+      return true;
+    }
+  }
+  return false;
+};
+
+
+/**
+ * Allows formatting of strings such as "Hello {0}".format("world")
+ */
+String.prototype.format = function() {
+  var args = arguments;
+  return this.replace(/{(\d+)}/g, function(match, number) { 
+    return typeof args[number] != 'undefined' ? args[number] : match;
+  });
 };
 
 

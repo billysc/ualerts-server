@@ -25,31 +25,27 @@ import static org.junit.Assert.assertNotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.ualerts.fixed.Fixture;
-import org.ualerts.fixed.InetAddress;
-import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
 import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
- * Test case for the {@link ServiceSupportedFixtureService} class.
+ * Test case for the {@link CommandSupportedFixtureService} class.
  *
  * @author Michael Irwin
  */
-public class ServiceSupportedFixtureServiceTest {
+public class CommandSupportedFixtureServiceTest {
 
   private Mockery context;
   private FixtureModel fixture;
   private CommandService commandService;
-  private ServiceSupportedFixtureService service;
+  private CommandSupportedFixtureService service;
   
   /**
    * Setup for each test
@@ -59,7 +55,7 @@ public class ServiceSupportedFixtureServiceTest {
     context = new Mockery();
     fixture = new FixtureModel();
     commandService = context.mock(CommandService.class);
-    service = new ServiceSupportedFixtureService();
+    service = new CommandSupportedFixtureService();
     service.setCommandService(commandService);
     
     fixture.setBuilding("A Building");
@@ -96,7 +92,7 @@ public class ServiceSupportedFixtureServiceTest {
     context.assertIsSatisfied();
     assertEquals(fixtureObj.getId(), returnedFixture.getId());
     assertEquals(fixtureObj.getVersion(), returnedFixture.getVersion());
-    assertEquals(fixture.getBuilding(), command.getBuildingName());
+    assertEquals(fixture.getBuildingId(), command.getBuildingId());
     assertEquals(fixture.getInventoryNumber(), command.getInventoryNumber());
     assertEquals(fixture.getIpAddress(), 
         command.getInetAddress().getHostAddress());

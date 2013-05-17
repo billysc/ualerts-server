@@ -1,3 +1,4 @@
+<!DOCTYPE configuration>
 <configuration>
 
   <jmxConfigurator />
@@ -10,6 +11,8 @@
   </appender>
 
   <!-- logger name="org.ualerts.testing.jpa" level="debug"/ -->
+  
+  <!--  logger name="org.apache.http" level="debug" / -->
   
   <root level="info">
     <appender-ref ref="STDOUT" />

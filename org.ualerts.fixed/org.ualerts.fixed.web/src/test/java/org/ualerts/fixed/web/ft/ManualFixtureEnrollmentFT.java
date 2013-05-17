@@ -19,15 +19,19 @@
 
 package org.ualerts.fixed.web.ft;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.ualerts.fixed.web.controller.fixture.IndexController;
 import org.ualerts.testing.jpa.EntityManagerFactoryResource;
 import org.ualerts.testing.jpa.HibernatePersistentDataResource;
@@ -37,9 +41,14 @@ import org.ualerts.testing.jpa.TestResources;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
+import com.gargoylesoftware.htmlunit.html.HtmlHiddenInput;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlListItem;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
+import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
+import com.gargoylesoftware.htmlunit.javascript.host.Event;
+import com.gargoylesoftware.htmlunit.javascript.host.KeyboardEvent;
 
 import edu.vt.cns.kestrel.common.IntegrationTestRunner;
 
@@ -51,9 +60,15 @@ import edu.vt.cns.kestrel.common.IntegrationTestRunner;
 @RunWith(IntegrationTestRunner.class)
 public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   
+  private static final Logger logger = 
+      LoggerFactory.getLogger(ManualFixtureEnrollmentFT.class);
+  
+  private static final String AUTOCOMPLETE_FORMAT_BUILDING = "(%s) - %s";
+  
   private static final String HTML_ID_GLOBAL_ERRORS = "globalErrorContainer";
   private static final String HTML_ID_IP_ADDRESS = "ipAddressContainer";
   private static final String HTML_ID_BUILDING = "buildingContainer";
+  private static final String HTML_ID_BUILDING_ID = "buildingId";
   private static final String HTML_ID_FIXTURE_BUTTON = "addFixture";
   private static final String HTML_ID_INV_NUMBER = "inventoryNumberContainer";
   private static final String HTML_ID_MAC_ADDRESS = "macAddressContainer";
@@ -141,19 +156,6 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   }
   
   /**
-   * Verify that a non-existing building cannot be used
-   * @throws Exception
-   */
-  @Test
-  public void testValidateInvalidBuilding() throws Exception {
-    HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
-    openEnrollFixtureDialog(page);
-    populateField(page, HTML_ID_BUILDING, "Unknown Building");
-    clickSubmitButtonAndWait(page);
-    assertFieldHasError(page, HTML_ID_BUILDING, "is not known");
-  }
-  
-  /**
    * Test a valid form submission and that the modal form disappears
    * @throws Exception
    */
@@ -184,14 +186,25 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
     submitValidForm(page);
     assertNoErrors(page);
+    assertFalse(getModalBody(page).isDisplayed());
     
+    // FIXME Bug in HtmlUnit doesn't fire CSS transition events, which bootstrap
+    // relies on for callbacks. Basically, modal doesn't get destroyed and 
+    // doesn't refetch content. Reloading the page resets everything and allows
+    // test to pass. Shouldn't have to be this way.
+    page = getHtmlPage(IndexController.INDEX_PATH);
     openEnrollFixtureDialog(page);
-    
+
     populateField(page, HTML_ID_MAC_ADDRESS, VALID_MAC_ADDRESS);
     populateField(page, HTML_ID_SERIAL_NUMBER, VALID_SERIAL_NUMBER);
     populateField(page, HTML_ID_INV_NUMBER, VALID_INVENTORY_NUMBER);
-    populateField(page, HTML_ID_BUILDING, 
-        properties.getString("building.1.name"));
+
+    HtmlInput building = populateAutocompeteField(page, HTML_ID_BUILDING, 
+        properties.getString("building.1.abbreviation"));
+    building.type(KeyboardEvent.DOM_VK_TAB);
+    building.type(KeyboardEvent.DOM_VK_TAB);
+    getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
+
     populateField(page, HTML_ID_ROOM_NUMBER, VALID_ROOM_NUMBER);
     populateField(page, HTML_ID_POSITION_HINT, VALID_POSITION_HINT);
     
@@ -205,6 +218,70 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     assertTrue(((HtmlDivision) page.getFirstByXPath("//div[@id='" 
         + HTML_ID_GLOBAL_ERRORS + "']" + "/div")).getTextContent()
         .contains("the same building, room, and position hint"));
+  }
+  
+  /**
+   * Validate that the building autocomplete works
+   */
+  @Ignore
+  @Test
+  @TestResources(prefix = "sql/", before = "ManualFixtureEnrollmentFT_before",
+      after = "ManualFixtureEnrollmentFT_after")
+  public void validateBuildingAutoComplete() throws Exception {
+    String buildingName = properties.getString("building.1.name");
+    String buildingId = properties.getString("building.1.id");
+    String buildingAbbr = properties.getString("building.1.abbreviation");
+    String buildingDisplay = 
+        String.format(AUTOCOMPLETE_FORMAT_BUILDING, buildingAbbr, buildingName);
+
+    HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
+    openEnrollFixtureDialog(page);
+    
+    // Type first two characters into input
+    HtmlInput input = populateAutocompeteField(page, HTML_ID_BUILDING, 
+        buildingName.substring(0, 2));
+    
+    // Validate that the building appears in autocomplete
+    HtmlUnorderedList dropdown = getAutocompleteList(page, HTML_ID_BUILDING);
+    assertTrue(dropdown.getChildElementCount() > 0);
+    HtmlListItem item = dropdown.getFirstByXPath("li[1]");
+    assertEquals(buildingDisplay, item.getTextContent());
+    
+    // Select the building
+    input.type(KeyboardEvent.DOM_VK_TAB);
+    input.type(KeyboardEvent.DOM_VK_TAB);
+    getClient().waitForBackgroundJavaScriptStartingBefore(JS_SHORT_DELAY);
+    
+    // Validate that the field is populated with the building
+    assertEquals(buildingDisplay, input.getValueAttribute());
+    
+    // Validate that the id field is populated with the id of the building
+    HtmlHiddenInput buildingIdElement = 
+        page.getHtmlElementById(HTML_ID_BUILDING_ID);
+    assertEquals(buildingId, buildingIdElement.getValueAttribute());
+  }
+  
+  /**
+   * Verify that a non-existing building cannot be used
+   * @throws Exception
+   */
+  @Ignore
+  @Test
+  public void testValidateInvalidBuilding() throws Exception {
+    HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
+    openEnrollFixtureDialog(page);
+    
+    // Type first two characters into input
+    HtmlInput input = populateAutocompeteField(page, HTML_ID_BUILDING, "Z_Z_Z");
+
+    input.type(KeyboardEvent.DOM_VK_TAB);
+    getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
+    assertEmpty(input.getValueAttribute());
+    
+    //Validate that the hidden building id value is empty too
+    HtmlHiddenInput buildingIdElement = 
+        page.getHtmlElementById(HTML_ID_BUILDING_ID);
+    assertEmpty(buildingIdElement.getValueAttribute());
   }
 
   private void openEnrollFixtureDialog(HtmlPage page) throws Exception {
@@ -244,23 +321,46 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
         + "/div[1]/div[@class='error']")).getTextContent();
   }
   
+  private HtmlInput populateAutocompeteField(HtmlPage page, String fieldId, 
+      String value) throws Exception {
+    HtmlInput input = getInputField(page, fieldId);
+    input.type(value);
+    getClient().waitForBackgroundJavaScript(JS_LONG_DELAY);
+    return input;
+  }
+  
   private void populateField(HtmlPage page, String fieldId, String value) 
       throws Exception {
-    ((HtmlInput) page.getFirstByXPath("//div[@id='" + fieldId + "']//input"))
-      .setValueAttribute(value);
+    HtmlInput input = getInputField(page, fieldId);
+    input.setValueAttribute("");
+    input.type(value);
+  }
+  
+  private HtmlInput getInputField(HtmlPage page, String fieldId) {
+    return page.getFirstByXPath("//div[@id='" + fieldId + "']//input"); 
   }
   
   private void submitValidForm(HtmlPage page) throws Exception {
     openEnrollFixtureDialog(page);
-    populateField(page, "ipAddressContainer", VALID_IP_ADDRESS);
-    populateField(page, "macAddressContainer", VALID_MAC_ADDRESS);
-    populateField(page, "serialNumberContainer", VALID_SERIAL_NUMBER);
-    populateField(page, "inventoryNumberContainer", VALID_INVENTORY_NUMBER);
-    populateField(page, "buildingContainer", 
+    populateField(page, HTML_ID_IP_ADDRESS, VALID_IP_ADDRESS);
+    populateField(page, HTML_ID_MAC_ADDRESS, VALID_MAC_ADDRESS);
+    populateField(page, HTML_ID_SERIAL_NUMBER, VALID_SERIAL_NUMBER);
+    populateField(page, HTML_ID_INV_NUMBER, VALID_INVENTORY_NUMBER);
+
+    HtmlInput building = populateAutocompeteField(page, HTML_ID_BUILDING, 
         properties.getString("building.1.name"));
-    populateField(page, "roomContainer", VALID_ROOM_NUMBER);
-    populateField(page, "positionHintContainer", VALID_POSITION_HINT);
+    building.type(KeyboardEvent.DOM_VK_TAB);
+    building.type(KeyboardEvent.DOM_VK_TAB);
+    getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
+    
+    populateField(page, HTML_ID_ROOM_NUMBER, VALID_ROOM_NUMBER);
+    populateField(page, HTML_ID_POSITION_HINT, VALID_POSITION_HINT);
     clickSubmitButtonAndWait(page);
+  }
+  
+  private HtmlUnorderedList getAutocompleteList(HtmlPage page, String fieldId) {
+    return page.getFirstByXPath("//div[@id='" + fieldId + "']//"
+    		+ "ul[@class='typeahead dropdown-menu']");
   }
   
 }

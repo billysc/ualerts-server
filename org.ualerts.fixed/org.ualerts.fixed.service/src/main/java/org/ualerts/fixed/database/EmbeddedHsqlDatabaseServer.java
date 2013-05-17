@@ -164,8 +164,8 @@ public class EmbeddedHsqlDatabaseServer implements InitializingBean,
   }
 
   private String getDatabaseURI() throws IOException {
-    return URI_SCHEME + 
-        new File(location.getFile(), DEFAULT_DATABASE_NAME).getAbsolutePath();
+    File path = new File(location.getFile(), DEFAULT_DATABASE_NAME);
+    return URI_SCHEME + path.getAbsolutePath();
   }
 
   private void waitForShutdown() {
