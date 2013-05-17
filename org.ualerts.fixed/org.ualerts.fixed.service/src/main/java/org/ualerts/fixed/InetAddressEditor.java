@@ -31,13 +31,18 @@ public class InetAddressEditor extends PropertyEditorSupport {
 
   @Override
   public String getAsText() {
-    return (getValue() == null)
-        ? null : ((InetAddress) getValue()).getHostAddress();
+    if (getValue() == null) return null;
+    return ((InetAddress) getValue()).getHostAddress();
   }
 
   @Override
   public void setAsText(String text) throws IllegalArgumentException {
-    setValue(InetAddress.getByAddress(StringUtils.isBlank(text)? null : text));
+    if (StringUtils.isBlank(text)) {
+      setValue(null);
+    }
+    else {
+      setValue(InetAddress.getByAddress(text));  
+    }
   }
 
 }

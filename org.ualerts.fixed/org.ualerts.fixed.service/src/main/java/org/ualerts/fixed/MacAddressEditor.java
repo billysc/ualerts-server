@@ -21,6 +21,9 @@ package org.ualerts.fixed;
 
 import java.beans.PropertyEditorSupport;
 
+import org.apache.commons.lang.StringUtils;
+
+
 /**
  * A {@code PropertyEditor} for a {@link MacAddress}.
  *
@@ -30,13 +33,18 @@ public class MacAddressEditor extends PropertyEditorSupport {
 
   @Override
   public String getAsText() {
-    return (getValue() == null)
-        ? null : ((MacAddress) getValue()).toString();
+    if (getValue() == null) return null;
+    return ((MacAddress) getValue()).toString();
   }
 
   @Override
   public void setAsText(String text) throws IllegalArgumentException {
-    setValue(new MacAddress(text));
+    if (StringUtils.isBlank(text)) {
+      setValue(null);
+    }
+    else {
+      setValue(new MacAddress(text));
+    }
   }
 
 }
