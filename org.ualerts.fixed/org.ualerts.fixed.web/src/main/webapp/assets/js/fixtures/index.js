@@ -25,8 +25,8 @@ $(function() {
     fixturesTable.parent().hide();
   }
   
-  $("#addFixture").data("post-modal-callback", function($modal) { 
-	  addFixtureController.modalReady(this, $modal);
+  $("#addFixture").data("post-modal-callback", function() { 
+	  addFixtureController.modalReady(this, $(this));
   });
   
 });
