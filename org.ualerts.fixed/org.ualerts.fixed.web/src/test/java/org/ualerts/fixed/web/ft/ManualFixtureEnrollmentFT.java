@@ -278,6 +278,31 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
         page.getHtmlElementById(HTML_ID_BUILDING_ID);
     assertEmpty(buildingIdElement.getValueAttribute());
   }
+  
+  /**
+   * Validate that the auto-completion of position hints works
+   * @throws Exception Any exception that can occur
+   */
+  @Test
+  public void testAutocompletionOfPositionHints() throws Exception {
+    String hint = properties.getString("positionHint.1.hint");
+    
+    HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
+    openEnrollFixtureDialog(page);
+    
+    HtmlInput input = populateAutocompeteField(page, HTML_ID_POSITION_HINT, 
+        hint.substring(0,2));
+    HtmlUnorderedList dropdownList = 
+        getAutocompleteList(page, HTML_ID_POSITION_HINT);
+    assertTrue(dropdownList.getChildElementCount() > 0);
+
+    HtmlListItem element = dropdownList.getFirstByXPath("li");
+    assertEquals(hint, element.getTextContent());
+    
+    input.type(KeyboardEvent.DOM_VK_TAB);
+    getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
+    assertEquals(hint, element.getTextContent());
+  }
 
   private void openEnrollFixtureDialog(HtmlPage page) throws Exception {
     HtmlAnchor fixtureButton = page.getHtmlElementById(HTML_ID_FIXTURE_BUTTON);
