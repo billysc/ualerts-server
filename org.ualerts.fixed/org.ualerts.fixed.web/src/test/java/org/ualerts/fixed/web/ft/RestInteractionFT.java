@@ -20,7 +20,6 @@
 package org.ualerts.fixed.web.ft;
 
 import static org.junit.Assert.assertEquals;
-import junit.framework.ComparisonFailure;
 
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.junit.Before;
