@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="global" tagdir="/WEB-INF/tags" %>
 <%@ attribute name="javascriptBase" required="true" rtexprvalue="true" %>
 <global:scripts javascriptBase="${javascriptBase}"/>
