@@ -5,14 +5,14 @@ $(function() {
     cache: false
   });
   
-  $(".modalTrigger").click(function(event) {
+  $(".modal-trigger").click(function(event) {
     event.stopPropagation();
     var $this = $(this);
     var $target = $("" + $this.data("target"));
     var remote = $this.attr("href");
-    var title = $this.data("modaltitle");
-    var primaryButtonText = $this.data("primarybuttontext");
-    var cancelButtonText = $this.data("cancelbuttontext");
+    var title = $this.data("title");
+    var primaryButtonText = $this.data("primary-button-text");
+    var cancelButtonText = $this.data("cancel-button-text");
     
     var opts = {};
     if (typeof remote != "undefined") {
@@ -35,8 +35,8 @@ $(function() {
     else
       $cancelButton.addClass("hide");
     
-    if (typeof $this.data("postmodalcallback") == "string") {
-      var fn = $this.data("postmodalcallback");
+    if (typeof $this.data("post-modal-callback") == "string") {
+      var fn = $this.data("post-modal-callback");
       window[fn]($target);
     }
     
