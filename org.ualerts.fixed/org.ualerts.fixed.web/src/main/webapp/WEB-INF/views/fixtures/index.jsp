@@ -100,7 +100,8 @@
 	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery.dataTables.min.js"></script>
 	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/global.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/fixtures/BuildingService.js"></script>
-	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/fixtures/AddFixtureController.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/fixtures/PositionHintService.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/fixtures/AddFixtureController.js"></script>
 	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/fixtures/index.js"></script>
 	  
 	</body>

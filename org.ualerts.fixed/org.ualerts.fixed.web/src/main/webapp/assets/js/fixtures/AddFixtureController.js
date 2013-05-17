@@ -1,5 +1,6 @@
-function AddFixtureController(buildingService) {
+function AddFixtureController(buildingService, positionHintService) {
   this.buildingService = buildingService;
+  this.positionHintService = positionHintService;
 }
 
 AddFixtureController.prototype.modalReady = function(source, $modal) {
@@ -13,6 +14,13 @@ AddFixtureController.prototype.modalReady = function(source, $modal) {
   
   $building.blur(function() {
     controller.whenBuildingSelected(this);
+  });
+  
+  var $positionHint = $("#positionHint");
+  $positionHint.typeahead({
+    source: function(query, process) {
+      controller.positionHintService.getAllPositionHints(process);
+    } 
   });
   
   $modal.find(".btn-primary").click(function() {
