@@ -1,5 +1,5 @@
 var fixturesListTable;
-
+var addFixtureController = new AddFixtureController();
 
 $(function() {
   var fixturesTable = $("#fixturesList");
@@ -21,36 +21,11 @@ $(function() {
     fixturesTable.parent().hide();
   }
   
-  $("#addFixture").data("post-modal-callback", function($modal) {
-    var submitEnrollFixture = function() {
-      var $form = $modal.find("form");
-      var url = $form.attr("action");
-      var requestType = "POST";
-      var responseType = "json";
-      var successCallback = function(data) {
-        if (data.success) {
-          var fixture = data.fixture;
-          displayFixture(fixture);
-          $modal.modal('hide');
-        }
-        else {
-          displayErrorsOnForm($form, data.errors);
-          $(".modal-body").scrollTop(0);
-        }
-      };
-      var errorCallback = function(request, status, ex) {
-        alert("Something happened: " + status + ": " + ex);
-      };
-      submitForm($form, url, requestType, responseType, successCallback, 
-          errorCallback);
-    };
-    
-    $modal.find(".btn-primary").click(submitEnrollFixture);
-    $modal.find("form").submit(submitEnrollFixture);
+  $("#addFixture").data("post-modal-callback", function($modal) { 
+    addFixtureController.modalReady(this, $modal);
   });
   
 });
-
 
 /**
  * Display the provided fixture in the fixtures display
