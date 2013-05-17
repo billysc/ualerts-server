@@ -22,9 +22,6 @@ package org.ualerts.fixed.web.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.validation.BindException;
-import org.ualerts.fixed.service.Command;
-import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
