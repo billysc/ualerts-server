@@ -29,6 +29,8 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.ualerts.fixed.web.controller.fixture.IndexController;
 import org.ualerts.testing.jpa.EntityManagerFactoryResource;
 import org.ualerts.testing.jpa.HibernatePersistentDataResource;
@@ -56,6 +58,8 @@ import edu.vt.cns.kestrel.common.IntegrationTestRunner;
  */
 @RunWith(IntegrationTestRunner.class)
 public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
+  
+  private static final Logger logger = LoggerFactory.getLogger(ManualFixtureEnrollmentFT.class);
   
   private static final String HTML_ID_GLOBAL_ERRORS = "globalErrorContainer";
   private static final String HTML_ID_IP_ADDRESS = "ipAddressContainer";
@@ -277,6 +281,8 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
    * @throws Exception Any exception that can occur
    */
   @Test
+  @TestResources(prefix = "sql/", before = "ManualFixtureEnrollmentFT_before",
+      after = "ManualFixtureEnrollmentFT_after")
   public void testAutocompletionOfPositionHints() throws Exception {
     String hint = properties.getString("positionHint.1.hintText");
     
@@ -285,11 +291,11 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     
     HtmlInput input = populateAutocompeteField(page, HTML_ID_POSITION_HINT, 
         hint.substring(0,2));
-    HtmlUnorderedList dropdownList = 
+    HtmlUnorderedList dropdown = 
         getAutocompleteList(page, HTML_ID_POSITION_HINT);
-    assertTrue(dropdownList.getChildElementCount() > 0);
+    assertTrue(dropdown.getChildElementCount() > 0);
 
-    HtmlListItem element = dropdownList.getFirstByXPath("li");
+    HtmlListItem element = dropdown.getFirstByXPath("li");
     assertEquals(hint, element.getTextContent());
     
     input.type(KeyboardEvent.DOM_VK_TAB);
