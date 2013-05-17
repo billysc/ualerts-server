@@ -249,7 +249,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     
     // Select the building
     input.type(KeyboardEvent.DOM_VK_TAB);
-    input.fireEvent(Event.TYPE_BLUR);
+    input.type(KeyboardEvent.DOM_VK_TAB);
     getClient().waitForBackgroundJavaScriptStartingBefore(JS_SHORT_DELAY);
     
     // Validate that the field is populated with the building
@@ -274,7 +274,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     // Type first two characters into input
     HtmlInput input = populateAutocompeteField(page, HTML_ID_BUILDING, "Z_Z_Z");
 
-    input.fireEvent(Event.TYPE_BLUR);
+    input.type(KeyboardEvent.DOM_VK_TAB);
     getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
     assertEmpty(input.getValueAttribute());
     
@@ -325,7 +325,6 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
       String value) throws Exception {
     HtmlInput input = getInputField(page, fieldId);
     input.type(value);
-    input.fireEvent(Event.TYPE_KEY_UP);
     getClient().waitForBackgroundJavaScript(JS_LONG_DELAY);
     return input;
   }
@@ -351,7 +350,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     HtmlInput building = populateAutocompeteField(page, HTML_ID_BUILDING, 
         properties.getString("building.1.name"));
     building.type(KeyboardEvent.DOM_VK_TAB);
-    building.fireEvent(Event.TYPE_BLUR);
+    building.type(KeyboardEvent.DOM_VK_TAB);
     getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
     
     populateField(page, HTML_ID_ROOM_NUMBER, VALID_ROOM_NUMBER);
