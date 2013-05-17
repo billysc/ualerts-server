@@ -126,10 +126,10 @@ public class RestInteractionFT extends AbstractFunctionalTest {
     PositionHintsModel hintsModel = getPositionHints("application/xml");
     assertNotNull(hintsModel);
     
-    String[] positionHints = hintsModel.getPositionHints();
-    assertEquals(2, positionHints.length);
-    assertEquals(properties.getString("positionHint.1.hint"), positionHints[0]);
-    assertEquals(properties.getString("positionHint.2.hint"), positionHints[1]);
+    String[] hints = hintsModel.getPositionHints();
+    assertEquals(2, hints.length);
+    assertEquals(properties.getString("positionHint.1.hintText"), hints[0]);
+    assertEquals(properties.getString("positionHint.2.hintText"), hints[1]);
   }
   
   /**
@@ -142,10 +142,10 @@ public class RestInteractionFT extends AbstractFunctionalTest {
     PositionHintsModel hintsModel = getPositionHints("application/json");
     assertNotNull(hintsModel);
     
-    String[] positionHints = hintsModel.getPositionHints();
-    assertEquals(2, positionHints.length);
-    assertEquals(properties.getString("positionHint.1.hint"), positionHints[0]);
-    assertEquals(properties.getString("positionHint.2.hint"), positionHints[1]);
+    String[] hints = hintsModel.getPositionHints();
+    assertEquals(2, hints.length);
+    assertEquals(properties.getString("positionHint.1.hintText"), hints[0]);
+    assertEquals(properties.getString("positionHint.2.hintText"), hints[1]);
   }
   
   private BuildingsModel getBuildings(String mediaType) {

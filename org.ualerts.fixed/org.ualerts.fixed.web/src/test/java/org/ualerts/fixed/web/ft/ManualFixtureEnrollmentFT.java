@@ -285,7 +285,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
    */
   @Test
   public void testAutocompletionOfPositionHints() throws Exception {
-    String hint = properties.getString("positionHint.1.hint");
+    String hint = properties.getString("positionHint.1.hintText");
     
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
     openEnrollFixtureDialog(page);
