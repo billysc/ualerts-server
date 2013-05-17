@@ -30,8 +30,6 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.ualerts.fixed.web.controller.fixture.IndexController;
 import org.ualerts.testing.jpa.EntityManagerFactoryResource;
 import org.ualerts.testing.jpa.HibernatePersistentDataResource;
@@ -47,7 +45,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlListItem;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
-import com.gargoylesoftware.htmlunit.javascript.host.Event;
 import com.gargoylesoftware.htmlunit.javascript.host.KeyboardEvent;
 
 import edu.vt.cns.kestrel.common.IntegrationTestRunner;
@@ -59,11 +56,6 @@ import edu.vt.cns.kestrel.common.IntegrationTestRunner;
  */
 @RunWith(IntegrationTestRunner.class)
 public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
-  
-  private static final Logger logger = 
-      LoggerFactory.getLogger(ManualFixtureEnrollmentFT.class);
-  
-  private static final String AUTOCOMPLETE_FORMAT_BUILDING = "(%s) - %s";
   
   private static final String HTML_ID_GLOBAL_ERRORS = "globalErrorContainer";
   private static final String HTML_ID_IP_ADDRESS = "ipAddressContainer";
@@ -200,7 +192,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     populateField(page, HTML_ID_INV_NUMBER, VALID_INVENTORY_NUMBER);
 
     HtmlInput building = populateAutocompeteField(page, HTML_ID_BUILDING, 
-        properties.getString("building.1.abbreviation"));
+        properties.getString("building.1.name"));
     building.type(KeyboardEvent.DOM_VK_TAB);
     building.type(KeyboardEvent.DOM_VK_TAB);
     getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
@@ -230,10 +222,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   public void validateBuildingAutoComplete() throws Exception {
     String buildingName = properties.getString("building.1.name");
     String buildingId = properties.getString("building.1.id");
-    String buildingAbbr = properties.getString("building.1.abbreviation");
-    String buildingDisplay = 
-        String.format(AUTOCOMPLETE_FORMAT_BUILDING, buildingAbbr, buildingName);
-
+    
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
     openEnrollFixtureDialog(page);
     
@@ -245,7 +234,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     HtmlUnorderedList dropdown = getAutocompleteList(page, HTML_ID_BUILDING);
     assertTrue(dropdown.getChildElementCount() > 0);
     HtmlListItem item = dropdown.getFirstByXPath("li[1]");
-    assertEquals(buildingDisplay, item.getTextContent());
+    assertEquals(buildingName, item.getTextContent());
     
     // Select the building
     input.type(KeyboardEvent.DOM_VK_TAB);
@@ -253,7 +242,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     getClient().waitForBackgroundJavaScriptStartingBefore(JS_SHORT_DELAY);
     
     // Validate that the field is populated with the building
-    assertEquals(buildingDisplay, input.getValueAttribute());
+    assertEquals(buildingName, input.getValueAttribute());
     
     // Validate that the id field is populated with the id of the building
     HtmlHiddenInput buildingIdElement = 

@@ -5,14 +5,14 @@ $(function() {
     cache: false
   });
   
-  $(".modalTrigger").click(function(event) {
+  $(".modal-trigger").click(function(event) {
     event.stopPropagation();
     var $this = $(this);
     var $target = $("" + $this.data("target"));
     var remote = $this.attr("href");
-    var title = $this.data("modaltitle");
-    var primaryButtonText = $this.data("primarybuttontext");
-    var cancelButtonText = $this.data("cancelbuttontext");
+    var title = $this.data("title");
+    var primaryButtonText = $this.data("primary-button-text");
+    var cancelButtonText = $this.data("cancel-button-text");
     
     // Remove any lingering click handlers
     var $primaryButton = $target.find(".btn-primary").unbind("click");
@@ -20,11 +20,9 @@ $(function() {
     
     $target.unbind("hidden");
     $target.unbind("loaded");
-    if (typeof $this.data("postmodalcallback") == "string") {
-      var fn = $this.data("postmodalcallback");
-      if (typeof window[fn] == "function") {
-        $target.on('loaded', window[fn]);
-      }
+    var fn = $this.data("post-modal-callback");
+    if (typeof fn == "function") {      
+      $target.on('loaded', fn);
     }
       
     var opts = {};

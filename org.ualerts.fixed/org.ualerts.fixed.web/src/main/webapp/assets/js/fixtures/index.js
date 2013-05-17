@@ -1,7 +1,6 @@
 var fixturesListTable;
-var allBuildings = null;
-var buildingNames = null;
-var autoComplete_buildingFormat = "({0}) - {1}";
+var buildingService = new BuildingService();
+var addFixtureController = new AddFixtureController(buildingService);
 
 $(function() {
   var fixturesTable = $("#fixturesList");
@@ -19,70 +18,16 @@ $(function() {
       { bSortable: false }
     ]
   });
+  
   if (emptyTable) {
     fixturesTable.parent().hide();
   }
-});
-
-function postModalDisplay_enrollFixture() {
-  var $modal = $(this);
   
-  $("#building").typeahead({
-	source: function(query, process) {
-      if (allBuildings != null && buildingNames != null) {
-    	return buildingNames;
-      }
-      $.get(CONTEXT_URL + "/api/buildings", function(data) {
-    	allBuildings = data.buildings;
-    	buildingNames = Array();
-    	for (key in allBuildings) {
-          var building = allBuildings[key];
-          var display = autoComplete_buildingFormat.format(building.abbreviation, building.name); 
-          buildingNames.push(display);
-          allBuildings[key].display = display;
-    	}
-    	process(buildingNames);
-      }, 'json');
-    }
-  }).blur(function() {
-  	var value = $(this).val();
-    if (!buildingNames.contains(value)) {
-      $("#buildingId").val('');
-      return $(this).val('');
-    }
-    for (key in allBuildings) {
-	  if (allBuildings[key].display == value) {
-        return $("#buildingId").val( allBuildings[key].id );
-      }
-    }
+  $("#addFixture").data("post-modal-callback", function() { 
+	  addFixtureController.modalReady(this, $(this));
   });
   
-  var submitEnrollFixture = function(event) {
-	event.stopPropagation();
-    var $form = $modal.find("form");
-    var successCallback = function(response) {
-      if (response.success) {
-        displayFixture(response.fixture);
-        $modal.modal('hide');
-      }
-      else {
-        displayErrorsOnForm($form, response.errors);
-        $(".modal-body").scrollTop(0);
-      }
-    };
-    
-    var errorCallback = function(request, status, ex) {
-      alert("Something happened: " + status + ": " + ex);
-    };
-    
-    submitForm($form, $form.attr("action"), "POST", "json", successCallback, 
-        errorCallback);
-    return false;
-  };
-  
-  $modal.find(".btn-primary").click(submitEnrollFixture);
-  $modal.find("form").submit(submitEnrollFixture);
-}
+});
 
 /**
  * Display the provided fixture in the fixtures display
@@ -105,7 +50,7 @@ function displayFixture(fixture) {
   
   // Get new row and wrap as jQuery object
   var $newRow = $( fixturesListTable.fnGetNodes( row[0] ) );
-  $newRow.attr("data-entity-id", fixture.id);
+  $newRow.data("entity-id", fixture.id);
   var currentColor = $newRow.css("backgroundColor");
   $newRow.addClass("updated");
   

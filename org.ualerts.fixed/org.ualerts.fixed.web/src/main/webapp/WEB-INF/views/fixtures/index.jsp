@@ -30,7 +30,12 @@
 	    <div class="row">
 	      <div class="span12">
 	        <div class="text-right actionButtons">
-	          <a id="addFixture" class="btn modalTrigger" href="${pageContext.request.contextPath}/ui/fixtures/enrollment.html" data-target="#modal" data-title="Add Fixture" data-primarybuttontext="Submit New Fixture" data-cancelbuttontext="Cancel" data-postmodalcallback="postModalDisplay_enrollFixture">
+	          <a id="addFixture" class="btn modal-trigger" 
+	             href="${pageContext.request.contextPath}/ui/fixtures/enrollment.html" 
+	             data-target="#modal" 
+	             data-title="Add Fixture" 
+	             data-primary-button-text="Submit New Fixture" 
+	             data-cancel-button-text="Cancel">
 	            <i class="icon-plus"></i> Add Fixture
 	          </a>
 	        </div>
@@ -73,7 +78,7 @@
 	  <div id="modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	    <div class="modal-header">
 	      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-	      <h3 id="myModalLabel">Enroll Fixture</h3>
+	      <h3 id="myModalLabel">Title Here</h3>
 	    </div>
 	    <div id="modalBody" class="modal-body"></div>
 	    <div class="modal-footer">
@@ -94,6 +99,8 @@
 	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/bootstrap.min.js"></script>
 	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery.dataTables.min.js"></script>
 	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/global.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/fixtures/BuildingService.js"></script>
+	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/fixtures/AddFixtureController.js"></script>
 	  <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/fixtures/index.js"></script>
 	  
 	</body>
