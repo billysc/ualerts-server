@@ -18,13 +18,21 @@ $(function() {
     var $primaryButton = $target.find(".btn-primary").unbind("click");
     var $cancelButton = $target.find(".btn.cancel").unbind("click");
     
+    $target.unbind("hidden");
+    $target.unbind("loaded");
+    if (typeof $this.data("postmodalcallback") == "string") {
+      var fn = $this.data("postmodalcallback");
+      if (typeof window[fn] == "function") {
+        $target.on('loaded', window[fn]);
+      }
+    }
+      
     var opts = {};
     if (typeof remote != "undefined") {
       opts.remote = remote;
     }
 
     $target.modal(opts);
-    
     $target.find(".modal-header h3").text(title);
     if (typeof primaryButtonText == "string")
       $primaryButton.removeClass("hide").text(primaryButtonText);
@@ -41,17 +49,13 @@ $(function() {
       $(this).removeData('modal');
     });
     
-    if (typeof $this.data("postmodalcallback") == "string") {
-      var fn = $this.data("postmodalcallback");
-      if (typeof window[fn] == "function") {
-        $target.on('loaded', window[fn]);
-      }
-    }
-    
     return false;
   });
 });
 
+/**
+ * Function that removes all empty strings or null values from Array
+ */
 Array.prototype.clean = function() {
   for (var i = 0; i < this.length; i++) {
     if (this[i] == null || this[i] == "") {         
