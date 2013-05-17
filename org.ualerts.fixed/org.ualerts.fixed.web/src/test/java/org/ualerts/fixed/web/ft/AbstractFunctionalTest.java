@@ -41,13 +41,13 @@ public abstract class AbstractFunctionalTest {
    * Short delay for Javascript wait time. Intended for short functions that
    * don't fetch remote sources
    */
-  protected static final Long JS_SHORT_DELAY = 1000L;
+  protected static final Long JS_SHORT_DELAY = 4000L;
   
   /**
    * Long delay for Javascript wait time. Should be used whenever attempting
    * to fetch remote sources
    */
-  protected static final Long JS_LONG_DELAY = 4000L;
+  protected static final Long JS_LONG_DELAY = 10000L;
 
   private WebClient client = new WebClient(BrowserVersion.FIREFOX_17);
   private String contextUrl = WebContextUtil.getUrl();
