@@ -20,6 +20,7 @@
 package org.ualerts.fixed.web.ft;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.junit.Before;
@@ -29,6 +30,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ualerts.fixed.web.model.BuildingsModel;
+import org.ualerts.fixed.web.model.PositionHintsModel;
 import org.ualerts.testing.jpa.EntityManagerFactoryResource;
 import org.ualerts.testing.jpa.HibernatePersistentDataResource;
 import org.ualerts.testing.jpa.PersistentDataResource;
@@ -51,6 +53,7 @@ public class RestInteractionFT extends AbstractFunctionalTest {
   
   private static final String REST_POINT = "/api";
   private static final String BUILDING_URL = "/buildings";
+  private static final String POSITION_HINTS_URL = "/positionHints";
 
   // CHECKSTYLE:OFF
   @ClassRule
@@ -113,10 +116,48 @@ public class RestInteractionFT extends AbstractFunctionalTest {
     buildingValidator.validateIsBuilding2(buildings.getBuildings()[1]);
   }
   
+  /**
+   * Test the retrieval of all position hints, using XML
+   */
+  @Test
+  @TestResources(prefix = "sql/", before = "RestInteractionFT_buildings_before",
+      after = "RestInteractionFT_buildings_after")
+  public void testGetPositionHintsXml() {
+    PositionHintsModel hintsModel = getPositionHints("application/xml");
+    assertNotNull(hintsModel);
+    
+    String[] positionHints = hintsModel.getPositionHints();
+    assertEquals(2, positionHints.length);
+    assertEquals(properties.getString("positionHint.1.hint"), positionHints[0]);
+    assertEquals(properties.getString("positionHint.2.hint"), positionHints[1]);
+  }
+  
+  /**
+   * Test the retrieval of all position hints, using JSON
+   */
+  @Test
+  @TestResources(prefix = "sql/", before = "RestInteractionFT_buildings_before",
+      after = "RestInteractionFT_buildings_after")
+  public void testGetPositionHintsJson() {
+    PositionHintsModel hintsModel = getPositionHints("application/json");
+    assertNotNull(hintsModel);
+    
+    String[] positionHints = hintsModel.getPositionHints();
+    assertEquals(2, positionHints.length);
+    assertEquals(properties.getString("positionHint.1.hint"), positionHints[0]);
+    assertEquals(properties.getString("positionHint.2.hint"), positionHints[1]);
+  }
+  
   private BuildingsModel getBuildings(String mediaType) {
     WebResource resource = client.resource(getContextUrl() + REST_POINT 
         + BUILDING_URL);
     return resource.header("Accept", mediaType).get(BuildingsModel.class);
+  }
+  
+  private PositionHintsModel getPositionHints(String mediaType) {
+    WebResource resource = client.resource(getContextUrl() + REST_POINT 
+        + POSITION_HINTS_URL);
+    return resource.header("Accept", mediaType).get(PositionHintsModel.class);
   }
   
 }
