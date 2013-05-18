@@ -1,6 +1,6 @@
 var fixturesListTable;
 var buildingService = new BuildingService();
-var addFixtureController = new AddFixtureController(buildingService);
+var fixturesViewController = new FixturesViewController(buildingService);
 
 $(function() {
   var fixturesTable = $("#fixturesList");
@@ -24,7 +24,7 @@ $(function() {
   }
   
   $("#addFixture").data("post-modal-callback", function() { 
-	  addFixtureController.modalReady(this, $(this));
+	  fixturesViewController.modalReady(this, $(this));
   });
   
 });
