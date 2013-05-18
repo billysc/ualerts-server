@@ -1,9 +1,6 @@
 CVS
 RCS
 .svn
-.project
-.classpath
-.settings
 .checkstyle
 target
 build
