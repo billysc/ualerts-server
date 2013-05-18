@@ -19,9 +19,10 @@
 
 package org.ualerts.fixed.web.ft;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.List;
+import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -35,8 +36,9 @@ import org.ualerts.testing.jpa.HibernatePersistentDataResource;
 import org.ualerts.testing.jpa.PersistentDataResource;
 import org.ualerts.testing.jpa.TestResources;
 
-import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlButton;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
@@ -71,7 +73,7 @@ public class FixtureRemovalFT extends AbstractFunctionalTest {
   private HtmlAnchor control;
   
   /**
-   * Perform one-time set up tasks
+   * Performs one-time set up tasks.
    * @throws Exception
    */
   @BeforeClass
@@ -79,6 +81,10 @@ public class FixtureRemovalFT extends AbstractFunctionalTest {
     properties = PropertiesAccessor.newInstance("persistent-data.properties");
   }
   
+  /**
+   * Performs per-test setup tasks.
+   * @throws Exception
+   */
   @Before
   public void setUp() throws Exception {
     page = getHtmlPage(IndexController.INDEX_PATH);
@@ -96,7 +102,11 @@ public class FixtureRemovalFT extends AbstractFunctionalTest {
   @TestResources(prefix = "sql/", before = "FixtureRemovalFT_before",
       after = "FixtureRemovalFT_after")
   public void testNotRemovedWhenDialogCanceled() throws Exception {
-    org.junit.Assert.fail("not implemented");
+    String id = row.getAttribute("data-entity-id");
+    clickControlButtonAndWait();
+    clickCancelButtonAndWait();
+    HtmlTableRow topRow = getFirstTableRow(table);
+    assertEquals(id, topRow.getAttribute("data-entity-id"));
   }
 
   /**
@@ -119,9 +129,34 @@ public class FixtureRemovalFT extends AbstractFunctionalTest {
   @TestResources(prefix = "sql/", before = "FixtureRemovalFT_before",
       after = "FixtureRemovalFT_after")
   public void testRemovedWhenConfirmed() throws Exception {
-    org.junit.Assert.fail("not implemented");
+    clickControlButtonAndWait();
+    clickSubmitButtonAndWait();
+    assertEquals(0, table.getBodies().get(0).getRows().size());
   }
 
+  private void clickControlButtonAndWait() throws IOException {
+    clickButtonAndWait(control);
+  }
+
+  private void clickCancelButtonAndWait() throws Exception {
+    HtmlButton button = (HtmlButton) page.getFirstByXPath(
+        "//button[@data-dismiss='modal']");
+    assertNotNull(button);
+    clickButtonAndWait(button);
+  }
+
+  private void clickSubmitButtonAndWait() throws Exception {
+    HtmlButton button = (HtmlButton) page.getFirstByXPath(
+        "//button[@class='btn btn-primary']");
+    assertNotNull(button);
+    clickButtonAndWait(button);
+  }
+  
+  private void clickButtonAndWait(HtmlElement button) throws IOException {
+    button.click();  
+    getClient().waitForBackgroundJavaScript(JS_LONG_DELAY);
+  }
+  
   private HtmlAnchor getRemoveControl(HtmlTableRow row) {
     HtmlAnchor control = (HtmlAnchor) row.getFirstByXPath(
         "//a[@data-control-function='remove']");
