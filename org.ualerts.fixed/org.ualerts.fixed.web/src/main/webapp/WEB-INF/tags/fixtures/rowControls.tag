@@ -1,2 +1,19 @@
-<a class="btn btn-link no-padding" href="#edit" title="Edit this fixture"><i class="icon-pencil"></i></a>
-<a class="btn btn-link no-padding" href="#remove" title="Remove this fixture"><i class="icon-remove-circle"></i></a>       
+<a class="btn btn-link no-padding modal-trigger" 
+  title="Edit this fixture" 
+  href="${pageContext.request.contextPath}/ui/fixtures/{id}/edit.html"
+  data-target="#modal" data-title="Edit Fixture" 
+  data-primary-button-text="Save Changes" 
+  data-cancel-button-text="Cancel"
+  data-control-function="edit">  
+    <i class="icon-pencil"></i>
+</a>  
+
+<a class="btn btn-link no-padding modal-trigger" 
+  title="Remove this fixture" 
+  href="${pageContext.request.contextPath}/ui/fixtures/{id}/remove.html"
+  data-target="#modal" data-title="Remove Fixture" 
+  data-primary-button-text="Remove Fixture" 
+  data-cancel-button-text="Cancel"
+  data-control-function="remove">  
+    <i class="icon-remove-circle"></i>
+</a>  
