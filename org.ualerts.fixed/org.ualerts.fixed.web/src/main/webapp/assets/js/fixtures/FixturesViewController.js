@@ -17,44 +17,47 @@
  *
  */
 
-function FixturesViewController() {
+function FixturesViewController(buildingService) {
   FormViewController.call(this);
+  this.buildingService = buildingService;
 }
 
 FixturesViewController.prototype = new FormViewController();
 FixturesViewController.prototype.constructor = FixturesViewController;
 
-/**
- * Displays the provided fixture in the fixtures table view.
- * @param fixture the fixture to display
- */
-FixturesViewController.prototype.displayFixture = function(fixture) {
-  $("#fixturesListEmpty").remove();
-  $("#fixturesList").parent().show();
-
-  //Add the row. Return value has index value to retrieve row from dataTables
-  var rowControls = $("#rowControls").html();
-  var row = $("#fixturesList").show().dataTable().fnAddData([
-    fixture.buildingAbbreviation + " " + fixture.room,
-    fixture.positionHint,
-    fixture.ipAddress,
-    fixture.macAddress,
-    fixture.inventoryNumber,
-    rowControls
-  ]);
-  
-  // Get new row and wrap as jQuery object
-  var $newRow = $(fixturesListTable.fnGetNodes(row[0]));
-  $newRow.data("entity-id", fixture.id);
-  var currentColor = $newRow.css("backgroundColor");
-  $newRow.addClass("updated");
-  
-  // Wait, fade out, then remove CSS styles and updated class
-  $newRow.find("td").delay(4000).animate({backgroundColor: currentColor}, 
-      1000, function() {
-    $(this).css("backgroundColor", "").parent().removeClass("updated");
+FixturesViewController.prototype.modalReady = function(source, $modal) {
+  var controller = this;
+  var $building = $("#building");
+  $building.typeahead({
+    source: function(query, process) {
+      controller.buildingService.getAllBuildings(process);
+    }
   });
   
+  $building.blur(function() {
+    controller.whenBuildingSelected(this);
+  });
+  
+  $modal.find(".btn-primary").click(function() {
+    controller.submitForm(this, $modal);
+  });
+  
+  $modal.find("form").submit(function() {
+    controller.submitForm(this, $modal);
+  });
+};
+
+FixturesViewController.prototype.whenBuildingSelected = function(buildingElement) {
+  var value = $(buildingElement).val();
+  var building = this.buildingService.findMatchingBuilding(value);
+  if (building == null) {
+    $('#buildingId').val('');
+    $(buildingElement).val('');
+  }
+  else {
+    $("#buildingId").val(building.id);
+    $(buildingElement).val(building.name);
+  }
 };
 
 FixturesViewController.prototype.submitForm = function(source, $modal) {
@@ -87,5 +90,38 @@ FixturesViewController.prototype.onSuccess = function(source, data, $modal) {
 FixturesViewController.prototype.onError = function(source, request, 
     status, ex, $modal) {
   alert("Something happened: " + status + ": " + ex);
+};
+
+/**
+ * Displays the provided fixture in the fixtures table view.
+ * @param fixture the fixture to display
+ */
+FixturesViewController.prototype.displayFixture = function(fixture) {
+  $("#fixturesListEmpty").remove();
+  $("#fixturesList").parent().show();
+
+  //Add the row. Return value has index value to retrieve row from dataTables
+  var rowControls = $("#rowControls").html();
+  var row = $("#fixturesList").show().dataTable().fnAddData([
+    fixture.buildingAbbreviation + " " + fixture.room,
+    fixture.positionHint,
+    fixture.ipAddress,
+    fixture.macAddress,
+    fixture.inventoryNumber,
+    rowControls
+  ]);
+  
+  // Get new row and wrap as jQuery object
+  var $newRow = $(fixturesListTable.fnGetNodes(row[0]));
+  $newRow.data("entity-id", fixture.id);
+  var currentColor = $newRow.css("backgroundColor");
+  $newRow.addClass("updated");
+  
+  // Wait, fade out, then remove CSS styles and updated class
+  $newRow.find("td").delay(4000).animate({backgroundColor: currentColor}, 
+      1000, function() {
+    $(this).css("backgroundColor", "").parent().removeClass("updated");
+  });
+  
 };
 

@@ -18,44 +18,9 @@
  */
 
 function AddFixtureController(buildingService) {
-  FixturesViewController.call(this);
-  this.buildingService = buildingService;
+  FixturesViewController.call(this, buildingService);
 }
 
 AddFixtureController.prototype = new FixturesViewController();
 AddFixtureController.prototype.constructor = AddFixtureController;
 
-AddFixtureController.prototype.modalReady = function(source, $modal) {
-  var controller = this;
-  var $building = $("#building");
-  $building.typeahead({
-    source: function(query, process) {
-      controller.buildingService.getAllBuildings(process);
-    }
-  });
-  
-  $building.blur(function() {
-    controller.whenBuildingSelected(this);
-  });
-  
-  $modal.find(".btn-primary").click(function() {
-    controller.submitForm(this, $modal);
-  });
-  
-  $modal.find("form").submit(function() {
-    controller.submitForm(this, $modal);
-  });
-};
-
-AddFixtureController.prototype.whenBuildingSelected = function(buildingElement) {
-  var value = $(buildingElement).val();
-  var building = this.buildingService.findMatchingBuilding(value);
-  if (building == null) {
-    $('#buildingId').val('');
-    $(buildingElement).val('');
-  }
-  else {
-    $("#buildingId").val(building.id);
-    $(buildingElement).val(building.name);
-  }
-};
