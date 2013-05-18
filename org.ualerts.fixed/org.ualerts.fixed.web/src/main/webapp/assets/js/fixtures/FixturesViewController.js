@@ -18,7 +18,11 @@
  */
 
 function FixturesViewController() {
+  FormViewController.call(this);
 }
+
+FixturesViewController.prototype = new FormViewController();
+FixturesViewController.prototype.constructor = FixturesViewController;
 
 /**
  * Displays the provided fixture in the fixtures table view.
