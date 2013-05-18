@@ -21,6 +21,8 @@ package org.ualerts.fixed.web.ft;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -33,6 +35,7 @@ import org.ualerts.testing.jpa.HibernatePersistentDataResource;
 import org.ualerts.testing.jpa.PersistentDataResource;
 import org.ualerts.testing.jpa.TestResources;
 
+import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
@@ -121,7 +124,7 @@ public class FixtureRemovalFT extends AbstractFunctionalTest {
 
   private HtmlAnchor getRemoveControl(HtmlTableRow row) {
     HtmlAnchor control = (HtmlAnchor) row.getFirstByXPath(
-        "//a[@href='#remove']");
+        "//a[@data-control-function='remove']");
     assertNotNull(control);
     return control;
   }
