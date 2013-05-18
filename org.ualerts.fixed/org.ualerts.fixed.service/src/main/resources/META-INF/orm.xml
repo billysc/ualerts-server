@@ -25,6 +25,7 @@
     <query>
       select distinct b
       from Building b
+      order by b.name
     </query>
   </named-query>
 
@@ -99,9 +100,11 @@
     <query>
       select distinct f
       from Fixture f
-      left outer join fetch f.room rm
-      left outer join fetch rm.building
-      left outer join fetch f.asset
+      left outer join fetch f.room r
+      left outer join fetch f.positionHint p
+      left outer join fetch r.building b
+      left outer join fetch f.asset a
+      order by b.name, r.roomNumber, p.hintText     
     </query>
   </named-query>
 
