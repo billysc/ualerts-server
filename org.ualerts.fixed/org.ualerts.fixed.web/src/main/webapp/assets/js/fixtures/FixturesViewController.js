@@ -56,3 +56,36 @@ FixturesViewController.prototype.displayFixture = function(fixture) {
   });
   
 };
+
+FixturesViewController.prototype.submitForm = function(source, $modal) {
+  var controller = this;
+  var successCallback = function(data) {
+    controller.onSuccess(this, data, $modal);
+  };
+  var errorCallback = function(request, status, ex) {
+    controller.onError(this, request, status, ex, $modal);
+  };
+
+  var $form = $modal.find("form");
+  this.ajaxSubmit($form, $form.attr("action"), "POST", "json", successCallback, 
+      errorCallback);
+};
+
+FixturesViewController.prototype.onSuccess = function(source, data, $modal) {
+  if (data.success) {
+    var fixture = data.fixture;
+    this.displayFixture(fixture);
+    $modal.modal('hide');
+  }
+  else {
+    var $form = $modal.find("form");
+    this.displayErrorsOnForm($form, data.errors);
+    $(".modal-body").scrollTop(0);
+  }
+};
+
+FixturesViewController.prototype.onError = function(source, request, 
+    status, ex, $modal) {
+  alert("Something happened: " + status + ": " + ex);
+};
+
