@@ -32,7 +32,7 @@ FormViewController.prototype.ajaxSubmit = function($form, url, requestType,
   });
 };
 
-FormViewController.prototype.displayFormErrors = function ($form, errors) {
+FormViewController.prototype.displayFormErrors = function($form, errors) {
   $form.find("[data-for]").html('');
   if (typeof errors != "object")
     return;
