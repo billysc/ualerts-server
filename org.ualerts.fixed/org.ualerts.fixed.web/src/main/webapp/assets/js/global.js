@@ -86,31 +86,3 @@ String.prototype.format = function() {
     return typeof args[number] != 'undefined' ? args[number] : match;
   });
 };
-
-
-function submitForm($form, url, requestType, responseType, successCallback, errorCallback) {
-  $.ajax({
-    url: url,
-    cache: false,
-    data: $form.serialize(),
-    type: requestType,
-    dataType: responseType,
-    success: successCallback,
-    error: errorCallback
-  });
-}
-
-function displayErrorsOnForm($form, errors) {
-  $form.find("[data-for]").html('');
-  if (typeof errors != "object")
-    return;
-  if (typeof errors.global == "object") {
-    $form.find("[data-for='_global']").html(errors.global.clean().join("<br />"));
-  }
-  if (typeof errors.fields == "object") {
-    for (fieldName in errors.fields) {
-      var fieldErrors = errors.fields[fieldName];
-      $form.find("[data-for='" + fieldName + "']").html(fieldErrors.clean().join("<br />"));
-    }
-  }
-}
