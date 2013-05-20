@@ -17,5 +17,5 @@
   <global:inlineField label="Serial Number" path="serialNumber" />
   <global:inlineField label="MAC Address" path="macAddress" />
   <global:inlineField label="IP Address" path="ipAddress" />
-  
+  <global:hiddenSubmitField />
 </form:form>
