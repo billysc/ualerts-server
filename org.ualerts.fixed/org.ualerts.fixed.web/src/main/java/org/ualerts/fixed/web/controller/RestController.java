@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.ualerts.fixed.web.model.BuildingsModel;
+import org.ualerts.fixed.web.model.PositionHintsModel;
 import org.ualerts.fixed.web.service.BuildingService;
+import org.ualerts.fixed.web.service.PositionHintService;
 
 /**
  * A controller that provides RESTful interactions
@@ -37,6 +39,7 @@ import org.ualerts.fixed.web.service.BuildingService;
 public class RestController {
   
   private BuildingService buildingService;
+  private PositionHintService positionHintService;
 
   /**
    * Get all buildings known to the system
@@ -49,12 +52,31 @@ public class RestController {
   }
   
   /**
+   * Get all of the position hints known to the system
+   * @return A collection of position hints
+   */
+  @ResponseBody
+  @RequestMapping(value = "/positionHints", method = RequestMethod.GET)
+  public PositionHintsModel getAllPositionHints() throws Exception {
+    return positionHintService.getAllPositionHints();
+  }
+  
+  /**
    * Sets the {@code buildingService} property.
    * @param buildingService the value to set
    */
   @Resource
   public void setBuildingService(BuildingService buildingService) {
     this.buildingService = buildingService;
+  }
+  
+  /**
+   * Sets the {@code positionHintService} property.
+   * @param positionHintService the value to set
+   */
+  @Resource
+  public void setPositionHintService(PositionHintService positionHintService) {
+    this.positionHintService = positionHintService;
   }
   
 }

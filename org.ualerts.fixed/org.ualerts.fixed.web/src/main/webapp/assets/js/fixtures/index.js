@@ -1,6 +1,8 @@
 var fixturesListTable;
 var buildingService = new BuildingService();
-var addFixtureController = new AddFixtureController(buildingService);
+var positionHintService = new PositionHintService();
+var addFixtureController = 
+	new AddFixtureController(buildingService, positionHintService);
 
 $(function() {
   var fixturesTable = $("#fixturesList");
