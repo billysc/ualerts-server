@@ -19,17 +19,57 @@
 function FormViewController() {
 }
 
-FormViewController.prototype.ajaxSubmit = function($form, url, requestType, 
-    responseType, successCallback, errorCallback) {
+FormViewController.prototype.modalReady = function(source, $modal) {
+  var controller = this;
+
+  $modal.find(".btn-primary").click(function() {
+    controller.submitForm(this, $modal);
+  });
+  
+  $modal.find("form").submit(function() {
+    controller.submitForm(this, $modal);
+  });
+};
+
+FormViewController.prototype.submitForm = function(source, $modal) {
+  var controller = this;
+  var successCallback = function(responseBody) {
+    controller.onSuccess(this, responseBody, $modal);
+  };
+  var errorCallback = function(request, status, ex) {
+    controller.onError(this, request, status, ex, $modal);
+  };
+
+  var $form = $modal.find("form");
   $.ajax({
-    url: url,
+    url: $form.attr("action"),
     cache: false,
     data: $form.serialize(),
-    type: requestType,
-    dataType: responseType,
+    type: "POST",
+    dataType: "json",
     success: successCallback,
     error: errorCallback
   });
+};
+
+FormViewController.prototype.onSuccess = function(source, responseBody, $modal) {
+  if (responseBody.success) {
+    this.whenFormAccepted(responseBody);
+    $modal.modal('hide');
+  }
+  else {
+    var $form = $modal.find("form");
+    this.displayFormErrors($form, responseBody.errors);
+    $(".modal-body").scrollTop(0);
+  }
+};
+
+FormViewController.prototype.onError = function(source, request, 
+    status, ex, $modal) {
+  alert("Something happened: " + status + ": " + ex);
+};
+
+FormViewController.prototype.whenFormAccepted = function(responseBody) {
 };
 
 FormViewController.prototype.displayFormErrors = function($form, errors) {
