@@ -194,13 +194,13 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     populateField(page, HTML_ID_SERIAL_NUMBER, VALID_SERIAL_NUMBER);
     populateField(page, HTML_ID_INV_NUMBER, VALID_INVENTORY_NUMBER);
 
-    populateAutocompeteField(page, HTML_ID_BUILDING, 
+    populateAutocompleteField(page, HTML_ID_BUILDING, 
         properties.getString("building.1.name"), true);
 
-    populateAutocompeteField(page, HTML_ID_ROOM_NUMBER, 
+    populateAutocompleteField(page, HTML_ID_ROOM_NUMBER, 
         properties.getString("room.1.roomNumber"), true);
     
-    HtmlInput positionHint = populateAutocompeteField(page, 
+    HtmlInput positionHint = populateAutocompleteField(page, 
         HTML_ID_POSITION_HINT, properties.getString("positionHint.1.hintText"), 
         true);
     positionHint.fireEvent(Event.TYPE_BLUR);
@@ -232,7 +232,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     openEnrollFixtureDialog(page);
     
     // Type first two characters into input
-    HtmlInput input = populateAutocompeteField(page, HTML_ID_BUILDING, 
+    HtmlInput input = populateAutocompleteField(page, HTML_ID_BUILDING, 
         buildingName.substring(0, 2), false);
     
     // Validate that the building appears in autocomplete
@@ -265,7 +265,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     openEnrollFixtureDialog(page);
     
     // Type first two characters into input
-    HtmlInput input = populateAutocompeteField(page, HTML_ID_BUILDING, "Z_Z_Z", 
+    HtmlInput input = populateAutocompleteField(page, HTML_ID_BUILDING, "Z_Z_Z", 
         true);
     input.fireEvent(Event.TYPE_BLUR);
     getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
@@ -290,7 +290,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
     openEnrollFixtureDialog(page);
     
-    HtmlInput input = populateAutocompeteField(page, HTML_ID_POSITION_HINT, 
+    HtmlInput input = populateAutocompleteField(page, HTML_ID_POSITION_HINT, 
         hint.substring(0, 2), false);
     HtmlUnorderedList dropdown = 
         getAutocompleteList(page, HTML_ID_POSITION_HINT);
@@ -317,7 +317,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
     openEnrollFixtureDialog(page);
     
-    HtmlInput input = populateAutocompeteField(page, HTML_ID_ROOM_NUMBER, 
+    HtmlInput input = populateAutocompleteField(page, HTML_ID_ROOM_NUMBER, 
         room.substring(0, 2), false);
     HtmlUnorderedList dropdown = getAutocompleteList(page, HTML_ID_ROOM_NUMBER);
     assertTrue(dropdown.getChildElementCount() > 0);
@@ -337,13 +337,13 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     populateField(page, HTML_ID_SERIAL_NUMBER, VALID_SERIAL_NUMBER);
     populateField(page, HTML_ID_INV_NUMBER, VALID_INVENTORY_NUMBER);
 
-    populateAutocompeteField(page, HTML_ID_BUILDING, 
+    populateAutocompleteField(page, HTML_ID_BUILDING, 
         properties.getString("building.1.name"), true);
     
     populateField(page, HTML_ID_ROOM_NUMBER, 
         properties.getString("room.1.roomNumber"));
 
-    populateAutocompeteField(page, HTML_ID_POSITION_HINT, 
+    populateAutocompleteField(page, HTML_ID_POSITION_HINT, 
         properties.getString("positionHint.1.hintText"), true);
     
     clickSubmitButtonAndWait(page);
@@ -386,7 +386,7 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
         + "/div[1]/div[@class='error']")).getTextContent();
   }
   
-  private HtmlInput populateAutocompeteField(HtmlPage page, String fieldId, 
+  private HtmlInput populateAutocompleteField(HtmlPage page, String fieldId, 
       String value, boolean selectField) throws Exception {
     HtmlInput input = getInputField(page, fieldId);
     input.type(value);
