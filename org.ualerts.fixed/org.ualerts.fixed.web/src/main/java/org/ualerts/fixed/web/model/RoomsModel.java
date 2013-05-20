@@ -35,9 +35,16 @@ public class RoomsModel {
 
   private String[] rooms;
   
+  /**
+   * Constructs a new instance.
+   */
   public RoomsModel() {
   }
   
+  /**
+   * Constructs a new instance with the provided room data
+   * @param rooms The rooms to populate the model with
+   */
   public RoomsModel(String[] rooms) {
     this.rooms = rooms;
   }
