@@ -5,7 +5,8 @@
      data-target="#modal" 
      data-title="Add Fixture" 
      data-primary-button-text="Submit New Fixture" 
-     data-cancel-button-text="Cancel">
+     data-cancel-button-text="Cancel"
+     data-control-function="add">
     <i class="icon-plus"></i> Add Fixture
   </a>
 </div>
