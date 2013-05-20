@@ -17,9 +17,10 @@
  *
  */
 
-function FixturesViewController(buildingService) {
+function FixturesViewController(buildingService, positionHintService) {
   FormViewController.call(this);
   this.buildingService = buildingService;
+  this.positionHintService = positionHintService;
   this.fixturesListTable = null;
 }
 
@@ -33,14 +34,7 @@ FixturesViewController.prototype.documentReady = function(source) {
     aaSorting: [ [0, 'asc'], [1, 'asc'] ],
     bPaginate: false,
     bInfo: false,
-    aoColumns: [
-      null,
-      null,
-      null,
-      null,
-      null,
-      { bSortable: false }
-    ]
+    aoColumns: [ null, null, null, null, null, { bSortable: false }]
   });
   
   if (emptyTable) {
@@ -48,18 +42,26 @@ FixturesViewController.prototype.documentReady = function(source) {
   }
   
   var controller = this;
-  $("#addFixture").data("post-modal-callback", function() { 
-    controller.modalReady(this, $(this));
+  $("#addFixture").on("modalLoaded", function(event, $modal) { 
+    controller.modalReady(this, $modal);
   });
 };
 
 FixturesViewController.prototype.modalReady = function(source, $modal) {
   var controller = this;
+  
   var $building = $("#building");
   $building.typeahead({
     source: function(query, process) {
       controller.buildingService.getAllBuildings(process);
     }
+  });
+  
+  var $positionHint = $("#positionHint");
+  $positionHint.typeahead({
+    source: function(query, process) {
+      controller.positionHintService.getAllPositionHints(process);
+    } 
   });
   
   $building.blur(function() {
@@ -110,7 +112,7 @@ FixturesViewController.prototype.onSuccess = function(source, data, $modal) {
   }
   else {
     var $form = $modal.find("form");
-    this.displayErrorsOnForm($form, data.errors);
+    this.displayFormErrors($form, data.errors);
     $(".modal-body").scrollTop(0);
   }
 };

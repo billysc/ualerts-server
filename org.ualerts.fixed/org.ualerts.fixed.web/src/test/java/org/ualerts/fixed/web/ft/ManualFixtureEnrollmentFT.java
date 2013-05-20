@@ -198,11 +198,15 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     HtmlInput building = populateAutocompeteField(page, HTML_ID_BUILDING, 
         properties.getString("building.1.name"));
     building.type(KeyboardEvent.DOM_VK_TAB);
-    building.type(KeyboardEvent.DOM_VK_TAB);
     getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
 
     populateField(page, HTML_ID_ROOM_NUMBER, VALID_ROOM_NUMBER);
-    populateField(page, HTML_ID_POSITION_HINT, VALID_POSITION_HINT);
+    
+    HtmlInput positionHint = populateAutocompeteField(page, 
+        HTML_ID_POSITION_HINT, properties.getString("positionHint.1.hintText"));
+    positionHint.type(KeyboardEvent.DOM_VK_TAB);
+    positionHint.fireEvent(Event.TYPE_BLUR);
+    getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
     
     clickSubmitButtonAndWait(page);
     
@@ -247,8 +251,6 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     // Validate that the field is populated with the building
     assertEquals(buildingName, input.getValueAttribute());
     
-    logger.info(getModalBody(page).asXml());
-    
     // Validate that the id field is populated with the id of the building
     HtmlHiddenInput buildingIdElement = 
         page.getHtmlElementById(HTML_ID_BUILDING_ID);
@@ -276,6 +278,33 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     HtmlHiddenInput buildingIdElement = 
         page.getHtmlElementById(HTML_ID_BUILDING_ID);
     assertEmpty(buildingIdElement.getValueAttribute());
+  }
+  
+  /**
+   * Validate that the auto-completion of position hints works
+   * @throws Exception Any exception that can occur
+   */
+  @Test
+  @TestResources(prefix = "sql/", before = "ManualFixtureEnrollmentFT_before",
+      after = "ManualFixtureEnrollmentFT_after")
+  public void testAutocompletionOfPositionHints() throws Exception {
+    String hint = properties.getString("positionHint.1.hintText");
+    
+    HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
+    openEnrollFixtureDialog(page);
+    
+    HtmlInput input = populateAutocompeteField(page, HTML_ID_POSITION_HINT, 
+        hint.substring(0,2));
+    HtmlUnorderedList dropdown = 
+        getAutocompleteList(page, HTML_ID_POSITION_HINT);
+    assertTrue(dropdown.getChildElementCount() > 0);
+
+    HtmlListItem element = dropdown.getFirstByXPath("li");
+    assertEquals(hint, element.getTextContent());
+    
+    input.type(KeyboardEvent.DOM_VK_TAB);
+    getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
+    assertEquals(hint, element.getTextContent());
   }
 
   private void openEnrollFixtureDialog(HtmlPage page) throws Exception {
@@ -348,7 +377,13 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
     
     populateField(page, HTML_ID_ROOM_NUMBER, VALID_ROOM_NUMBER);
-    populateField(page, HTML_ID_POSITION_HINT, VALID_POSITION_HINT);
+
+    HtmlInput positionHint = populateAutocompeteField(page, 
+        HTML_ID_POSITION_HINT, properties.getString("positionHint.1.hintText"));
+    positionHint.type(KeyboardEvent.DOM_VK_TAB);
+    positionHint.fireEvent(Event.TYPE_BLUR);
+    getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
+    
     clickSubmitButtonAndWait(page);
   }
   

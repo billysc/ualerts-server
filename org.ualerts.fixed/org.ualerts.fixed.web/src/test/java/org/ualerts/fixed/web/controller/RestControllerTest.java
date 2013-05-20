@@ -26,7 +26,9 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.ualerts.fixed.web.model.BuildingsModel;
+import org.ualerts.fixed.web.model.PositionHintsModel;
 import org.ualerts.fixed.web.service.BuildingService;
+import org.ualerts.fixed.web.service.PositionHintService;
 
 /**
  * Test case for RestController
@@ -37,6 +39,7 @@ public class RestControllerTest {
 
   private Mockery context;
   private BuildingService buildingService;
+  private PositionHintService positionHintService;
   private RestController controller;
   
   /**
@@ -46,9 +49,11 @@ public class RestControllerTest {
   public void setUp() {
     context = new Mockery();
     buildingService = context.mock(BuildingService.class);
+    positionHintService = context.mock(PositionHintService.class);
     
     controller = new RestController();
     controller.setBuildingService(buildingService);
+    controller.setPositionHintService(positionHintService);
   }
   
   /**
@@ -63,6 +68,21 @@ public class RestControllerTest {
     } });
     
     assertEquals(buildings, controller.getAllBuildings());
+    context.assertIsSatisfied();
+  }
+  
+  /**
+   * Validate the get all position hints method
+   * @throws Exception
+   */
+  @Test
+  public void testGetAllPositionHints() throws Exception {
+    final PositionHintsModel model = new PositionHintsModel();
+    context.checking(new Expectations() { { 
+      oneOf(positionHintService).getAllPositionHints();
+      will(returnValue(model));
+    } });
+    assertEquals(model, controller.getAllPositionHints());
     context.assertIsSatisfied();
   }
   
