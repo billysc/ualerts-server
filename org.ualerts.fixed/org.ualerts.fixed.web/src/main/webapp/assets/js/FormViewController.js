@@ -28,6 +28,7 @@ FormViewController.prototype.whenModalReady = function(source, $modal) {
   
   $modal.find("form").submit(function() {
     controller.submitForm(this, $modal);
+    return false;
   });
 };
 
