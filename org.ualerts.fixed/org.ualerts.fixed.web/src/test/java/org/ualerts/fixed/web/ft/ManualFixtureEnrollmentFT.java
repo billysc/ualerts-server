@@ -198,11 +198,15 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     HtmlInput building = populateAutocompeteField(page, HTML_ID_BUILDING, 
         properties.getString("building.1.name"));
     building.type(KeyboardEvent.DOM_VK_TAB);
-    building.type(KeyboardEvent.DOM_VK_TAB);
     getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
 
     populateField(page, HTML_ID_ROOM_NUMBER, VALID_ROOM_NUMBER);
-    populateField(page, HTML_ID_POSITION_HINT, VALID_POSITION_HINT);
+    
+    HtmlInput positionHint = populateAutocompeteField(page, 
+        HTML_ID_POSITION_HINT, properties.getString("positionHint.1.hintText"));
+    positionHint.type(KeyboardEvent.DOM_VK_TAB);
+    positionHint.fireEvent(Event.TYPE_BLUR);
+    getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
     
     clickSubmitButtonAndWait(page);
     
@@ -373,7 +377,13 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
     
     populateField(page, HTML_ID_ROOM_NUMBER, VALID_ROOM_NUMBER);
-    populateField(page, HTML_ID_POSITION_HINT, VALID_POSITION_HINT);
+
+    HtmlInput positionHint = populateAutocompeteField(page, 
+        HTML_ID_POSITION_HINT, properties.getString("positionHint.1.hintText"));
+    positionHint.type(KeyboardEvent.DOM_VK_TAB);
+    positionHint.fireEvent(Event.TYPE_BLUR);
+    getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
+    
     clickSubmitButtonAndWait(page);
   }
   

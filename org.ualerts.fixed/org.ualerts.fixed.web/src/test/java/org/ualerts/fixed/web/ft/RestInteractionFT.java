@@ -144,13 +144,8 @@ public class RestInteractionFT extends AbstractFunctionalTest {
   
   private void validateHints(String[] hints) {
     assertEquals(2, hints.length);
-    try {
-      assertEquals(properties.getString("positionHint.1.hintText"), hints[0]);
-      assertEquals(properties.getString("positionHint.2.hintText"), hints[1]);
-    } catch (AssertionError e) {
-      assertEquals(properties.getString("positionHint.2.hintText"), hints[0]);
-      assertEquals(properties.getString("positionHint.1.hintText"), hints[1]);
-    }
+    assertEquals(properties.getString("positionHint.1.hintText"), hints[0]);
+    assertEquals(properties.getString("positionHint.2.hintText"), hints[1]);
   }
   
   private BuildingsModel getBuildings(String mediaType) {
