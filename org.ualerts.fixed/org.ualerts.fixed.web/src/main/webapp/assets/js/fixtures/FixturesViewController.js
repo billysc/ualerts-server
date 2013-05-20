@@ -20,10 +20,38 @@
 function FixturesViewController(buildingService) {
   FormViewController.call(this);
   this.buildingService = buildingService;
+  this.fixturesListTable = null;
 }
 
 FixturesViewController.prototype = new FormViewController();
 FixturesViewController.prototype.constructor = FixturesViewController;
+
+FixturesViewController.prototype.documentReady = function(source) {
+  var fixturesTable = $("#fixturesList");
+  var emptyTable = (fixturesTable.find("tbody tr").size() == 0);
+  this.fixturesListTable = fixturesTable.dataTable({
+    aaSorting: [ [0, 'asc'], [1, 'asc'] ],
+    bPaginate: false,
+    bInfo: false,
+    aoColumns: [
+      null,
+      null,
+      null,
+      null,
+      null,
+      { bSortable: false }
+    ]
+  });
+  
+  if (emptyTable) {
+    fixturesTable.parent().hide();
+  }
+  
+  var controller = this;
+  $("#addFixture").data("post-modal-callback", function() { 
+    controller.modalReady(this, $(this));
+  });
+};
 
 FixturesViewController.prototype.modalReady = function(source, $modal) {
   var controller = this;
@@ -112,7 +140,7 @@ FixturesViewController.prototype.displayFixture = function(fixture) {
   ]);
   
   // Get new row and wrap as jQuery object
-  var $newRow = $(fixturesListTable.fnGetNodes(row[0]));
+  var $newRow = $(this.fixturesListTable.fnGetNodes(row[0]));
   $newRow.data("entity-id", fixture.id);
   var currentColor = $newRow.css("backgroundColor");
   $newRow.addClass("updated");
