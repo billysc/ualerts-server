@@ -19,6 +19,9 @@
 
 package org.ualerts.fixed.web.service;
 
+import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
+import static org.hamcrest.core.AllOf.allOf;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -32,6 +35,7 @@ import org.junit.Test;
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
+import org.ualerts.fixed.service.commands.DeleteFixtureCommand;
 import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
 import org.ualerts.fixed.web.model.FixtureModel;
 
@@ -122,6 +126,26 @@ public class CommandSupportedFixtureServiceTest {
     context.assertIsSatisfied();
     assertNotNull(fixtureDtos);
     assertEquals(fixtures.size(), fixtureDtos.size());
+  }
+  
+  /**
+   * Test {@link CommandSupportedFixtureService#removeFixture(FixtureModel)}.
+   * @throws Exception
+   */
+  @Test
+  public void testRemoveFixture() throws Exception {
+    final DeleteFixtureCommand command = new DeleteFixtureCommand();
+    final FixtureModel fixture = new FixtureModel();
+    fixture.setId(-1L);
+    context.checking(new Expectations() { {
+      oneOf(commandService).newCommand(DeleteFixtureCommand.class);
+      will(returnValue(command));
+      oneOf(commandService).invoke(with(allOf(same(command), 
+         hasProperty("id", equalTo(fixture.getId())))));
+    } });
+    
+    service.removeFixture(fixture);
+    context.assertIsSatisfied();
   }
   
 }
