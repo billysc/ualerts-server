@@ -78,6 +78,8 @@ FixturesViewController.prototype.whenModalReady = function(source, $modal) {
   $building.blur(function() {
     controller.whenBuildingSelected(this);
   });
+  
+  $modal.find("input[type='text']:first").focus();
 };
 
 FixturesViewController.prototype.whenBuildingSelected = function(buildingElement) {
