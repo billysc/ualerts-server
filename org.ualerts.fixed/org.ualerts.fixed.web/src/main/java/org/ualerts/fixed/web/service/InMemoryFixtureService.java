@@ -20,6 +20,7 @@
 package org.ualerts.fixed.web.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.ualerts.fixed.web.model.FixtureModel;
@@ -59,6 +60,21 @@ public class InMemoryFixtureService implements FixtureService {
   @Override
   public List<FixtureModel> retrieveAllFixtures() throws Exception {
     return fixtures;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public void removeFixture(FixtureModel fixture) throws Exception {
+    Iterator<FixtureModel> i = fixtures.iterator();
+    boolean found = false;
+    while (!found && i.hasNext()) {
+      FixtureModel candidate = i.next();
+      found = candidate.getId().equals(fixture.getId());
+    }
+    if (found) {
+      i.remove();
+    }
   }
   
 }

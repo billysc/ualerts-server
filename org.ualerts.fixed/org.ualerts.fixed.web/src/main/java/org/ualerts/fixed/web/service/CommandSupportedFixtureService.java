@@ -30,6 +30,7 @@ import org.ualerts.fixed.InetAddress;
 import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
+import org.ualerts.fixed.service.commands.DeleteFixtureCommand;
 import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
 import org.ualerts.fixed.web.model.FixtureModel;
 
@@ -76,6 +77,17 @@ public class CommandSupportedFixtureService implements FixtureService {
     return fixtures;
   }
   
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void removeFixture(FixtureModel fixture) throws Exception {
+    DeleteFixtureCommand command = commandService.newCommand(
+        DeleteFixtureCommand.class);
+    command.setId(fixture.getId());
+    commandService.invoke(command);
+  }
+
   /**
    * Sets the {@code commandService} property.
    * @param commandService the value to set
