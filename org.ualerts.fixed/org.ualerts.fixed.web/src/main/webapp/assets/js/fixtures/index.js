@@ -1,7 +1,8 @@
 var buildingService = new BuildingService();
 var positionHintService = new PositionHintService();
+var roomService = new RoomService();
 var fixturesViewController = new FixturesViewController(buildingService, 
-    positionHintService);
+    positionHintService, roomService);
 
 $(function() {
   fixturesViewController.whenDocumentReady(this);

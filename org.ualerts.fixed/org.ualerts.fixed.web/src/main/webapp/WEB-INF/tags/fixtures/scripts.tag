@@ -4,4 +4,5 @@
 <script type="text/javascript" src="${base}/fixtures/BuildingService.js"></script>
 <script type="text/javascript" src="${base}/fixtures/FixturesViewController.js"></script>
 <script type="text/javascript" src="${base}/fixtures/PositionHintService.js"></script>
+<script type="text/javascript" src="${base}/fixtures/RoomService.js"></script>
 <script type="text/javascript" src="${base}/fixtures/index.js"></script>
