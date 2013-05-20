@@ -37,6 +37,7 @@ import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.service.commands.DeleteFixtureCommand;
 import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
+import org.ualerts.fixed.service.commands.FindFixtureCommand;
 import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
@@ -104,6 +105,30 @@ public class CommandSupportedFixtureServiceTest {
     assertEquals(fixture.getPositionHint(), command.getPositionHint());
     assertEquals(fixture.getRoom(), command.getRoomNumber());
     assertEquals(fixture.getSerialNumber(), command.getSerialNumber());
+  }
+
+  /**
+   * Test for {@link CommandSupportedFixtureService#findFixtureById(Long)}.
+   * @throws Exception
+   */
+  @Test
+  public void testFindFixtureById() throws Exception {
+    final Long id = -1L;
+    final FindFixtureCommand command = new FindFixtureCommand();
+    final Fixture fixture = new Fixture();
+    fixture.setId(id);
+    
+    context.checking(new Expectations() { { 
+      oneOf(commandService).newCommand(FindFixtureCommand.class);
+      will(returnValue(command));
+      oneOf(commandService).invoke(with(allOf(same(command),
+          hasProperty("id", equalTo(id)))));
+      will(returnValue(fixture));
+    } });
+    
+    FixtureModel result = service.findFixtureById(id);
+    context.assertIsSatisfied();
+    assertEquals(id, result.getId());
   }
   
   /**

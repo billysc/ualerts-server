@@ -32,6 +32,7 @@ import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.service.commands.DeleteFixtureCommand;
 import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
+import org.ualerts.fixed.service.commands.FindFixtureCommand;
 import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
@@ -39,6 +40,7 @@ import org.ualerts.fixed.web.model.FixtureModel;
  * the {@code org.ualerts.service} module to complete the various tasks.
  * 
  * @author Michael Irwin
+ * @author Carl Harris
  */
 @Service
 public class CommandSupportedFixtureService implements FixtureService {
@@ -63,6 +65,17 @@ public class CommandSupportedFixtureService implements FixtureService {
     return new FixtureModel(newFixture);
   }
   
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public FixtureModel findFixtureById(Long id) throws Exception {
+    FindFixtureCommand command = commandService.newCommand(
+        FindFixtureCommand.class);
+    command.setId(id);
+    return new FixtureModel(commandService.invoke(command));
+  }
+
   /**
    * {@inheritDoc}
    */
