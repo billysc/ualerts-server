@@ -6,5 +6,6 @@
 <script type="text/javascript" src="${base}/jquery-ui.custom.min.js"></script>
 <script type="text/javascript" src="${base}/bootstrap.min.js"></script>
 <script type="text/javascript" src="${base}/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="${base}/ModalViewController.js"></script>
 <script type="text/javascript" src="${base}/FormViewController.js"></script>
 <script type="text/javascript" src="${base}/global.js"></script>
