@@ -22,13 +22,16 @@ package org.ualerts.fixed.web.controller;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.ualerts.fixed.web.model.BuildingsModel;
 import org.ualerts.fixed.web.model.PositionHintsModel;
+import org.ualerts.fixed.web.model.RoomsModel;
 import org.ualerts.fixed.web.service.BuildingService;
 import org.ualerts.fixed.web.service.PositionHintService;
+import org.ualerts.fixed.web.service.RoomService;
 
 /**
  * A controller that provides RESTful interactions
@@ -40,6 +43,7 @@ public class RestController {
   
   private BuildingService buildingService;
   private PositionHintService positionHintService;
+  private RoomService roomService;
 
   /**
    * Get all buildings known to the system
@@ -62,6 +66,18 @@ public class RestController {
   }
   
   /**
+   * Get all of the rooms for a given building
+   * @param buildingId The id of the building to get rooms for
+   * @return The rooms for the building
+   */
+  @ResponseBody
+  @RequestMapping(value = "/buildings/{id}/rooms", method = RequestMethod.GET)
+  public RoomsModel getRoomsForBuilding(@PathVariable("id") String buildingId) 
+      throws Exception {
+    return roomService.getRoomsForBuilding(buildingId);
+  }
+  
+  /**
    * Sets the {@code buildingService} property.
    * @param buildingService the value to set
    */
@@ -77,6 +93,15 @@ public class RestController {
   @Resource
   public void setPositionHintService(PositionHintService positionHintService) {
     this.positionHintService = positionHintService;
+  }
+  
+  /**
+   * Sets the {@code roomService} property.
+   * @param roomService the value to set
+   */
+  @Resource
+  public void setRoomService(RoomService roomService) {
+    this.roomService = roomService;
   }
   
 }
