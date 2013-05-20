@@ -311,11 +311,14 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
   @Test
   @TestResources(prefix = "sql/", before = "ManualFixtureEnrollmentFT_before",
       after = "ManualFixtureEnrollmentFT_after")
-  public void testAutocompletionOfRooms() throws Exception {
+  public void testAutocompletionOfRoomsWithBuildingEntered() throws Exception {
+    String building = properties.getString("building.1.name");
     String room = properties.getString("room.1.roomNumber");
     
     HtmlPage page = getHtmlPage(IndexController.INDEX_PATH);
     openEnrollFixtureDialog(page);
+    
+    populateAutocompleteField(page, HTML_ID_BUILDING, building, true);
     
     HtmlInput input = populateAutocompleteField(page, HTML_ID_ROOM_NUMBER, 
         room.substring(0, 2), false);
