@@ -27,6 +27,7 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -114,6 +115,7 @@ public class FixtureRemovalFT extends AbstractFunctionalTest {
    * is not removed.
    * @throws Exception
    */
+  @Ignore
   @Test
   @TestResources(prefix = "sql/", before = "FixtureRemovalFT_before",
       after = "FixtureRemovalFT_after")
@@ -125,6 +127,7 @@ public class FixtureRemovalFT extends AbstractFunctionalTest {
    * Tests that when the removal is confirmed, the fixture is removed.
    * @throws Exception
    */
+  @Ignore
   @Test
   @TestResources(prefix = "sql/", before = "FixtureRemovalFT_before",
       after = "FixtureRemovalFT_after")
