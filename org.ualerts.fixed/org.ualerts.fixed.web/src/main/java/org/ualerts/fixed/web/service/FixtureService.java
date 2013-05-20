@@ -56,10 +56,10 @@ public interface FixtureService {
   List<FixtureModel> retrieveAllFixtures() throws Exception;
   
   /**
-   * Removes a peristent fixture.
-   * @param fixture the fixture to remove
+   * Removes a persistent fixture.
+   * @param id ID of the fixture to remove.
    * @throws Exception
    */
-  void removeFixture(FixtureModel fixture) throws Exception;
+  void removeFixture(Long id) throws Exception;
   
 }

@@ -160,16 +160,15 @@ public class CommandSupportedFixtureServiceTest {
   @Test
   public void testRemoveFixture() throws Exception {
     final DeleteFixtureCommand command = new DeleteFixtureCommand();
-    final FixtureModel fixture = new FixtureModel();
-    fixture.setId(-1L);
+    final Long id = -1L;
     context.checking(new Expectations() { {
       oneOf(commandService).newCommand(DeleteFixtureCommand.class);
       will(returnValue(command));
       oneOf(commandService).invoke(with(allOf(same(command), 
-         hasProperty("id", equalTo(fixture.getId())))));
+         hasProperty("id", equalTo(id)))));
     } });
     
-    service.removeFixture(fixture);
+    service.removeFixture(id);
     context.assertIsSatisfied();
   }
   

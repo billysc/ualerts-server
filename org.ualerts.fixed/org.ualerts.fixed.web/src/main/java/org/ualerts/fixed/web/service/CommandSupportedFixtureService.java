@@ -94,10 +94,10 @@ public class CommandSupportedFixtureService implements FixtureService {
    * {@inheritDoc}
    */
   @Override
-  public void removeFixture(FixtureModel fixture) throws Exception {
+  public void removeFixture(Long id) throws Exception {
     DeleteFixtureCommand command = commandService.newCommand(
         DeleteFixtureCommand.class);
-    command.setId(fixture.getId());
+    command.setId(id);
     commandService.invoke(command);
   }
 
