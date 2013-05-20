@@ -19,7 +19,7 @@
 function FormViewController() {
 }
 
-FormViewController.prototype.modalReady = function(source, $modal) {
+FormViewController.prototype.whenModalReady = function(source, $modal) {
   var controller = this;
 
   $modal.find(".btn-primary").click(function() {

@@ -27,7 +27,7 @@ function FixturesViewController(buildingService, positionHintService) {
 FixturesViewController.prototype = new FormViewController();
 FixturesViewController.prototype.constructor = FixturesViewController;
 
-FixturesViewController.prototype.documentReady = function(source) {
+FixturesViewController.prototype.whenDocumentReady = function(source) {
   var fixturesTable = $("#fixturesList");
   var emptyTable = (fixturesTable.find("tbody tr").size() == 0);
   this.fixturesListTable = fixturesTable.dataTable({
@@ -43,12 +43,12 @@ FixturesViewController.prototype.documentReady = function(source) {
   
   var controller = this;
   $("#addFixture").on("modalLoaded", function(event, $modal) { 
-    controller.modalReady(this, $modal);
+    controller.whenModalReady(this, $modal);
   });
 };
 
-FixturesViewController.prototype.modalReady = function(source, $modal) {
-  FormViewController.prototype.modalReady.call(this, source, $modal);
+FixturesViewController.prototype.whenModalReady = function(source, $modal) {
+  FormViewController.prototype.whenModalReady.call(this, source, $modal);
   
   var controller = this;
 

@@ -4,5 +4,5 @@ var fixturesViewController = new FixturesViewController(buildingService,
     positionHintService);
 
 $(function() {
-  fixturesViewController.documentReady(this);
+  fixturesViewController.whenDocumentReady(this);
 });
