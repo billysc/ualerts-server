@@ -20,8 +20,16 @@
 var buildingService = new BuildingService();
 var positionHintService = new PositionHintService();
 var roomService = new RoomService();
-var fixturesViewController = new FixturesViewController(buildingService, 
-    positionHintService, roomService);
+
+var fixturesViewController = new FixturesViewController();
+var addFixtureStrategy = new AddFixtureStrategy(fixturesViewController,
+    buildingService, positionHintService, roomService);
+var editFixtureStrategy = new EditFixtureStrategy(fixturesViewController);
+var removeFixtureStrategy = new RemoveFixtureStrategy(fixturesViewController);
+fixturesViewController.addControlStrategy("add", addFixtureStrategy);
+fixturesViewController.addControlStrategy("edit", editFixtureStrategy);
+fixturesViewController.addControlStrategy("remove", removeFixtureStrategy);
+
 
 $(function() {
   fixturesViewController.whenDocumentReady(this);
