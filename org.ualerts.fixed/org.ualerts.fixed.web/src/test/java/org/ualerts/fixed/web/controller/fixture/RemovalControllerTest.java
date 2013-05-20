@@ -21,6 +21,8 @@ package org.ualerts.fixed.web.controller.fixture;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Map;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
@@ -32,7 +34,7 @@ import org.ualerts.fixed.web.service.FixtureService;
 /**
  * Unit tests for {@link RemovalController}.
  *
- * @author ceharris
+ * @author Carl Harris
  */
 public class RemovalControllerTest {
 
@@ -85,8 +87,9 @@ public class RemovalControllerTest {
       oneOf(fixtureService).removeFixture(with(same(id)));
     } });
     
-    controller.handleFormSubmission(id);
+    Map<String, Object> result = controller.handleFormSubmission(id);
     context.assertIsSatisfied();
+    assertEquals(Boolean.TRUE, result.get("success"));
   }
   
 }
