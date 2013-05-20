@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ualerts.fixed.web.model.BuildingsModel;
 import org.ualerts.fixed.web.model.PositionHintsModel;
+import org.ualerts.fixed.web.model.RoomsModel;
 import org.ualerts.testing.jpa.EntityManagerFactoryResource;
 import org.ualerts.testing.jpa.HibernatePersistentDataResource;
 import org.ualerts.testing.jpa.PersistentDataResource;
@@ -54,6 +55,7 @@ public class RestInteractionFT extends AbstractFunctionalTest {
   private static final String REST_POINT = "/api";
   private static final String BUILDING_URL = "/buildings";
   private static final String POSITION_HINTS_URL = "/positionHints";
+  private static final String ROOMS_URL = "/buildings/%s/rooms";
 
   // CHECKSTYLE:OFF
   @ClassRule
@@ -142,10 +144,42 @@ public class RestInteractionFT extends AbstractFunctionalTest {
     validateHints(hintsModel.getPositionHints());
   }
   
+  /**
+   * Test the retrieval of all rooms, using XML
+   */
+  @Test
+  @TestResources(prefix = "sql/", before = "RestInteractionFT_rooms_before",
+      after = "RestInteractionFT_rooms_after")
+  public void testGetRoomsXml() {
+    String buildingId = properties.getString("building.1.id");
+    RoomsModel roomsModel = getRooms(buildingId, "application/xml");
+    assertNotNull(roomsModel);
+    validateRooms(roomsModel.getRooms());
+  }
+  
+  /**
+   * Test the retrieval of all rooms, using JSON
+   */
+  @Test
+  @TestResources(prefix = "sql/", before = "RestInteractionFT_rooms_before",
+      after = "RestInteractionFT_rooms_after")
+  public void testGetRoomsJson() {
+    String buildingId = properties.getString("building.1.id");
+    RoomsModel roomsModel = getRooms(buildingId, "application/json");
+    assertNotNull(roomsModel);
+    validateRooms(roomsModel.getRooms());
+  }
+  
   private void validateHints(String[] hints) {
     assertEquals(2, hints.length);
     assertEquals(properties.getString("positionHint.1.hintText"), hints[0]);
     assertEquals(properties.getString("positionHint.2.hintText"), hints[1]);
+  }
+  
+  private void validateRooms(String[] rooms) {
+    assertEquals(2, rooms.length);
+    assertEquals(properties.getString("room.1.roomNumber"), rooms[0]);
+    assertEquals(properties.getString("room.2.roomNumber"), rooms[1]);
   }
   
   private BuildingsModel getBuildings(String mediaType) {
@@ -158,6 +192,12 @@ public class RestInteractionFT extends AbstractFunctionalTest {
     WebResource resource = client.resource(getContextUrl() + REST_POINT 
         + POSITION_HINTS_URL);
     return resource.header("Accept", mediaType).get(PositionHintsModel.class);
+  }
+  
+  private RoomsModel getRooms(String buildingId, String mediaType) {
+    WebResource resource = client.resource(getContextUrl() + REST_POINT 
+        + String.format(ROOMS_URL, buildingId));
+    return resource.header("Accept", mediaType).get(RoomsModel.class);
   }
   
 }
