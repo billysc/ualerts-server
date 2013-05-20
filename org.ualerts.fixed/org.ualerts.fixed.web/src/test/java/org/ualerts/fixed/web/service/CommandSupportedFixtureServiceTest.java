@@ -51,7 +51,7 @@ public class CommandSupportedFixtureServiceTest {
    * Setup for each test
    */
   @Before
-  public void setup() {
+  public void setUp() {
     context = new Mockery();
     fixture = new FixtureModel();
     commandService = context.mock(CommandService.class);
@@ -73,7 +73,7 @@ public class CommandSupportedFixtureServiceTest {
    * @throws Exception
    */
   @Test
-  public void validateFixtureCreation() throws Exception {
+  public void testCreateFixture() throws Exception {
     final Fixture fixtureObj = new Fixture();
     fixtureObj.setId(new Long(0));
     fixtureObj.setVersion(new Long(1));
@@ -107,7 +107,7 @@ public class CommandSupportedFixtureServiceTest {
    * @throws Exception
    */
   @Test
-  public void validateRetrievalAllFixtures() throws Exception {
+  public void testRetrievalAllFixtures() throws Exception {
     final FindAllFixturesCommand command = new FindAllFixturesCommand();
     final List<Fixture> fixtures = new ArrayList<Fixture>();
     
