@@ -27,8 +27,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ualerts.fixed.web.model.BuildingsModel;
 import org.ualerts.fixed.web.model.PositionHintsModel;
+import org.ualerts.fixed.web.model.RoomsModel;
 import org.ualerts.fixed.web.service.BuildingService;
 import org.ualerts.fixed.web.service.PositionHintService;
+import org.ualerts.fixed.web.service.RoomService;
 
 /**
  * Test case for RestController
@@ -40,6 +42,7 @@ public class RestControllerTest {
   private Mockery context;
   private BuildingService buildingService;
   private PositionHintService positionHintService;
+  private RoomService roomService;
   private RestController controller;
   
   /**
@@ -50,10 +53,12 @@ public class RestControllerTest {
     context = new Mockery();
     buildingService = context.mock(BuildingService.class);
     positionHintService = context.mock(PositionHintService.class);
+    roomService = context.mock(RoomService.class);
     
     controller = new RestController();
     controller.setBuildingService(buildingService);
     controller.setPositionHintService(positionHintService);
+    controller.setRoomService(roomService);
   }
   
   /**
@@ -83,6 +88,22 @@ public class RestControllerTest {
       will(returnValue(model));
     } });
     assertEquals(model, controller.getAllPositionHints());
+    context.assertIsSatisfied();
+  }
+  
+  /**
+   * Validate the get all rooms for building method
+   * @throws Exception
+   */
+  @Test
+  public void testGetRoomsForBuilding() throws Exception {
+    final String buildingId = "12";
+    final RoomsModel model = new RoomsModel();
+    context.checking(new Expectations() { {
+      oneOf(roomService).getRoomsForBuilding(buildingId);
+      will(returnValue(model));
+    } });
+    assertEquals(model, controller.getRoomsForBuilding(buildingId));
     context.assertIsSatisfied();
   }
   

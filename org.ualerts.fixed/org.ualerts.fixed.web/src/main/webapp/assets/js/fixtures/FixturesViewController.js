@@ -17,10 +17,12 @@
  *
  */
 
-function FixturesViewController(buildingService, positionHintService) {
+function FixturesViewController(buildingService, positionHintService, 
+    roomService) {
   FormViewController.call(this);
   this.buildingService = buildingService;
   this.positionHintService = positionHintService;
+  this.roomService = roomService;
   this.fixturesListTable = null;
 }
 
@@ -54,6 +56,13 @@ FixturesViewController.prototype.modalReady = function(source, $modal) {
   $building.typeahead({
     source: function(query, process) {
       controller.buildingService.getAllBuildings(process);
+    }
+  });
+  
+  var $room = $("#room");
+  $room.typeahead({
+    source: function(query, process) {
+      controller.roomService.getRooms(process);
     }
   });
   
