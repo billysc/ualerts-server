@@ -1,7 +1,8 @@
 <%@ attribute name="contextPath" required="true" rtexprvalue="true" %>
+<%@ attribute name="fixtureId" required="true" rtexprvalue="true" %>
 <a class="btn btn-link no-padding modal-trigger" 
   title="Edit this fixture" 
-  href="${contextPath}/ui/fixtures/{id}/edit.html"
+  href="${contextPath}/ui/fixtures/${fixtureId}/edit.html"
   data-target="#modal" data-title="Edit Fixture" 
   data-primary-button-text="Save Changes" 
   data-cancel-button-text="Cancel"
@@ -11,7 +12,7 @@
 
 <a class="btn btn-link no-padding modal-trigger" 
   title="Remove this fixture" 
-  href="${contextPath}/ui/fixtures/{id}/remove.html"
+  href="${contextPath}/ui/fixtures/${fixtureId}/remove.html"
   data-target="#modal" data-title="Remove Fixture" 
   data-primary-button-text="Remove Fixture" 
   data-cancel-button-text="Cancel"
