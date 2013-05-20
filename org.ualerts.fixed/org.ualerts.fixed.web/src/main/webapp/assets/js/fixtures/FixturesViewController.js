@@ -29,7 +29,7 @@ function FixturesViewController(buildingService, positionHintService,
 FixturesViewController.prototype = new FormViewController();
 FixturesViewController.prototype.constructor = FixturesViewController;
 
-FixturesViewController.prototype.documentReady = function(source) {
+FixturesViewController.prototype.whenDocumentReady = function(source) {
   var fixturesTable = $("#fixturesList");
   var emptyTable = (fixturesTable.find("tbody tr").size() == 0);
   this.fixturesListTable = fixturesTable.dataTable({
@@ -45,13 +45,15 @@ FixturesViewController.prototype.documentReady = function(source) {
   
   var controller = this;
   $("#addFixture").on("modalLoaded", function(event, $modal) { 
-    controller.modalReady(this, $modal);
+    controller.whenModalReady(this, $modal);
   });
 };
 
-FixturesViewController.prototype.modalReady = function(source, $modal) {
-  var controller = this;
+FixturesViewController.prototype.whenModalReady = function(source, $modal) {
+  FormViewController.prototype.whenModalReady.call(this, source, $modal);
   
+  var controller = this;
+
   var $building = $("#building");
   $building.typeahead({
     source: function(query, process) {
@@ -76,14 +78,6 @@ FixturesViewController.prototype.modalReady = function(source, $modal) {
   $building.blur(function() {
     controller.whenBuildingSelected(this);
   });
-  
-  $modal.find(".btn-primary").click(function() {
-    controller.submitForm(this, $modal);
-  });
-  
-  $modal.find("form").submit(function() {
-    controller.submitForm(this, $modal);
-  });
 };
 
 FixturesViewController.prototype.whenBuildingSelected = function(buildingElement) {
@@ -99,43 +93,12 @@ FixturesViewController.prototype.whenBuildingSelected = function(buildingElement
   }
 };
 
-FixturesViewController.prototype.submitForm = function(source, $modal) {
-  var controller = this;
-  var successCallback = function(data) {
-    controller.onSuccess(this, data, $modal);
-  };
-  var errorCallback = function(request, status, ex) {
-    controller.onError(this, request, status, ex, $modal);
-  };
-
-  var $form = $modal.find("form");
-  this.ajaxSubmit($form, $form.attr("action"), "POST", "json", successCallback, 
-      errorCallback);
-};
-
-FixturesViewController.prototype.onSuccess = function(source, data, $modal) {
-  if (data.success) {
-    var fixture = data.fixture;
-    this.displayFixture(fixture);
-    $modal.modal('hide');
-  }
-  else {
-    var $form = $modal.find("form");
-    this.displayFormErrors($form, data.errors);
-    $(".modal-body").scrollTop(0);
-  }
-};
-
-FixturesViewController.prototype.onError = function(source, request, 
-    status, ex, $modal) {
-  alert("Something happened: " + status + ": " + ex);
-};
-
 /**
  * Displays the provided fixture in the fixtures table view.
  * @param fixture the fixture to display
  */
-FixturesViewController.prototype.displayFixture = function(fixture) {
+FixturesViewController.prototype.whenFormAccepted = function(responseBody) {
+  var fixture = responseBody.fixture;
   $("#fixturesListEmpty").remove();
   $("#fixturesList").parent().show();
 
