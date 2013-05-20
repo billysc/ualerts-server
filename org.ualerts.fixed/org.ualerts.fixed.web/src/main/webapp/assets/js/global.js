@@ -19,11 +19,9 @@ $(function() {
     var $cancelButton = $target.find(".btn.cancel").unbind("click");
     
     $target.unbind("hidden");
-    $target.unbind("loaded");
-    var fn = $this.data("post-modal-callback");
-    if (typeof fn == "function") {      
-      $target.on('loaded', fn);
-    }
+    $target.unbind("loaded").on('loaded', function() {
+      $this.trigger('modalLoaded');
+    });
       
     var opts = {};
     if (typeof remote != "undefined") {
@@ -31,6 +29,7 @@ $(function() {
     }
 
     $target.modal(opts);
+
     $target.find(".modal-header h3").text(title);
     if (typeof primaryButtonText == "string")
       $primaryButton.removeClass("hide").text(primaryButtonText);

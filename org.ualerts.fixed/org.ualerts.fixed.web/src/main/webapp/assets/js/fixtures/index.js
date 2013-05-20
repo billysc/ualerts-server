@@ -23,7 +23,7 @@ $(function() {
     fixturesTable.parent().hide();
   }
   
-  $("#addFixture").data("post-modal-callback", function() { 
+  $("#addFixture").on("modalLoaded", function() { 
 	  addFixtureController.modalReady(this, $(this));
   });
   
