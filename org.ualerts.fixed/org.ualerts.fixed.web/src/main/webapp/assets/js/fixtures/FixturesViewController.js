@@ -44,7 +44,7 @@ FixturesViewController.prototype.whenDocumentReady = function(source) {
   }
   
   var controller = this;
-  $("#addFixture").on("modalLoaded", function(event, $modal) { 
+  $("div.container").on('modalLoaded', '.modal-trigger', function(event, $modal) {
     controller.whenModalReady(this, $modal);
   });
 };
