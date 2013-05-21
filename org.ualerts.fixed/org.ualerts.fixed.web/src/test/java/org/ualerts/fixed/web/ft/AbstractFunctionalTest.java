@@ -22,8 +22,12 @@ package org.ualerts.fixed.web.ft;
 import junit.framework.Assert;
 
 import org.junit.Before;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.gargoylesoftware.htmlunit.AlertHandler;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
@@ -36,6 +40,12 @@ public abstract class AbstractFunctionalTest {
   
   private static final String UI_PATH = "/ui/fixtures";
       // TODO repeated in web.xml
+  
+  /**
+   * Shared logger
+   */
+  protected final Logger logger =  // CHECKSTYLE:idiomatic
+      LoggerFactory.getLogger(getClass());   
   
   /**
    * Short delay for Javascript wait time. Intended for short functions that
@@ -58,6 +68,13 @@ public abstract class AbstractFunctionalTest {
   @Before
   public void clientSetup() {
     getClient().setCssErrorHandler(new NoOpErrorHandler());
+    getClient().setAlertHandler(new AlertHandler() {
+      @Override
+      public void handleAlert(Page page, String message) {
+        logger.error("javascript alert: " + message 
+            + " on page " + page);
+      }
+    });
   }
   
   /**
