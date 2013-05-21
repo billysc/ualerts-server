@@ -29,8 +29,6 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.ualerts.fixed.web.controller.fixture.IndexController;
 import org.ualerts.testing.jpa.EntityManagerFactoryResource;
 import org.ualerts.testing.jpa.HibernatePersistentDataResource;
@@ -58,10 +56,7 @@ import edu.vt.cns.kestrel.common.IntegrationTestRunner;
  */
 @RunWith(IntegrationTestRunner.class)
 public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
-  
-  private static final Logger logger = 
-      LoggerFactory.getLogger(ManualFixtureEnrollmentFT.class);
-  
+    
   private static final String HTML_ID_GLOBAL_ERRORS = "globalErrorContainer";
   private static final String HTML_ID_IP_ADDRESS = "ipAddressContainer";
   private static final String HTML_ID_BUILDING = "buildingContainer";
@@ -265,8 +260,9 @@ public class ManualFixtureEnrollmentFT extends AbstractFunctionalTest {
     openEnrollFixtureDialog(page);
     
     // Type first two characters into input
-    HtmlInput input = populateAutocompleteField(page, HTML_ID_BUILDING, "Z_Z_Z", 
-        true);
+    HtmlInput input = populateAutocompleteField(page, 
+        HTML_ID_BUILDING, "Z_Z_Z", true);
+    
     input.fireEvent(Event.TYPE_BLUR);
     getClient().waitForBackgroundJavaScript(JS_SHORT_DELAY);
     assertEmpty(input.getValueAttribute());

@@ -30,7 +30,9 @@ import org.ualerts.fixed.InetAddress;
 import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
+import org.ualerts.fixed.service.commands.DeleteFixtureCommand;
 import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
+import org.ualerts.fixed.service.commands.FindFixtureCommand;
 import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
@@ -38,6 +40,7 @@ import org.ualerts.fixed.web.model.FixtureModel;
  * the {@code org.ualerts.service} module to complete the various tasks.
  * 
  * @author Michael Irwin
+ * @author Carl Harris
  */
 @Service
 public class CommandSupportedFixtureService implements FixtureService {
@@ -66,6 +69,17 @@ public class CommandSupportedFixtureService implements FixtureService {
    * {@inheritDoc}
    */
   @Override
+  public FixtureModel findFixtureById(Long id) throws Exception {
+    FindFixtureCommand command = commandService.newCommand(
+        FindFixtureCommand.class);
+    command.setId(id);
+    return new FixtureModel(commandService.invoke(command));
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public List<FixtureModel> retrieveAllFixtures() throws Exception {
     FindAllFixturesCommand command = 
         commandService.newCommand(FindAllFixturesCommand.class);
@@ -76,6 +90,20 @@ public class CommandSupportedFixtureService implements FixtureService {
     return fixtures;
   }
   
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public FixtureModel removeFixture(Long id) throws Exception {
+    DeleteFixtureCommand command = commandService.newCommand(
+        DeleteFixtureCommand.class);
+    command.setId(id);
+    commandService.invoke(command);
+    FixtureModel fixture = new FixtureModel();
+    fixture.setId(id);
+    return fixture;
+  }
+
   /**
    * Sets the {@code commandService} property.
    * @param commandService the value to set

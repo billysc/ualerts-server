@@ -1,4 +1,4 @@
-activeProfiles=
+activeProfiles=ide-integration-tests
 eclipse.preferences.version=1
-resolveWorkspaceProjects=true
+resolveWorkspaceProjects=false
 version=1

@@ -12,7 +12,7 @@
 	  <div class="container">
 	    <div class="row">
 	      <div class="span12">
-	        <fixtures:actionButtons/>
+	        <fixtures:actionButtons contextPath="${pageContext.request.contextPath}"/>
 	        <fixtures:tableView fixtures="${fixtures}"/>
 	      </div>
 	    </div>

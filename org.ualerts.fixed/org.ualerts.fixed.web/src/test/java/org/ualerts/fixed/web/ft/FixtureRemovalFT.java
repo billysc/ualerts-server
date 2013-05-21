@@ -21,13 +21,12 @@ package org.ualerts.fixed.web.ft;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,6 +53,8 @@ import edu.vt.cns.kestrel.common.IntegrationTestRunner;
 @RunWith(IntegrationTestRunner.class)
 public class FixtureRemovalFT extends AbstractFunctionalTest {
 
+  private static final String JQUERY_DATATYPES_EMPTY_CLASS = "dataTables_empty";
+
   private static final String HTML_ID_FIXTURE_TABLE = "fixturesList";
   
   // CHECKSTYLE:OFF
@@ -66,21 +67,10 @@ public class FixtureRemovalFT extends AbstractFunctionalTest {
      new HibernatePersistentDataResource(entityManagerFactory);
   // CHECKSTYLE:ON
   
-  private static PropertiesAccessor properties;
-      
   private HtmlPage page;
   private HtmlTable table;
   private HtmlTableRow row;
   private HtmlAnchor control;
-  
-  /**
-   * Performs one-time set up tasks.
-   * @throws Exception
-   */
-  @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-    properties = PropertiesAccessor.newInstance("persistent-data.properties");
-  }
   
   /**
    * Performs per-test setup tasks.
@@ -115,26 +105,32 @@ public class FixtureRemovalFT extends AbstractFunctionalTest {
    * is not removed.
    * @throws Exception
    */
-  @Ignore
   @Test
   @TestResources(prefix = "sql/", before = "FixtureRemovalFT_before",
       after = "FixtureRemovalFT_after")
   public void testNotRemovedWhenConfirmationCanceled() throws Exception {    
-    org.junit.Assert.fail("not implemented");
+    String id = row.getAttribute("data-entity-id");
+    clickControlButtonAndWait();
+    clickSubmitButtonAndWait();
+    clickCancelButtonAndWait();
+    HtmlTableRow topRow = getFirstTableRow(table);
+    assertEquals(id, topRow.getAttribute("data-entity-id"));
   }
   
   /**
    * Tests that when the removal is confirmed, the fixture is removed.
    * @throws Exception
    */
-  @Ignore
   @Test
-  @TestResources(prefix = "sql/", before = "FixtureRemovalFT_before",
+  @TestResources(prefix = "sql/", before = "FixtureRemovalFT_before", 
       after = "FixtureRemovalFT_after")
   public void testRemovedWhenConfirmed() throws Exception {
     clickControlButtonAndWait();
     clickSubmitButtonAndWait();
-    assertEquals(0, table.getBodies().get(0).getRows().size());
+    clickSubmitButtonAndWait();
+    HtmlTableRow row = getFirstTableRow(table);
+    String cellClass = row.getCell(0).getAttribute("class");
+    assertTrue(cellClass.contains(JQUERY_DATATYPES_EMPTY_CLASS));
   }
 
   private void clickControlButtonAndWait() throws IOException {

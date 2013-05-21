@@ -17,17 +17,20 @@
  *
  */
 
-function FixturesViewController(buildingService, positionHintService, 
-    roomService) {
+function FixturesViewController() {
   FormViewController.call(this);
-  this.buildingService = buildingService;
-  this.positionHintService = positionHintService;
-  this.roomService = roomService;
+  this.controlStrategies = {};
+  this.controlFunction = null;
   this.fixturesListTable = null;
 }
 
 FixturesViewController.prototype = new FormViewController();
 FixturesViewController.prototype.constructor = FixturesViewController;
+
+FixturesViewController.prototype.addControlStrategy = function(
+    controlFunction, strategy) {
+  this.controlStrategies[controlFunction] = strategy;
+};
 
 FixturesViewController.prototype.whenDocumentReady = function(source) {
   var fixturesTable = $("#fixturesList");
@@ -44,7 +47,7 @@ FixturesViewController.prototype.whenDocumentReady = function(source) {
   }
   
   var controller = this;
-  $("#addFixture").on("modalLoaded", function(event, $modal) { 
+  $("div.container").on('modalLoaded', '.modal-trigger', function(event, $modal) {
     controller.whenModalReady(this, $modal);
   });
 };
@@ -52,60 +55,23 @@ FixturesViewController.prototype.whenDocumentReady = function(source) {
 FixturesViewController.prototype.whenModalReady = function(source, $modal) {
   FormViewController.prototype.whenModalReady.call(this, source, $modal);
   
-  var controller = this;
-
-  var $building = $("#building");
-  $building.typeahead({
-    source: function(query, process) {
-      controller.buildingService.getAllBuildings(process);
-    }
-  });
-  
-  var $room = $("#room");
-  $room.typeahead({
-    source: function(query, process) {
-      controller.roomService.getRooms(process);
-    }
-  });
-  
-  var $positionHint = $("#positionHint");
-  $positionHint.typeahead({
-    source: function(query, process) {
-      controller.positionHintService.getAllPositionHints(process);
-    } 
-  });
-  
-  $building.blur(function() {
-    controller.whenBuildingSelected(this);
-  });
-  
-  $modal.find("input[type='text']:first").focus();
+  var $source = $(source);
+  this.controlFunction = $source.data("control-function");
+  this.controlStrategies[this.controlFunction].whenModalReady(source, $modal);
 };
 
-FixturesViewController.prototype.whenBuildingSelected = function(buildingElement) {
-  var value = $(buildingElement).val();
-  var building = this.buildingService.findMatchingBuilding(value);
-  if (building == null) {
-    $('#buildingId').val('');
-    $(buildingElement).val('');
-  }
-  else {
-    $("#buildingId").val(building.id);
-    $(buildingElement).val(building.name);
-  }
-};
-
-/**
- * Displays the provided fixture in the fixtures table view.
- * @param fixture the fixture to display
- */
 FixturesViewController.prototype.whenFormAccepted = function(responseBody) {
-  var fixture = responseBody.fixture;
+  this.controlStrategies[this.controlFunction].whenFormAccepted(responseBody);
+};
+
+FixturesViewController.prototype.addFixtureToView = function(fixture) {
   $("#fixturesListEmpty").remove();
   $("#fixturesList").parent().show();
 
-  //Add the row. Return value has index value to retrieve row from dataTables
-  var rowControls = $("#rowControls").html();
+  var rowControls = this.replaceIdPlaceholder(fixture.id, 
+      $("#rowControls").html());
+  
+  // Add the row. Return value has index value to retrieve row from dataTables
   var row = $("#fixturesList").show().dataTable().fnAddData([
     fixture.buildingAbbreviation + " " + fixture.room,
     fixture.positionHint,
@@ -117,7 +83,7 @@ FixturesViewController.prototype.whenFormAccepted = function(responseBody) {
   
   // Get new row and wrap as jQuery object
   var $newRow = $(this.fixturesListTable.fnGetNodes(row[0]));
-  $newRow.data("entity-id", fixture.id);
+  $newRow.attr("data-entity-id", fixture.id);
   var currentColor = $newRow.css("backgroundColor");
   $newRow.addClass("updated");
   
@@ -126,6 +92,28 @@ FixturesViewController.prototype.whenFormAccepted = function(responseBody) {
       1000, function() {
     $(this).css("backgroundColor", "").parent().removeClass("updated");
   });
+
+};
+
+FixturesViewController.prototype.replaceIdPlaceholder = function(id, html) {
+  var placeholder = "{id}";
+  var length = placeholder.length;
+  var i = html.indexOf(placeholder);
+  while (i != -1) {
+    html = html.substring(0, i) + id + html.substring(i + length);
+    i = html.indexOf(placeholder); 
+  }
+  return html;
+};
+
+FixturesViewController.prototype.updateFixtureInView = function(fixture) {
   
 };
 
+FixturesViewController.prototype.removeFixtureFromView = function(fixture) {
+  var controller = this;
+  var row = $("#fixturesList tr[data-entity-id='" + fixture.id + "']").get(0);
+  $(row).addClass("removeHighlight").delay(1000).fadeOut(1000, function() {
+    controller.fixturesListTable.fnDeleteRow(row);
+  });
+};

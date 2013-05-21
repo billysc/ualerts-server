@@ -20,7 +20,10 @@
 package org.ualerts.fixed.web.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.ualerts.fixed.web.model.FixtureModel;
 
@@ -57,8 +60,41 @@ public class InMemoryFixtureService implements FixtureService {
    * {@inheritDoc}
    */
   @Override
+  public FixtureModel findFixtureById(Long id) throws Exception {
+    Iterator<FixtureModel> i = fixtures.iterator();
+    while (i.hasNext()) {
+      FixtureModel candidate = i.next();
+      if (candidate.getId().equals(id)) {
+        return candidate;
+      }
+    }
+    throw new EntityNotFoundException();
+  } 
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public List<FixtureModel> retrieveAllFixtures() throws Exception {
     return fixtures;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public FixtureModel removeFixture(Long id) throws Exception {
+    Iterator<FixtureModel> i = fixtures.iterator();
+    boolean found = false;
+    while (!found && i.hasNext()) {
+      FixtureModel candidate = i.next();
+      found = candidate.getId().equals(id);
+    }
+    if (found) {
+      i.remove();
+    }
+    FixtureModel fixture = new FixtureModel();
+    fixture.setId(id);
+    return fixture;
   }
   
 }

@@ -27,6 +27,7 @@ import org.ualerts.fixed.web.model.FixtureModel;
  * delete operations around Fixture objects.
  *
  * @author Michael Irwin
+ * @author Carl Harris
  */
 public interface FixtureService {
   
@@ -40,10 +41,27 @@ public interface FixtureService {
   FixtureModel createFixture(FixtureModel fixture) throws Exception;
   
   /**
+   * Finds a fixture using its persistent ID.
+   * @param id ID of the subject fixture
+   * @return matching fixture or {@code null} if there exists no such fixture
+   * @throws Exception
+   */
+  FixtureModel findFixtureById(Long id) throws Exception;
+  
+  /**
    * Retrieve all Fixtures stored in persistence
    * @return A list of all Fixtures stored in persistence
    * @throws Exception
    */
   List<FixtureModel> retrieveAllFixtures() throws Exception;
+  
+  /**
+   * Removes a persistent fixture.
+   * @param id ID of the fixture to remove.
+   * @return partial fixture model for the removed fixture (only the ID
+   *    is guaranteed to be available in the model)
+   * @throws Exception
+   */
+  FixtureModel removeFixture(Long id) throws Exception;
   
 }

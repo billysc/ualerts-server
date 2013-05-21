@@ -23,13 +23,13 @@ function ModalViewController() {
 
 ModalViewController.prototype.whenDocumentReady = function(source) {
   var controller = this;
-  $(".modal-trigger").click(function(event) {
+  $("body").on('click', '.modal-trigger', function(event) {
     controller.whenModalTriggered(this, event);
   });  
 };
 
 ModalViewController.prototype.whenModalTriggered = function(source, event) {
-  event.stopPropagation();
+//  event.stopPropagation();
   event.preventDefault();
   var $source = $(source);
   var $target = $("" + $source.data("target"));

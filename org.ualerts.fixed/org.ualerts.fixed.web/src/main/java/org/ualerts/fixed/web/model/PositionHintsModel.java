@@ -41,6 +41,10 @@ public class PositionHintsModel {
   public PositionHintsModel() {
   }
   
+  /**
+   * Constructs a new instance.
+   * @param positionHints position hints to wrap
+   */
   public PositionHintsModel(String[] positionHints) {
     this.positionHints = positionHints;
   }

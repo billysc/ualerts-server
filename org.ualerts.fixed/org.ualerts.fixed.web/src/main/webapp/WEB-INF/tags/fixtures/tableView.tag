@@ -28,7 +28,8 @@
         <td>${fixture.macAddress}</td>
         <td>${fixture.inventoryNumber}</td>
         <td>
-          <fixtures:rowControls/>
+          <fixtures:rowControls contextPath="${pageContext.request.contextPath}"
+              fixtureId="${fixture.id}"/>
         </td>
       </tr>
     </c:forEach>
@@ -36,7 +37,8 @@
 </table>
 <%-- this provides the controls needed when adding rows dynamically --%>
 <div id="rowControls" class="hide">
-  <fixtures:rowControls/>
+  <fixtures:rowControls contextPath="${pageContext.request.contextPath}"
+      fixtureId="{id}"/>
 </div>
     
 

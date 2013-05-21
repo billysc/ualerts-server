@@ -19,6 +19,9 @@
 
 package org.ualerts.fixed.web.service;
 
+import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
+import static org.hamcrest.core.AllOf.allOf;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -32,7 +35,9 @@ import org.junit.Test;
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.service.CommandService;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
+import org.ualerts.fixed.service.commands.DeleteFixtureCommand;
 import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
+import org.ualerts.fixed.service.commands.FindFixtureCommand;
 import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
@@ -51,7 +56,7 @@ public class CommandSupportedFixtureServiceTest {
    * Setup for each test
    */
   @Before
-  public void setup() {
+  public void setUp() {
     context = new Mockery();
     fixture = new FixtureModel();
     commandService = context.mock(CommandService.class);
@@ -73,7 +78,7 @@ public class CommandSupportedFixtureServiceTest {
    * @throws Exception
    */
   @Test
-  public void validateFixtureCreation() throws Exception {
+  public void testCreateFixture() throws Exception {
     final Fixture fixtureObj = new Fixture();
     fixtureObj.setId(new Long(0));
     fixtureObj.setVersion(new Long(1));
@@ -101,13 +106,37 @@ public class CommandSupportedFixtureServiceTest {
     assertEquals(fixture.getRoom(), command.getRoomNumber());
     assertEquals(fixture.getSerialNumber(), command.getSerialNumber());
   }
+
+  /**
+   * Test for {@link CommandSupportedFixtureService#findFixtureById(Long)}.
+   * @throws Exception
+   */
+  @Test
+  public void testFindFixtureById() throws Exception {
+    final Long id = -1L;
+    final FindFixtureCommand command = new FindFixtureCommand();
+    final Fixture fixture = new Fixture();
+    fixture.setId(id);
+    
+    context.checking(new Expectations() { { 
+      oneOf(commandService).newCommand(FindFixtureCommand.class);
+      will(returnValue(command));
+      oneOf(commandService).invoke(with(allOf(same(command),
+          hasProperty("id", equalTo(id)))));
+      will(returnValue(fixture));
+    } });
+    
+    FixtureModel result = service.findFixtureById(id);
+    context.assertIsSatisfied();
+    assertEquals(id, result.getId());
+  }
   
   /**
    * Validate the retrival of all fixtures.
    * @throws Exception
    */
   @Test
-  public void validateRetrievalAllFixtures() throws Exception {
+  public void testRetrievalAllFixtures() throws Exception {
     final FindAllFixturesCommand command = new FindAllFixturesCommand();
     final List<Fixture> fixtures = new ArrayList<Fixture>();
     
@@ -122,6 +151,26 @@ public class CommandSupportedFixtureServiceTest {
     context.assertIsSatisfied();
     assertNotNull(fixtureDtos);
     assertEquals(fixtures.size(), fixtureDtos.size());
+  }
+  
+  /**
+   * Test {@link CommandSupportedFixtureService#removeFixture(FixtureModel)}.
+   * @throws Exception
+   */
+  @Test
+  public void testRemoveFixture() throws Exception {
+    final DeleteFixtureCommand command = new DeleteFixtureCommand();
+    final Long id = -1L;
+    context.checking(new Expectations() { {
+      oneOf(commandService).newCommand(DeleteFixtureCommand.class);
+      will(returnValue(command));
+      oneOf(commandService).invoke(with(allOf(same(command), 
+         hasProperty("id", equalTo(id)))));
+    } });
+    
+    FixtureModel fixture = service.removeFixture(id);
+    context.assertIsSatisfied();
+    assertEquals(id, fixture.getId());
   }
   
 }

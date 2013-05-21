@@ -2,6 +2,9 @@
 <%@ attribute name="base" required="true" rtexprvalue="true" %>
 <global:scripts base="${base}"/>
 <script type="text/javascript" src="${base}/fixtures/BuildingService.js"></script>
+<script type="text/javascript" src="${base}/fixtures/AddFixtureStrategy.js"></script>
+<script type="text/javascript" src="${base}/fixtures/EditFixtureStrategy.js"></script>
+<script type="text/javascript" src="${base}/fixtures/RemoveFixtureStrategy.js"></script>
 <script type="text/javascript" src="${base}/fixtures/FixturesViewController.js"></script>
 <script type="text/javascript" src="${base}/fixtures/PositionHintService.js"></script>
 <script type="text/javascript" src="${base}/fixtures/RoomService.js"></script>

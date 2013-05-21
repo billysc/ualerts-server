@@ -54,7 +54,7 @@ public class CommandSupportedPositionHintService
     for (PositionHint positionHint : commandService.invoke(command)) {
       hints.add(positionHint.getHintText());
     }
-    return new PositionHintsModel( hints.toArray(new String[0]) );
+    return new PositionHintsModel(hints.toArray(new String[0]));
   }
   
   /**

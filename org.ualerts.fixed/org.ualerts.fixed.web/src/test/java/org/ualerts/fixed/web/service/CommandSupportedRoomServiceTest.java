@@ -31,9 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ualerts.fixed.Room;
 import org.ualerts.fixed.service.CommandService;
-import org.ualerts.fixed.service.commands.FindAllPositionHintsCommand;
 import org.ualerts.fixed.service.commands.FindRoomsForBuildingCommand;
-import org.ualerts.fixed.web.model.PositionHintsModel;
 import org.ualerts.fixed.web.model.RoomsModel;
 
 /**
