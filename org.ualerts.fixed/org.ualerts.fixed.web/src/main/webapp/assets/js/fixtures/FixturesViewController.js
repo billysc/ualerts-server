@@ -68,8 +68,10 @@ FixturesViewController.prototype.addFixtureToView = function(fixture) {
   $("#fixturesListEmpty").remove();
   $("#fixturesList").parent().show();
 
-  //Add the row. Return value has index value to retrieve row from dataTables
-  var rowControls = $("#rowControls").html();
+  var rowControls = this.replaceIdPlaceholder(fixture.id, 
+      $("#rowControls").html());
+  
+  // Add the row. Return value has index value to retrieve row from dataTables
   var row = $("#fixturesList").show().dataTable().fnAddData([
     fixture.buildingAbbreviation + " " + fixture.room,
     fixture.positionHint,
@@ -91,6 +93,17 @@ FixturesViewController.prototype.addFixtureToView = function(fixture) {
     $(this).css("backgroundColor", "").parent().removeClass("updated");
   });
 
+};
+
+FixturesViewController.prototype.replaceIdPlaceholder = function(id, html) {
+  var placeholder = "{id}";
+  var length = placeholder.length;
+  var i = html.indexOf(placeholder);
+  while (i != -1) {
+    html = html.substring(0, i) + id + html.substring(i + length);
+    i = html.indexOf(placeholder); 
+  }
+  return html;
 };
 
 FixturesViewController.prototype.updateFixtureInView = function(fixture) {
