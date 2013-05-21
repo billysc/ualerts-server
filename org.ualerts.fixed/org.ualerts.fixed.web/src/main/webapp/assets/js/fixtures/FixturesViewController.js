@@ -111,6 +111,9 @@ FixturesViewController.prototype.updateFixtureInView = function(fixture) {
 };
 
 FixturesViewController.prototype.removeFixtureFromView = function(fixture) {
+  var controller = this;
   var row = $("#fixturesList tr[data-entity-id='" + fixture.id + "']").get(0);
-  this.fixturesListTable.fnDeleteRow(row);
+  $(row).addClass("removeHighlight").delay(1000).fadeOut(1000, function() {
+    controller.fixturesListTable.fnDeleteRow(row);
+  });
 };

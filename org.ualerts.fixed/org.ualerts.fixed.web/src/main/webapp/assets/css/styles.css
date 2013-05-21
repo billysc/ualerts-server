@@ -31,6 +31,10 @@ body div.container tr.updated td {
   background-color: #FFF9D7;
 }
 
+body div.container tr.removeHighlight td {
+  background-color: #F4E4E4;
+}
+
 .no-padding {
   padding: 0 0;
 }
