@@ -11,7 +11,7 @@ INSERT INTO asset(id, serial_number, inventory_number, mac_address)
 VALUES(asset.1.id, 'asset.1.serialNumber', 'asset.1.inventoryNumber', 
   'asset.1.macAddress');
   
-INSERT INTO fixture(id, room_id, position_hint_id, asset_id, ip_address, 
+INSERT INTO fixture(id, version, room_id, position_hint_id, asset_id, ip_address, 
     installed_by)
-VALUES(fixture.1.id, fixture.1.roomId, fixture.1.positionHintId, 
+VALUES(fixture.1.id, fixture.1.version, fixture.1.roomId, fixture.1.positionHintId, 
     fixture.1.assetId, 'fixture.1.ipAddress', 'fixture.1.installedBy');
