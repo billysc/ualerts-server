@@ -98,5 +98,6 @@ FixturesViewController.prototype.updateFixtureInView = function(fixture) {
 };
 
 FixturesViewController.prototype.removeFixtureFromView = function(fixture) {
-  
+  var row = $("#fixturesList tr[data-entity-id='" + fixture.id + "']").get(0);
+  this.fixturesListTable.fnDeleteRow(row);
 };
