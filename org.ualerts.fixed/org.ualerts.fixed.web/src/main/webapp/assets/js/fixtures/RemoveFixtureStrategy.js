@@ -20,3 +20,10 @@
 function RemoveFixtureStrategy(controller) {
   this.controller = controller;
 }
+
+RemoveFixtureStrategy.prototype.whenModalReady = function(source, $modal) {
+};
+
+RemoveFixtureStrategy.prototype.whenFormAccepted = function(responseBody) {
+  this.controller.removeFixtureFromView(responseBody.fixture);
+};
