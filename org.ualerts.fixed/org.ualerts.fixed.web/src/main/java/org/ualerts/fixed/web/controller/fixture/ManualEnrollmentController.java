@@ -18,9 +18,7 @@
  */
 package org.ualerts.fixed.web.controller.fixture;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -28,13 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -42,6 +36,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.ualerts.fixed.web.controller.AbstractFormController;
 import org.ualerts.fixed.web.model.FixtureModel;
 import org.ualerts.fixed.web.service.FixtureService;
 
@@ -52,9 +47,8 @@ import org.ualerts.fixed.web.service.FixtureService;
  */
 @Controller
 @RequestMapping("/fixtures")
-public class ManualEnrollmentController {
+public class ManualEnrollmentController extends AbstractFormController {
   
-  private MessageSource messageSource;
   private FixtureService fixtureService;
   private Validator fixtureValidator;
 
@@ -128,47 +122,6 @@ public class ManualEnrollmentController {
     }
     return "fixtures/enrollment";
   }
-
-  private Map<String, Object> getMappedErrors(Errors errors) {
-    if (!errors.hasErrors())
-      return null;
-    
-    Map<String, Object> bindErrors = new HashMap<String, Object>();
-    if (errors.hasFieldErrors())
-      bindErrors.put("fields", getFieldErrors(errors));
-    if (errors.hasGlobalErrors())
-      bindErrors.put("global", getGlobalErrors(errors));
-    
-    return bindErrors;
-  }
-  
-  private Map<String, List<String>> getFieldErrors(Errors errors) {
-    if (!errors.hasFieldErrors())
-      return null;
-    
-    Map<String, List<String>> fieldErrors = new HashMap<String, List<String>>();
-    for (FieldError error : errors.getFieldErrors()) {
-      if (!fieldErrors.containsKey(error.getField()))
-        fieldErrors.put(error.getField(), new ArrayList<String>());
-      fieldErrors.get(error.getField()).add(getMessage(error.getCode()));
-    }
-    return fieldErrors;
-  }
-  
-  private List<String> getGlobalErrors(Errors errors) {
-    if (!errors.hasGlobalErrors())
-      return null;
-    
-    List<String> globalErrors = new ArrayList<String>();
-    for (ObjectError error : errors.getGlobalErrors()) {
-      globalErrors.add(getMessage(error.getCode()));
-    }
-    return globalErrors;
-  }
-  
-  private String getMessage(String messageCode) {
-    return messageSource.getMessage(messageCode, null, "", null);
-  }
   
   /**
    * Sets the {@code fixtureService} property.
@@ -177,15 +130,6 @@ public class ManualEnrollmentController {
   @Resource
   public void setFixtureService(FixtureService fixtureService) {
     this.fixtureService = fixtureService;
-  }
-  
-  /**
-   * Sets the {@code messageSource} property.
-   * @param messageSource the value to set
-   */
-  @Resource
-  public void setMessageSource(MessageSource messageSource) {
-    this.messageSource = messageSource;
   }
 
   /**
