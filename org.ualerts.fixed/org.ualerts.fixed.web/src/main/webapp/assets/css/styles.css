@@ -38,3 +38,10 @@ body div.container tr.removeHighlight td {
 .no-padding {
   padding: 0 0;
 }
+
+.form-horizontal div.control-group.condensed {
+  margin-bottom: 10px;
+}
+.form-horizontal div.control-group.condensed label {
+  padding-top: 0px;
+}

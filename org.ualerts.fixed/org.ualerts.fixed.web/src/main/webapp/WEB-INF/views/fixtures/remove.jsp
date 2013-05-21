@@ -4,19 +4,16 @@
 <form:form cssClass="form-horizontal" commandName="fixture" 
     action="${contextPath}/ui/fixtures/${fixture.id}/remove.json">
     
-  <div id="globalErrorContainer">
-    <div class="error" data-for="_global"></div>
-  </div>
-
-  <global:inlineField label="Building" path="building" />
-  <form:hidden path="buildingId" />
-
-  <global:inlineField label="Room" path="room" />
-  <global:inlineField label="Position Hint" path="positionHint" />
-  <global:inlineField label="Inventory Number" path="inventoryNumber" />
-  <global:inlineField label="Serial Number" path="serialNumber" />
-  <global:inlineField label="MAC Address" path="macAddress" />
-  <global:inlineField label="IP Address" path="ipAddress" />
-  <global:hiddenSubmitField />
+  <global:inlineFieldDisplay label="Building" value="${fixture.building}" />
+  <global:inlineFieldDisplay label="Room" value="${fixture.room}" />
+  <global:inlineFieldDisplay label="Position Hint" value="${fixture.positionHint}" />
+  <global:inlineFieldDisplay label="Inventory Number" value="${fixture.inventoryNumber}" />
+  <global:inlineFieldDisplay label="Serial Number" value="${fixture.serialNumber}" />
+  <global:inlineFieldDisplay label="MAC Address" value="${fixture.macAddress}" />
+  <global:inlineFieldDisplay label="IP Address" value="${fixture.ipAddress}" />
   
+  <div id="deleteConfirmation" class="hide text-center text-error">
+    <strong>Are you SURE you want to remove this fixture? <br />
+    This operation CANNOT be undone!</strong>
+  </div>
 </form:form>

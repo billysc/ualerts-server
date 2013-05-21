@@ -19,9 +19,42 @@
 
 function RemoveFixtureStrategy(controller) {
   this.controller = controller;
+  this.clickHandlers = null;
 }
 
 RemoveFixtureStrategy.prototype.whenModalReady = function(source, $modal) {
+  var controller = this;
+  
+  var $button = $modal.find(".btn-primary");
+  this.copyAndClearClickHandlers($button, $modal);
+
+  $button.click(function(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    controller.displayConfirmation(this, $modal);
+  });
+};
+
+RemoveFixtureStrategy.prototype.displayConfirmation = function(source, $modal) {
+  var $button = $modal.find(".btn-primary");
+  this.restoreClickHandlers($button);
+  $modal.find("#deleteConfirmation").show();
+};
+
+RemoveFixtureStrategy.prototype.copyAndClearClickHandlers = function($button, $modal) {
+  var elem = $button[0];
+  
+  // Make a deep copy of the already-bound click events
+  var data = $.hasData(elem) && $._data(elem);
+  this.clickHandlers = $.extend(true, {}, data.events.click);
+  $button.unbind("click");
+};
+
+RemoveFixtureStrategy.prototype.restoreClickHandlers = function($button, $modal) {
+  for (key in this.clickHandlers) {
+    $button.on('click', this.clickHandlers[key].handler);
+  }
+  this.clickHandlers = null;
 };
 
 RemoveFixtureStrategy.prototype.whenFormAccepted = function(responseBody) {
