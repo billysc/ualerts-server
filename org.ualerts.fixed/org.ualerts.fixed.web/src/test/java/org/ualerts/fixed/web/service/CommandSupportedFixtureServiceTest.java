@@ -38,6 +38,7 @@ import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.service.commands.DeleteFixtureCommand;
 import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
 import org.ualerts.fixed.service.commands.FindFixtureCommand;
+import org.ualerts.fixed.service.commands.UpdateFixtureCommand;
 import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
@@ -171,6 +172,39 @@ public class CommandSupportedFixtureServiceTest {
     FixtureModel fixture = service.removeFixture(id);
     context.assertIsSatisfied();
     assertEquals(id, fixture.getId());
+  }
+  
+  /**
+   * Test {@link CommandSupportedFixtureService#updateFixture(FixtureModel)}
+   * @throws Exception
+   */
+  public void testUpdateFixture() throws Exception {
+    final UpdateFixtureCommand command = new UpdateFixtureCommand();
+    
+    final Fixture fixture = new Fixture();
+    fixture.setId(2L);
+    
+    final FixtureModel fixtureModel = new FixtureModel();
+    fixtureModel.setBuilding("BUILDING 1");
+    fixtureModel.setIpAddress("123.123.123.123");
+    fixtureModel.setPositionHint("FRONT-RIGHT");
+    fixtureModel.setRoom("404");
+    
+    context.checking(new Expectations() { { 
+      oneOf(commandService).newCommand(UpdateFixtureCommand.class);
+      will(returnValue(command));
+      oneOf(commandService).invoke(command);
+      will(returnValue(fixture));
+    } });
+    
+    FixtureModel returnedFixture = service.updateFixture(fixtureModel);
+    context.assertIsSatisfied();
+    assertEquals(fixtureModel.getBuilding(), command.getBuildingName());
+    assertEquals(fixtureModel.getIpAddress(), 
+        command.getInetAddress().toString());
+    assertEquals(fixtureModel.getPositionHint(), command.getPositionHint());
+    assertEquals(fixtureModel.getRoom(), command.getRoomNumber());
+    assertEquals(fixture.getId(), returnedFixture.getId());
   }
   
 }
