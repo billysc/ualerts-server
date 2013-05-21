@@ -19,7 +19,7 @@
 
 package org.ualerts.fixed.web.controller.fixture;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -75,8 +75,11 @@ public class RemovalController {
       produces = "application/json")
   public Map<String, Object> handleFormSubmission(@PathVariable("id") Long id)
       throws Exception {
-    fixtureService.removeFixture(id);
-    return Collections.singletonMap("success", (Object) Boolean.TRUE);
+    FixtureModel fixture = fixtureService.removeFixture(id);
+    Map<String, Object> result = new HashMap<String, Object>();
+    result.put("fixture", fixture);
+    result.put("success", true);
+    return result;
   }
 
   /**

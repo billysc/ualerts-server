@@ -20,6 +20,7 @@
 package org.ualerts.fixed.web.controller.fixture;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import java.util.Map;
 
@@ -83,13 +84,17 @@ public class RemovalControllerTest {
   @Test
   public void testHandleFormSubmission() throws Exception {
     final Long id = -1L;
+    final FixtureModel fixture = new FixtureModel();
+    fixture.setId(id);
     context.checking(new Expectations() { { 
       oneOf(fixtureService).removeFixture(with(same(id)));
+      will(returnValue(fixture));
     } });
     
     Map<String, Object> result = controller.handleFormSubmission(id);
     context.assertIsSatisfied();
     assertEquals(Boolean.TRUE, result.get("success"));
+    assertSame(fixture, result.get("fixture"));
   }
   
 }
