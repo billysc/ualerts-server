@@ -28,6 +28,10 @@ function AddFixtureStrategy(controller,
 
 AddFixtureStrategy.prototype.whenModalReady = function(source, $modal) {
   var strategy = this;
+  
+  this.buildingService.reset();
+  this.positionHintService.reset();
+  this.roomService.reset();
 
   var $building = $("#building");
   $building.typeahead({

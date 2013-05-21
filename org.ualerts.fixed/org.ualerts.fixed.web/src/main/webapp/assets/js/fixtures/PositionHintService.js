@@ -21,6 +21,10 @@ function PositionHintService() {
   this.positionHints = null;
 }
 
+PositionHintService.prototype.reset = function() {
+  this.positionHints = null;
+};
+
 PositionHintService.prototype.getAllPositionHints = function(callback) {
   if (typeof callback != "function") return;
   if (this.positionHints == null) {

@@ -22,6 +22,10 @@ function BuildingService() {
   this.buildingNames = null;
 }
 
+BuildingService.prototype.reset = function() {
+  // Don't need to reset anything currently
+};
+
 BuildingService.prototype.getAllBuildings = function(callback) {
   if (typeof callback != "function") return;
   if (this.allBuildings == null) {
