@@ -106,12 +106,16 @@ public class FixtureRemovalFT extends AbstractFunctionalTest {
    * is not removed.
    * @throws Exception
    */
-  @Ignore
   @Test
   @TestResources(prefix = "sql/", before = "FixtureRemovalFT_before",
       after = "FixtureRemovalFT_after")
   public void testNotRemovedWhenConfirmationCanceled() throws Exception {    
-    org.junit.Assert.fail("not implemented");
+    String id = row.getAttribute("data-entity-id");
+    clickControlButtonAndWait();
+    clickSubmitButtonAndWait();
+    clickCancelButtonAndWait();
+    HtmlTableRow topRow = getFirstTableRow(table);
+    assertEquals(id, topRow.getAttribute("data-entity-id"));
   }
   
   /**
@@ -123,6 +127,7 @@ public class FixtureRemovalFT extends AbstractFunctionalTest {
       after = "FixtureRemovalFT_after")
   public void testRemovedWhenConfirmed() throws Exception {
     clickControlButtonAndWait();
+    clickSubmitButtonAndWait();
     clickSubmitButtonAndWait();
     HtmlTableRow row = getFirstTableRow(table);
     String cellClass = row.getCell(0).getAttribute("class");
