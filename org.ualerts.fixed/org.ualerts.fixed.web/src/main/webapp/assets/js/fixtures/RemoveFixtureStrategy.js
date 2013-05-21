@@ -31,13 +31,12 @@ RemoveFixtureStrategy.prototype.whenModalReady = function(source, $modal) {
   $button.click(function(event) {
     event.stopPropagation();
     event.preventDefault();
+    this.restoreClickHandlers($button);
     controller.displayConfirmation(this, $modal);
   });
 };
 
 RemoveFixtureStrategy.prototype.displayConfirmation = function(source, $modal) {
-  var $button = $modal.find(".btn-primary");
-  this.restoreClickHandlers($button);
   $modal.find("#deleteConfirmation").show();
 };
 
