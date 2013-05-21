@@ -21,6 +21,10 @@ function RoomService() {
   this.rooms = {};
 }
 
+RoomService.prototype.reset = function() {
+  this.rooms = {};
+};
+
 RoomService.prototype.getRooms = function(callback) {
   if (typeof callback != "function") return;
   
