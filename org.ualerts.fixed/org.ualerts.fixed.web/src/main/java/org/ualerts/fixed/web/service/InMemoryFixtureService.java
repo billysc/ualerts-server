@@ -82,7 +82,7 @@ public class InMemoryFixtureService implements FixtureService {
   /**
    * {@inheritDoc}
    */
-  public void removeFixture(Long id) throws Exception {
+  public FixtureModel removeFixture(Long id) throws Exception {
     Iterator<FixtureModel> i = fixtures.iterator();
     boolean found = false;
     while (!found && i.hasNext()) {
@@ -92,6 +92,9 @@ public class InMemoryFixtureService implements FixtureService {
     if (found) {
       i.remove();
     }
+    FixtureModel fixture = new FixtureModel();
+    fixture.setId(id);
+    return fixture;
   }
   
 }

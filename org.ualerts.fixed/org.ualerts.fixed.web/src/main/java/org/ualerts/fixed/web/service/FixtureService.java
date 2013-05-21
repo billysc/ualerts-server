@@ -58,8 +58,10 @@ public interface FixtureService {
   /**
    * Removes a persistent fixture.
    * @param id ID of the fixture to remove.
+   * @return partial fixture model for the removed fixture (only the ID
+   *    is guaranteed to be available in the model)
    * @throws Exception
    */
-  void removeFixture(Long id) throws Exception;
+  FixtureModel removeFixture(Long id) throws Exception;
   
 }

@@ -168,8 +168,9 @@ public class CommandSupportedFixtureServiceTest {
          hasProperty("id", equalTo(id)))));
     } });
     
-    service.removeFixture(id);
+    FixtureModel fixture = service.removeFixture(id);
     context.assertIsSatisfied();
+    assertEquals(id, fixture.getId());
   }
   
 }
