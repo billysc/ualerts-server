@@ -23,7 +23,7 @@ function RemoveFixtureStrategy(controller) {
 }
 
 RemoveFixtureStrategy.prototype.whenModalReady = function(source, $modal) {
-  var controller = this;
+  var strategy = this;
   
   var $button = $modal.find(".btn-primary");
   this.copyAndClearClickHandlers($button, $modal);
@@ -31,8 +31,8 @@ RemoveFixtureStrategy.prototype.whenModalReady = function(source, $modal) {
   $button.click(function(event) {
     event.stopPropagation();
     event.preventDefault();
-    this.restoreClickHandlers($button);
-    controller.displayConfirmation(this, $modal);
+    strategy.restoreClickHandlers($button);
+    strategy.displayConfirmation(this, $modal);
   });
 };
 
