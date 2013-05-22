@@ -132,7 +132,7 @@ public class FixtureEditFT extends AbstractFunctionalTest {
     clickControlButtonAndWait();
     
     populateAutocompleteField(HTML_ID_BUILDING, 
-        properties.getString("building.2.name"));
+        properties.getString("building.2.name").substring(0, 2));
     populateAutocompleteField(HTML_ID_ROOM, NEW_ROOM);
     populateAutocompleteField(HTML_ID_POSITION_HINT, NEW_POSITION_HINT);
     populateField(HTML_ID_IP_ADDRESS, NEW_IP_ADDRESS);
@@ -203,6 +203,7 @@ public class FixtureEditFT extends AbstractFunctionalTest {
       throws Exception {
     HtmlInput input = ((HtmlInput) page
         .getFirstByXPath("//div[@id='" + fieldContainerId + "']//input"));
+    input.setValueAttribute("");
     input.type(value);
     getClient().waitForBackgroundJavaScript(JS_LONG_DELAY);
     input.type(KeyboardEvent.DOM_VK_TAB);
@@ -212,8 +213,10 @@ public class FixtureEditFT extends AbstractFunctionalTest {
   
   private void populateField(String fieldContainerId, String value) 
       throws Exception {
-    ((HtmlInput) page.getFirstByXPath("//div[@id='" + fieldContainerId + "']//input"))
-      .type(value);
+    HtmlInput input = ((HtmlInput) page
+        .getFirstByXPath("//div[@id='" + fieldContainerId + "']//input"));
+    input.setValueAttribute("");
+    input.type(value);
   }
   
 }
