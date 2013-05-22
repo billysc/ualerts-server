@@ -84,15 +84,9 @@ FixturesViewController.prototype.addFixtureToView = function(fixture) {
   // Get new row and wrap as jQuery object
   var $newRow = $(this.fixturesListTable.fnGetNodes(row[0]));
   $newRow.attr("data-entity-id", fixture.id);
-  var currentColor = $newRow.css("backgroundColor");
-  $newRow.addClass("updated");
   
   // Wait, fade out, then remove CSS styles and updated class
-  $newRow.find("td").delay(4000).animate({backgroundColor: currentColor}, 
-      1000, function() {
-    $(this).css("backgroundColor", "").parent().removeClass("updated");
-  });
-
+  this.highlightRow($newRow);
 };
 
 FixturesViewController.prototype.replaceIdPlaceholder = function(id, html) {
@@ -107,7 +101,19 @@ FixturesViewController.prototype.replaceIdPlaceholder = function(id, html) {
 };
 
 FixturesViewController.prototype.updateFixtureInView = function(fixture) {
-  
+  var $row = $("#fixturesList tr[data-entity-id='" + fixture.id + "']");
+  this.fixturesListTable.fnUpdate(
+    [ 
+      fixture.buildingAbbreviation + " " + fixture.room,
+      fixture.positionHint,
+      fixture.ipAddress,
+      fixture.macAddress,
+      fixture.inventoryNumber,
+      $row.find("td:last").html()
+    ],
+    $row.get(0)
+  );
+  this.highlightRow($row);
 };
 
 FixturesViewController.prototype.removeFixtureFromView = function(fixture) {
@@ -115,5 +121,13 @@ FixturesViewController.prototype.removeFixtureFromView = function(fixture) {
   var row = $("#fixturesList tr[data-entity-id='" + fixture.id + "']").get(0);
   $(row).addClass("removeHighlight").delay(1000).fadeOut(1000, function() {
     controller.fixturesListTable.fnDeleteRow(row);
+  });
+};
+
+FixturesViewController.prototype.highlightRow = function($row) {
+  var currentColor = $row.addClass("updated").css("backgroundColor");
+  $row.find("td").delay(4000).animate({backgroundColor: currentColor}, 
+      1000, function() {
+    $(this).css("backgroundColor", "").parent().removeClass("updated");
   });
 };
