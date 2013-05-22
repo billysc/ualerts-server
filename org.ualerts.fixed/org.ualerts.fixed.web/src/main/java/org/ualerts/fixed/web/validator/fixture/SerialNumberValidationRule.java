@@ -40,6 +40,14 @@ public class SerialNumberValidationRule extends AbstractFixtureValidationRule {
    * {@inheritDoc}
    */
   @Override
+  public boolean supports(ActionType actionType) {
+    return ActionType.ADD.equals(actionType);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void doValidate(FixtureModel fixture) {
     String serialNumber = fixture.getSerialNumber();
     if (StringUtils.isBlank(serialNumber)) {

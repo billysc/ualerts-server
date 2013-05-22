@@ -19,6 +19,9 @@
 
 package org.ualerts.fixed.web.validator.fixture;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
@@ -28,6 +31,7 @@ import org.ualerts.fixed.Asset;
 import org.ualerts.fixed.repository.AssetRepository;
 import org.ualerts.fixed.web.model.FixtureModel;
 import org.ualerts.fixed.web.validator.FixtureValidator;
+import org.ualerts.fixed.web.validator.fixture.FixtureValidationRule.ActionType;
 
 /**
  * Test case for the InventoryNumberValidationRule class
@@ -56,6 +60,15 @@ public class InventoryNumberValidationRuleTest {
     
     rule = new InventoryNumberValidationRule();
     rule.setAssetRepository(assetRepository);
+  }
+  
+  /**
+   * Validate that the rule supports the expected ActionType value(s)
+   */
+  @Test
+  public void testAcceptsExpectedActionTypes() {
+    assertTrue(rule.supports(ActionType.ADD));
+    assertFalse(rule.supports(ActionType.EDIT));
   }
   
   /**

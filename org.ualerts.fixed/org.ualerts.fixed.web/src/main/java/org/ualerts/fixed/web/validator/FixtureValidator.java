@@ -21,9 +21,6 @@ package org.ualerts.fixed.web.validator;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.ualerts.fixed.web.model.FixtureModel;
@@ -34,7 +31,6 @@ import org.ualerts.fixed.web.validator.fixture.FixtureValidationRule;
  * 
  * @author Michael Irwin
  */
-@Component("fixtureValidator")
 public class FixtureValidator implements Validator {
 
   /**
@@ -44,6 +40,20 @@ public class FixtureValidator implements Validator {
 
   private List<FixtureValidationRule> validationRules;
 
+  /**
+   * Constructs a new instance.
+   */
+  public FixtureValidator() {
+  }
+  
+  /**
+   * Constructs a new instance with the provided validation rules
+   * @param validationRules The rules to use in the validator
+   */
+  public FixtureValidator(List<FixtureValidationRule> validationRules) {
+    this.validationRules = validationRules;
+  }
+  
   /**
    * {@inheritDoc}
    */
@@ -67,7 +77,6 @@ public class FixtureValidator implements Validator {
    * Sets the {@code validationRules} property.
    * @param validationRules the value to set
    */
-  @Resource
   public void setValidationRules(List<FixtureValidationRule> validationRules) {
     this.validationRules = validationRules;
   }

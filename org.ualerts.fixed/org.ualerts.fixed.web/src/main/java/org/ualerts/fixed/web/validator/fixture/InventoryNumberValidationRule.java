@@ -36,6 +36,14 @@ public class InventoryNumberValidationRule
     extends AbstractFixtureValidationRule {
 
   private AssetRepository assetRepository;
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean supports(ActionType actionType) {
+    return ActionType.ADD.equals(actionType);
+  }
 
   /**
    * {@inheritDoc}

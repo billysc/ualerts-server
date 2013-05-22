@@ -19,6 +19,7 @@
 package org.ualerts.fixed.web.controller.fixture;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -29,7 +30,6 @@ import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,6 +39,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.ualerts.fixed.web.controller.AbstractFormController;
 import org.ualerts.fixed.web.model.FixtureModel;
 import org.ualerts.fixed.web.service.FixtureService;
+import org.ualerts.fixed.web.validator.FixtureValidator;
+import org.ualerts.fixed.web.validator.fixture.FixtureValidationRule;
 
 /**
  * Controller to handle the manual enrollment of a fixture.
@@ -50,7 +52,7 @@ import org.ualerts.fixed.web.service.FixtureService;
 public class ManualEnrollmentController extends AbstractFormController {
   
   private FixtureService fixtureService;
-  private Validator fixtureValidator;
+  private List<FixtureValidationRule> fixtureValidationRules;
 
   /**
    * Sets the validator to be used for the controller
@@ -58,7 +60,7 @@ public class ManualEnrollmentController extends AbstractFormController {
    */
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.addValidators(fixtureValidator);
+    binder.addValidators(new FixtureValidator(fixtureValidationRules));
   }
 
   /**
@@ -133,12 +135,13 @@ public class ManualEnrollmentController extends AbstractFormController {
   }
 
   /**
-   * Sets the {@code fixtureValidator} property.
-   * @param fixtureValidator the value to set
+   * Sets the {@code fixtureValidationRules} property.
+   * @param validationRules the value to set
    */
-  @Resource(name = "fixtureValidator")
-  public void setFixtureValidator(Validator fixtureValidator) {
-    this.fixtureValidator = fixtureValidator;
+  @Resource(name = "addFixtureValidationRules")
+  public void setFixtureValidationRules(
+      List<FixtureValidationRule> validationRules) {
+    this.fixtureValidationRules = validationRules;
   }
   
 }

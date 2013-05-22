@@ -19,6 +19,8 @@
 
 package org.ualerts.fixed.web.validator.fixture;
 
+import static org.junit.Assert.assertTrue;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
@@ -34,6 +36,7 @@ import org.ualerts.fixed.repository.PositionHintRepository;
 import org.ualerts.fixed.repository.RoomRepository;
 import org.ualerts.fixed.web.model.FixtureModel;
 import org.ualerts.fixed.web.validator.FixtureValidator;
+import org.ualerts.fixed.web.validator.fixture.FixtureValidationRule.ActionType;
 
 /**
  * Test case for the LocationValidationRule class
@@ -74,6 +77,16 @@ public class LocationValidationRuleTest {
     rule.setPositionHintRepository(positionHintRepository);
     rule.setRoomRepository(roomRepository);
   }
+  
+  /**
+   * Validate that the rule supports the expected ActionType value(s)
+   */
+  @Test
+  public void testAcceptsExpectedActionTypes() {
+    assertTrue(rule.supports(ActionType.ADD));
+    assertTrue(rule.supports(ActionType.EDIT));
+  }
+  
   
   /**
    * Test that a missing building name causes a rejection

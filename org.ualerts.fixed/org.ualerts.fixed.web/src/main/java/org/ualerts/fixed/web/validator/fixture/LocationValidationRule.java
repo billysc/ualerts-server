@@ -49,6 +49,15 @@ public class LocationValidationRule extends AbstractFixtureValidationRule {
    * {@inheritDoc}
    */
   @Override
+  public boolean supports(ActionType actionType) {
+    return ActionType.ADD.equals(actionType) 
+        || ActionType.EDIT.equals(actionType);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void doValidate(FixtureModel fixture) {
     String buildingId = fixture.getBuildingId();
     String roomText = fixture.getRoom();
