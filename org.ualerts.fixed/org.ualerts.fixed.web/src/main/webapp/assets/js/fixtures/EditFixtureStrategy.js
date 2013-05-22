@@ -17,6 +17,67 @@
  *
  */
 
-function EditFixtureStrategy(controller) {
+function EditFixtureStrategy(controller,
+    buildingService, positionHintService, roomService) {
   this.controller = controller;
+  this.buildingService = buildingService;
+  this.positionHintService = positionHintService;
+  this.roomService = roomService;
 }
+
+EditFixtureStrategy.prototype.whenModalReady = function(source, $modal) {
+  var strategy = this;
+  
+  this.buildingService.reset();
+  this.positionHintService.reset();
+  this.roomService.reset();
+
+  var $building = $("#building");
+  $building.typeahead({
+    source: function(query, process) {
+      strategy.buildingService.getAllBuildings(process);
+    }
+  });
+  
+  var $room = $("#room");
+  $room.typeahead({
+    source: function(query, process) {
+      strategy.roomService.getRooms(process);
+    }
+  });
+  
+  var $positionHint = $("#positionHint");
+  $positionHint.typeahead({
+    source: function(query, process) {
+      strategy.positionHintService.getAllPositionHints(process);
+    } 
+  });
+  
+  $building.blur(function() {
+    strategy.whenBuildingSelected(this);
+  });
+
+};
+
+EditFixtureStrategy.prototype.whenBuildingSelected = function(buildingElement) {
+  var value = $(buildingElement).val();
+  var building = this.buildingService.findMatchingBuilding(value);
+  if (building == null) {
+    $('#buildingId').val('');
+    $(buildingElement).val('');
+  }
+  else {
+    $("#buildingId").val(building.id);
+    $(buildingElement).val(building.name);
+  }
+};
+
+/**
+ * Displays the provided fixture in the fixtures table view.
+ * @param fixture the fixture to display
+ */
+EditFixtureStrategy.prototype.whenFormAccepted = function(responseBody) {
+  var fixture = responseBody.fixture;
+  this.controller.updateFixtureInView(fixture);
+};
+
