@@ -19,6 +19,7 @@
 
 package org.ualerts.fixed.web.validator.fixture;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.jmock.Expectations;
@@ -67,7 +68,7 @@ public class MacAddressValidationRuleTest {
   @Test
   public void testAcceptsExpectedActionTypes() {
     assertTrue(rule.supports(ActionType.ADD));
-    assertTrue(rule.supports(ActionType.EDIT));
+    assertFalse(rule.supports(ActionType.EDIT));
   }
   
   /**
