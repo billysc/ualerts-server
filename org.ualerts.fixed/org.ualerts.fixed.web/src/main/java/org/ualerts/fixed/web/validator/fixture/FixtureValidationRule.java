@@ -30,6 +30,29 @@ import org.ualerts.fixed.web.model.FixtureModel;
 public interface FixtureValidationRule {
   
   /**
+   * Describes the types of actions that rules can support
+   */
+  public enum ActionType {
+    
+    /**
+     * Supports validation when a new fixture is being added to the system
+     */
+    ADD, 
+    
+    /**
+     * Supports validation when a fixture is being edited/updated
+     */
+    EDIT
+  }
+  
+  /**
+   * Does this rule support the provided rule type?
+   * @param actionType The ActionType to check
+   * @return True if the rule supports the action type
+   */
+  boolean supports(ActionType actionType);
+  
+  /**
    * Perform validation related to this specific rule on the provided 
    * FixtureModel
    * @param fixture The fixture to be validated

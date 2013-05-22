@@ -42,6 +42,14 @@ public class MacAddressValidationRule
    * {@inheritDoc}
    */
   @Override
+  public boolean supports(ActionType actionType) {
+    return ActionType.ADD.equals(actionType);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void doValidate(FixtureModel fixture) {
     String macAddress = fixture.getMacAddress();
     if (StringUtils.isBlank(macAddress)) {

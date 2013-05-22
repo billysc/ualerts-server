@@ -1,5 +1,5 @@
 /*
- * File created on Apr 30, 2013
+ * File created on May 20, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -16,6 +16,7 @@
  * limitations under the License.
  *
  */
+
 package org.ualerts.fixed.web.controller.fixture;
 
 import java.util.HashMap;
@@ -23,8 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -33,6 +32,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,17 +43,22 @@ import org.ualerts.fixed.web.validator.FixtureValidator;
 import org.ualerts.fixed.web.validator.fixture.FixtureValidationRule;
 
 /**
- * Controller to handle the manual enrollment of a fixture.
+ * Controller that handles the editing of fixtures
  *
  * @author Michael Irwin
  */
 @Controller
 @RequestMapping("/fixtures")
-public class ManualEnrollmentController extends AbstractFormController {
+public class EditController extends AbstractFormController {
+
+  /**
+   * Name of the view returned by {@link #provideForm(Long, Model)}.
+   */
+  static final String FORM_VIEW_NAME = "fixtures/edit";
   
   private FixtureService fixtureService;
   private List<FixtureValidationRule> fixtureValidationRules;
-
+  
   /**
    * Sets the validator to be used for the controller
    * @param binder The binder
@@ -62,69 +67,52 @@ public class ManualEnrollmentController extends AbstractFormController {
   protected void initBinder(WebDataBinder binder) {
     binder.addValidators(new FixtureValidator(fixtureValidationRules));
   }
-
+  
   /**
-   * Display the fixture enrollment form.
-   * @param model The model for the UI
-   * @return The name of the view to display
+   * Displays the edit fixture view
+   * @param id The id of the fixture to be edited
+   * @param model The model to be used for the view
+   * @return The name of the JSP to be rendered
+   * @throws Exception
    */
-  @RequestMapping(value = "/enrollment.html", method = RequestMethod.GET)
-  public String displayForm(Model model) {
-    model.addAttribute("fixture", new FixtureModel());
-    return "fixtures/enrollment";
+  @RequestMapping(value = "/{id}/edit.html", method = RequestMethod.GET)
+  public String provideForm(@PathVariable("id") Long id, Model model) 
+      throws Exception {
+    FixtureModel fixture = fixtureService.findFixtureById(id);    
+    model.addAttribute("fixture", fixture);
+    return FORM_VIEW_NAME;
   }
 
   /**
-   * Handle the form submission, producing a JSON result.
-   * @param request The incoming request
-   * @param response The outgoing response
-   * @param fixture The fixture model submitted in the request
-   * @param bindingResult Results of binding failures/errors
-   * @return A Map to be used for marshalling into JSON
-   * @throws Exception Only internal exceptions that cannot be handled
+   * Updates the fixture based on input provided by the user
+   * @param fixtureId ID of the fixture to remove
+   * @param fixture The fixture model submitted by the user
+   * @param bindingResult Any errors that occurred during binding/validation
+   * @return map containing a single {@code success} attribute
+   * @throws Exception
    */
   @ResponseBody
-  @RequestMapping(value = "/enrollment.json", method = RequestMethod.POST, 
-      produces = { "application/json" })
-  public Map<String, Object> handleFormSubmission(HttpServletRequest request,
-      HttpServletResponse response, 
+  @RequestMapping(value = "/{id}/edit.json", method = RequestMethod.POST,
+      produces = "application/json")
+  public Map<String, Object> handleFormSubmission(
+      @PathVariable("id") Long fixtureId,
       @Valid @ModelAttribute("fixture") FixtureModel fixture,
       BindingResult bindingResult) throws Exception {
-
-    Map<String, Object> responseData = new HashMap<String, Object>();
+    
+    Map<String, Object> result = new HashMap<String, Object>();
     if (bindingResult.hasErrors()) {
-      responseData.put("success", false);
-      responseData.put("errors", getMappedErrors(bindingResult));
+      result.put("success", false);
+      result.put("errors", getMappedErrors(bindingResult));
     }
     else {
-      fixture.setInstalledBy(""); //TODO Replace this with real data
-      FixtureModel dto = fixtureService.createFixture(fixture);
-      responseData.put("success", true);
-      responseData.put("fixture", dto);
+      FixtureModel fixtureModel = fixtureService.updateFixture(fixture);
+      result.put("fixture", fixtureModel);
+      result.put("success", true);
+      result.put("fixture", fixtureModel);
     }
-
-    return responseData;
+    return result;
   }
 
-  /**
-   * Handles form submission, producing a HTML output.
-   * @param fixture The fixture model, based on submitted data in request
-   * @param result Any binding errors/failures
-   * @return Name of the view to be rendered
-   */
-  @RequestMapping(value = "/enrollment.html", method = RequestMethod.POST, 
-      produces = { "text/html" })
-  public String handleFormSubmission(
-      @ModelAttribute("fixture") @Valid FixtureModel fixture,
-      BindingResult result) throws Exception {
-
-    fixture.setInstalledBy("");
-    if (!result.hasErrors()) {
-      fixtureService.createFixture(fixture);
-    }
-    return "fixtures/enrollment";
-  }
-  
   /**
    * Sets the {@code fixtureService} property.
    * @param fixtureService the value to set
@@ -133,15 +121,15 @@ public class ManualEnrollmentController extends AbstractFormController {
   public void setFixtureService(FixtureService fixtureService) {
     this.fixtureService = fixtureService;
   }
-
+  
   /**
    * Sets the {@code fixtureValidationRules} property.
-   * @param validationRules the value to set
+   * @param fixtureValidationRules the value to set
    */
-  @Resource(name = "addFixtureValidationRules")
+  @Resource(name = "editFixtureValidationRules")
   public void setFixtureValidationRules(
-      List<FixtureValidationRule> validationRules) {
-    this.fixtureValidationRules = validationRules;
+      List<FixtureValidationRule> fixtureValidationRules) {
+    this.fixtureValidationRules = fixtureValidationRules;
   }
   
 }

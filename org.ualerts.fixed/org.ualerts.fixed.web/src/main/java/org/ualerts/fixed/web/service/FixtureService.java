@@ -64,4 +64,12 @@ public interface FixtureService {
    */
   FixtureModel removeFixture(Long id) throws Exception;
   
+  /**
+   * Update the underlying Fixture stored in persistence
+   * @param fixture The fixture to be updated
+   * @return A new model of the fixture
+   * @throws Exception
+   */
+  FixtureModel updateFixture(FixtureModel fixture) throws Exception;
+  
 }

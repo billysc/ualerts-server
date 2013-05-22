@@ -36,6 +36,15 @@ public class IpAddressValidationRule extends AbstractFixtureValidationRule {
    * {@inheritDoc}
    */
   @Override
+  public boolean supports(ActionType actionType) {
+    return ActionType.ADD.equals(actionType) 
+        || ActionType.EDIT.equals(actionType);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void doValidate(FixtureModel fixture) {
     String ipAddress = fixture.getIpAddress();
     if (StringUtils.isBlank(ipAddress)) {

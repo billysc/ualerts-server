@@ -57,6 +57,7 @@ public class FixtureModel {
       Room room = fixture.getRoom();
       this.building = room.getBuilding().getName();
       this.buildingAbbreviation = room.getBuilding().getAbbreviation();
+      this.buildingId = room.getBuilding().getId();
       this.room = room.getRoomNumber();
     }
     if (fixture.getAsset() != null) {

@@ -18,7 +18,7 @@
  */
 
 function ModalViewController() {
-  
+ 
 }
 
 ModalViewController.prototype.whenDocumentReady = function(source) {

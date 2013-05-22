@@ -24,7 +24,8 @@ var roomService = new RoomService();
 var fixturesViewController = new FixturesViewController();
 var addFixtureStrategy = new AddFixtureStrategy(fixturesViewController,
     buildingService, positionHintService, roomService);
-var editFixtureStrategy = new EditFixtureStrategy(fixturesViewController);
+var editFixtureStrategy = new EditFixtureStrategy(fixturesViewController,
+    buildingService, positionHintService, roomService);
 var removeFixtureStrategy = new RemoveFixtureStrategy(fixturesViewController);
 
 fixturesViewController.addControlStrategy("add", addFixtureStrategy);

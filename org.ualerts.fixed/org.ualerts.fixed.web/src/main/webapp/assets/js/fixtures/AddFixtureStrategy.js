@@ -58,8 +58,6 @@ AddFixtureStrategy.prototype.whenModalReady = function(source, $modal) {
     strategy.whenBuildingSelected(this);
   });
   
-  $modal.find("input[type='text']:first").focus();
-
 };
 
 AddFixtureStrategy.prototype.whenBuildingSelected = function(buildingElement) {

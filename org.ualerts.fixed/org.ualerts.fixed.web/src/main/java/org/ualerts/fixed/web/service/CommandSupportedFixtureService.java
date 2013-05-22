@@ -33,6 +33,7 @@ import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.service.commands.DeleteFixtureCommand;
 import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
 import org.ualerts.fixed.service.commands.FindFixtureCommand;
+import org.ualerts.fixed.service.commands.UpdateFixtureCommand;
 import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
@@ -102,6 +103,22 @@ public class CommandSupportedFixtureService implements FixtureService {
     FixtureModel fixture = new FixtureModel();
     fixture.setId(id);
     return fixture;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public FixtureModel updateFixture(FixtureModel fixture) throws Exception {
+    UpdateFixtureCommand command = 
+        commandService.newCommand(UpdateFixtureCommand.class);
+    command.setBuildingName(fixture.getBuilding());
+    command.setId(fixture.getId());
+    command.setInetAddress(InetAddress.getByName(fixture.getIpAddress()));
+    command.setPositionHint(fixture.getPositionHint());
+    command.setRoomNumber(fixture.getRoom());
+    Fixture updatedFixture = commandService.invoke(command);
+    return new FixtureModel(updatedFixture);
   }
 
   /**

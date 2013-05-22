@@ -19,6 +19,8 @@
 
 package org.ualerts.fixed.web.validator.fixture;
 
+import static org.junit.Assert.assertTrue;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
@@ -34,6 +36,7 @@ import org.ualerts.fixed.repository.PositionHintRepository;
 import org.ualerts.fixed.repository.RoomRepository;
 import org.ualerts.fixed.web.model.FixtureModel;
 import org.ualerts.fixed.web.validator.FixtureValidator;
+import org.ualerts.fixed.web.validator.fixture.FixtureValidationRule.ActionType;
 
 /**
  * Test case for the LocationValidationRule class
@@ -74,6 +77,16 @@ public class LocationValidationRuleTest {
     rule.setPositionHintRepository(positionHintRepository);
     rule.setRoomRepository(roomRepository);
   }
+  
+  /**
+   * Validate that the rule supports the expected ActionType value(s)
+   */
+  @Test
+  public void testAcceptsExpectedActionTypes() {
+    assertTrue(rule.supports(ActionType.ADD));
+    assertTrue(rule.supports(ActionType.EDIT));
+  }
+  
   
   /**
    * Test that a missing building name causes a rejection
@@ -152,7 +165,19 @@ public class LocationValidationRuleTest {
       oneOf(errors).reject(MSG_PREFIX + "location.conflict");
     } });
     Fixture fixture = new Fixture();
+    fixture.setId(1L);
     testFullSubmission(fixture);
+  }
+  
+  /**
+   * Validate that if a location conflict occurs on the same fixture, no 
+   * rejection is made. This occurs during an EDIT
+   */
+  @Test
+  public void testLocationConflictOnSameFixtureDoesntReject() {
+    Fixture fixture = new Fixture();
+    fixture.setId(1L);
+    testFullSubmission(fixture, fixture.getId());
   }
   
   /*
@@ -222,6 +247,10 @@ public class LocationValidationRuleTest {
   }
   
   private void testFullSubmission(final Fixture locationFixture) {
+    testFullSubmission(locationFixture, null);
+  }
+  
+  private void testFullSubmission(final Fixture locationFixture, Long modelId) {
     final String building = "Building";
     final String buildingId = "buildingId";
     final Building buildingObj = new Building();
@@ -246,6 +275,7 @@ public class LocationValidationRuleTest {
     
     fixture.setBuilding(building);
     fixture.setBuildingId(buildingId);
+    fixture.setId(modelId);
     fixture.setIpAddress(ipAddress);
     fixture.setMacAddress(macAddress);
     fixture.setPositionHint(positionHint);
