@@ -10,12 +10,13 @@
 
   <global:inlineField label="Building" path="building" />
   <form:hidden path="buildingId" />
+  
   <global:inlineField label="Room" path="room" />
   <global:inlineField label="Position Hint" path="positionHint" />
+  <global:inlineField label="IP Address" path="ipAddress" />
+  <global:inlineFieldDisplay label="MAC Address" value="${fixture.macAddress}" />
   <global:inlineFieldDisplay label="Inventory Number" value="${fixture.inventoryNumber}" />
   <global:inlineFieldDisplay label="Serial Number" value="${fixture.serialNumber}" />
-  <global:inlineFieldDisplay label="MAC Address" value="${fixture.macAddress}" />
-  <global:inlineField label="IP Address" path="ipAddress" />
   <global:hiddenSubmitField />
   
 </form:form>
