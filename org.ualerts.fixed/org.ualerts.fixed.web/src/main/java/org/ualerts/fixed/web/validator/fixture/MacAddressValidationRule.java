@@ -43,8 +43,7 @@ public class MacAddressValidationRule
    */
   @Override
   public boolean supports(ActionType actionType) {
-    return ActionType.ADD.equals(actionType)
-        || ActionType.EDIT.equals(actionType);
+    return ActionType.ADD.equals(actionType);
   }
   
   /**
