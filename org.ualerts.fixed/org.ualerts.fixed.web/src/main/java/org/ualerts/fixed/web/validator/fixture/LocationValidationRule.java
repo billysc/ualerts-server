@@ -24,6 +24,7 @@ import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import org.ualerts.fixed.Building;
+import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.PositionHint;
 import org.ualerts.fixed.Room;
 import org.ualerts.fixed.repository.BuildingRepository;
@@ -72,8 +73,10 @@ public class LocationValidationRule extends AbstractFixtureValidationRule {
       Room room = roomRepository.findRoom(building.getId(), roomText);
       PositionHint hint = positionHintRepository.findHint(hintText);
       if ((room != null) && (hint != null)) {
-        if (fixtureRepository.findFixtureByLocation(room.getId(),
-            hint.getId()) != null) {
+        Fixture loadedFixture = fixtureRepository
+            .findFixtureByLocation(room.getId(), hint.getId());
+        if (loadedFixture != null 
+            && !loadedFixture.getId().equals(fixture.getId())) {
           reject("location.conflict");
         }
       }

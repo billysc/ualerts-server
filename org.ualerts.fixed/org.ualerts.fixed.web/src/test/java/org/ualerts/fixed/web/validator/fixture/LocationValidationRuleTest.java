@@ -165,7 +165,19 @@ public class LocationValidationRuleTest {
       oneOf(errors).reject(MSG_PREFIX + "location.conflict");
     } });
     Fixture fixture = new Fixture();
+    fixture.setId(1L);
     testFullSubmission(fixture);
+  }
+  
+  /**
+   * Validate that if a location conflict occurs on the same fixture, no 
+   * rejection is made. This occurs during an EDIT
+   */
+  @Test
+  public void testLocationConflictOnSameFixtureDoesntReject() {
+    Fixture fixture = new Fixture();
+    fixture.setId(1L);
+    testFullSubmission(fixture, fixture.getId());
   }
   
   /*
@@ -235,6 +247,10 @@ public class LocationValidationRuleTest {
   }
   
   private void testFullSubmission(final Fixture locationFixture) {
+    testFullSubmission(locationFixture, null);
+  }
+  
+  private void testFullSubmission(final Fixture locationFixture, Long modelId) {
     final String building = "Building";
     final String buildingId = "buildingId";
     final Building buildingObj = new Building();
@@ -259,6 +275,7 @@ public class LocationValidationRuleTest {
     
     fixture.setBuilding(building);
     fixture.setBuildingId(buildingId);
+    fixture.setId(modelId);
     fixture.setIpAddress(ipAddress);
     fixture.setMacAddress(macAddress);
     fixture.setPositionHint(positionHint);
