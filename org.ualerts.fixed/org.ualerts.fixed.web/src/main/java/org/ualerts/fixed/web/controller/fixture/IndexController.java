@@ -24,7 +24,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.ualerts.fixed.web.service.FixtureService;
+import org.ualerts.fixed.service.api.FixtureService;
 
 /**
  * A controller that serves up the start/index page.

@@ -36,9 +36,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.ualerts.fixed.service.api.FixtureService;
+import org.ualerts.fixed.service.api.model.FixtureModel;
 import org.ualerts.fixed.web.controller.AbstractFormController;
-import org.ualerts.fixed.web.model.FixtureModel;
-import org.ualerts.fixed.web.service.FixtureService;
 import org.ualerts.fixed.web.validator.FixtureValidator;
 import org.ualerts.fixed.web.validator.fixture.FixtureValidationRule;
 

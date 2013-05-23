@@ -17,7 +17,7 @@
  *
  */
 
-package org.ualerts.fixed.web.service;
+package org.ualerts.fixed.service.api;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +29,12 @@ import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.InetAddress;
 import org.ualerts.fixed.MacAddress;
 import org.ualerts.fixed.service.CommandService;
+import org.ualerts.fixed.service.api.model.FixtureModel;
 import org.ualerts.fixed.service.commands.AddFixtureCommand;
 import org.ualerts.fixed.service.commands.DeleteFixtureCommand;
 import org.ualerts.fixed.service.commands.FindAllFixturesCommand;
 import org.ualerts.fixed.service.commands.FindFixtureCommand;
 import org.ualerts.fixed.service.commands.UpdateFixtureCommand;
-import org.ualerts.fixed.web.model.FixtureModel;
 
 /**
  * An implementation of the {@link FixtureService} class that uses commands from

@@ -1,5 +1,5 @@
 /*
- * File created on May 17, 2013
+ * File created on May 15, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -17,7 +17,9 @@
  *
  */
 
-package org.ualerts.fixed.web.model;
+package org.ualerts.fixed.service.api.model;
+
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,45 +27,46 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * A model that holds position hints.
+ * Model that wraps a collection of buildings
  *
  * @author Michael Irwin
  */
-@XmlRootElement(name = "positionHints")
+@XmlRootElement(name = "buildings")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class PositionHintsModel {
+public class BuildingsModel {
 
-  private String[] positionHints;
-  
+  private BuildingModel[] buildings;
+
   /**
-   * Constructs a new instance.
+   * Constructs a new, empty instance.
    */
-  public PositionHintsModel() {
+  public BuildingsModel() {
+    
   }
   
   /**
-   * Constructs a new instance.
-   * @param positionHints position hints to wrap
+   * Constructs a new instance with the provided set of buildings.
+   * @param buildings The buildings this model should contain
    */
-  public PositionHintsModel(String[] positionHints) {
-    this.positionHints = positionHints;
+  public BuildingsModel(List<BuildingModel> buildings) {
+    this.buildings = buildings.toArray(new BuildingModel[ buildings.size() ]);
   }
   
   /**
-   * Gets the {@code positionHints} property.
+   * Gets the {@code buildings} property.
    * @return property value
    */
-  @XmlElement(name = "positionHint")
-  public String[] getPositionHints() {
-    return positionHints;
+  @XmlElement(name = "building")
+  public BuildingModel[] getBuildings() {
+    return buildings;
   }
   
   /**
-   * Sets the {@code positionHints} property.
-   * @param positionHints the value to set
+   * Sets the {@code buildings} property.
+   * @param buildings the value to set
    */
-  public void setPositionHints(String[] positionHints) {
-    this.positionHints = positionHints;
+  public void setBuildings(BuildingModel[] buildings) {
+    this.buildings = buildings;
   }
   
 }

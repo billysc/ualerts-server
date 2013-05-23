@@ -21,7 +21,7 @@ package org.ualerts.fixed.web.ft;
 
 import static junit.framework.Assert.assertEquals;
 
-import org.ualerts.fixed.web.model.BuildingModel;
+import org.ualerts.fixed.service.api.model.BuildingModel;
 
 /**
  * Utility class to help validate buildings

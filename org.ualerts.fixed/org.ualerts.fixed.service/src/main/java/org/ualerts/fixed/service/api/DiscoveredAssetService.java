@@ -17,14 +17,14 @@
  *
  */
 
-package org.ualerts.fixed.web.service;
+package org.ualerts.fixed.service.api;
 
 import java.util.Date;
 import java.util.List;
 
 import org.ualerts.fixed.repository.EntityNotFoundException;
-import org.ualerts.fixed.web.model.DiscoveredAssetModel;
-import org.ualerts.fixed.web.model.EnrolledFixtureModel;
+import org.ualerts.fixed.service.api.model.DiscoveredAssetModel;
+import org.ualerts.fixed.service.api.model.EnrolledFixtureModel;
 
 /**
  * Service API for interacting with DiscoveredAssets in the system.

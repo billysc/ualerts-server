@@ -1,5 +1,5 @@
 /*
- * File created on May 20, 2013
+ * File created on May 17, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -17,7 +17,7 @@
  *
  */
 
-package org.ualerts.fixed.web.service;
+package org.ualerts.fixed.service.api;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,19 +25,20 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.ualerts.fixed.Room;
+import org.ualerts.fixed.PositionHint;
 import org.ualerts.fixed.service.CommandService;
-import org.ualerts.fixed.service.commands.FindRoomsForBuildingCommand;
-import org.ualerts.fixed.web.model.RoomsModel;
+import org.ualerts.fixed.service.api.model.PositionHintsModel;
+import org.ualerts.fixed.service.commands.FindAllPositionHintsCommand;
 
 /**
- * An implementation of RoomService that uses the CommandService when working
- * with the backend.
+ * An implementation of the PositionHintService that uses commands to provide
+ * back-end functionality.
  *
  * @author Michael Irwin
  */
 @Service
-public class CommandSupportedRoomService implements RoomService {
+public class CommandSupportedPositionHintService 
+    implements PositionHintService {
 
   private CommandService commandService;
   
@@ -45,16 +46,15 @@ public class CommandSupportedRoomService implements RoomService {
    * {@inheritDoc}
    */
   @Override
-  public RoomsModel getRoomsForBuilding(String buildingId) throws Exception {
-    FindRoomsForBuildingCommand command = 
-        commandService.newCommand(FindRoomsForBuildingCommand.class);
-    command.setBuildingId(buildingId);
+  public PositionHintsModel getAllPositionHints() throws Exception {
+    List<String> hints = new ArrayList<String>();
     
-    List<String> rooms = new ArrayList<String>();
-    for (Room room : commandService.invoke(command)) {
-      rooms.add(room.getRoomNumber());
+    FindAllPositionHintsCommand command = 
+        commandService.newCommand(FindAllPositionHintsCommand.class);
+    for (PositionHint positionHint : commandService.invoke(command)) {
+      hints.add(positionHint.getHintText());
     }
-    return new RoomsModel(rooms.toArray(new String[0]));
+    return new PositionHintsModel(hints.toArray(new String[0]));
   }
   
   /**

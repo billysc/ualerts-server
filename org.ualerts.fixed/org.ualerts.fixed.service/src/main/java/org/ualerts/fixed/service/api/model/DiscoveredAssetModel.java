@@ -17,7 +17,7 @@
  *
  */
 
-package org.ualerts.fixed.web.model;
+package org.ualerts.fixed.service.api.model;
 
 import java.util.Date;
 

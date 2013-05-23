@@ -22,7 +22,7 @@ package org.ualerts.fixed.web.validator.fixture;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import org.ualerts.fixed.InetAddress;
-import org.ualerts.fixed.web.model.FixtureModel;
+import org.ualerts.fixed.service.api.model.FixtureModel;
 
 /**
  * A FixtureValidationRule that validates the IP Address for a Fixture.

@@ -1,5 +1,5 @@
 /*
- * File created on May 15, 2013
+ * File created on May 20, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -17,9 +17,7 @@
  *
  */
 
-package org.ualerts.fixed.web.model;
-
-import java.util.List;
+package org.ualerts.fixed.service.api.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -27,46 +25,45 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Model that wraps a collection of buildings
+ * A model that contains a collection of room strings.
  *
  * @author Michael Irwin
  */
-@XmlRootElement(name = "buildings")
+@XmlRootElement(name = "rooms")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class BuildingsModel {
+public class RoomsModel {
 
-  private BuildingModel[] buildings;
-
+  private String[] rooms;
+  
   /**
-   * Constructs a new, empty instance.
+   * Constructs a new instance.
    */
-  public BuildingsModel() {
-    
+  public RoomsModel() {
   }
   
   /**
-   * Constructs a new instance with the provided set of buildings.
-   * @param buildings The buildings this model should contain
+   * Constructs a new instance with the provided room data
+   * @param rooms The rooms to populate the model with
    */
-  public BuildingsModel(List<BuildingModel> buildings) {
-    this.buildings = buildings.toArray(new BuildingModel[ buildings.size() ]);
+  public RoomsModel(String[] rooms) {
+    this.rooms = rooms;
   }
   
   /**
-   * Gets the {@code buildings} property.
+   * Gets the {@code rooms} property.
    * @return property value
    */
-  @XmlElement(name = "building")
-  public BuildingModel[] getBuildings() {
-    return buildings;
+  @XmlElement(name = "room")
+  public String[] getRooms() {
+    return rooms;
   }
   
   /**
-   * Sets the {@code buildings} property.
-   * @param buildings the value to set
+   * Sets the {@code rooms} property.
+   * @param rooms the value to set
    */
-  public void setBuildings(BuildingModel[] buildings) {
-    this.buildings = buildings;
+  public void setRooms(String[] rooms) {
+    this.rooms = rooms;
   }
   
 }

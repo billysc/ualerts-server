@@ -1,5 +1,5 @@
 /*
- * File created on May 17, 2013
+ * File created on May 20, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -17,7 +17,7 @@
  *
  */
 
-package org.ualerts.fixed.web.service;
+package org.ualerts.fixed.service.api;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,20 +25,19 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.ualerts.fixed.PositionHint;
+import org.ualerts.fixed.Room;
 import org.ualerts.fixed.service.CommandService;
-import org.ualerts.fixed.service.commands.FindAllPositionHintsCommand;
-import org.ualerts.fixed.web.model.PositionHintsModel;
+import org.ualerts.fixed.service.api.model.RoomsModel;
+import org.ualerts.fixed.service.commands.FindRoomsForBuildingCommand;
 
 /**
- * An implementation of the PositionHintService that uses commands to provide
- * back-end functionality.
+ * An implementation of RoomService that uses the CommandService when working
+ * with the backend.
  *
  * @author Michael Irwin
  */
 @Service
-public class CommandSupportedPositionHintService 
-    implements PositionHintService {
+public class CommandSupportedRoomService implements RoomService {
 
   private CommandService commandService;
   
@@ -46,15 +45,16 @@ public class CommandSupportedPositionHintService
    * {@inheritDoc}
    */
   @Override
-  public PositionHintsModel getAllPositionHints() throws Exception {
-    List<String> hints = new ArrayList<String>();
+  public RoomsModel getRoomsForBuilding(String buildingId) throws Exception {
+    FindRoomsForBuildingCommand command = 
+        commandService.newCommand(FindRoomsForBuildingCommand.class);
+    command.setBuildingId(buildingId);
     
-    FindAllPositionHintsCommand command = 
-        commandService.newCommand(FindAllPositionHintsCommand.class);
-    for (PositionHint positionHint : commandService.invoke(command)) {
-      hints.add(positionHint.getHintText());
+    List<String> rooms = new ArrayList<String>();
+    for (Room room : commandService.invoke(command)) {
+      rooms.add(room.getRoomNumber());
     }
-    return new PositionHintsModel(hints.toArray(new String[0]));
+    return new RoomsModel(rooms.toArray(new String[0]));
   }
   
   /**

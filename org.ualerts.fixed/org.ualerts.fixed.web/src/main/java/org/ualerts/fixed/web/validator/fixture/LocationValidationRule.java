@@ -31,7 +31,7 @@ import org.ualerts.fixed.repository.BuildingRepository;
 import org.ualerts.fixed.repository.FixtureRepository;
 import org.ualerts.fixed.repository.PositionHintRepository;
 import org.ualerts.fixed.repository.RoomRepository;
-import org.ualerts.fixed.web.model.FixtureModel;
+import org.ualerts.fixed.service.api.model.FixtureModel;
 
 /**
  * A FixtureValidationRule that validates the IP Address for a Fixture.

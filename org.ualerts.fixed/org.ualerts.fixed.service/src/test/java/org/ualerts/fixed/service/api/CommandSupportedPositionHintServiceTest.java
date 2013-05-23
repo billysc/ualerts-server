@@ -17,7 +17,7 @@
  *
  */
 
-package org.ualerts.fixed.web.service;
+package org.ualerts.fixed.service.api;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -29,22 +29,22 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.ualerts.fixed.Building;
+import org.ualerts.fixed.PositionHint;
 import org.ualerts.fixed.service.CommandService;
-import org.ualerts.fixed.service.commands.FindAllBuildingsCommand;
-import org.ualerts.fixed.web.model.BuildingModel;
-import org.ualerts.fixed.web.model.BuildingsModel;
+import org.ualerts.fixed.service.api.CommandSupportedPositionHintService;
+import org.ualerts.fixed.service.api.model.PositionHintsModel;
+import org.ualerts.fixed.service.commands.FindAllPositionHintsCommand;
 
 /**
- * Test case for the CommandSupportedBuildingService class
+ * Test case for the CommandSupportedPositionHintService class
  *
  * @author Michael Irwin
  */
-public class CommandSupportedBuildingServiceTest {
+public class CommandSupportedPositionHintServiceTest {
 
   private Mockery context;
   private CommandService commandService;
-  private CommandSupportedBuildingService service;
+  private CommandSupportedPositionHintService service;
   
   /**
    * Setup tasks
@@ -53,37 +53,35 @@ public class CommandSupportedBuildingServiceTest {
   public void setUp() {
     context = new Mockery();
     commandService = context.mock(CommandService.class);
-    service = new CommandSupportedBuildingService();
+    service = new CommandSupportedPositionHintService();
     service.setCommandService(commandService);
   }
   
   /**
-   * Validate the getAllBuildings method
+   * Validate the getAllPositionHints method
    */
   @Test
-  public void testRetrieveAllBuildings() throws Exception {
-    final FindAllBuildingsCommand command = new FindAllBuildingsCommand();
-    final List<Building> buildings = new ArrayList<Building>();
-    Building building = new Building();
-    building.setAbbreviation("ACME");
-    building.setId("1995");
-    building.setName("Acme Labs");
-    buildings.add(building);
+  public void testGetAllPositionHints() throws Exception {
+    final FindAllPositionHintsCommand command = 
+        new FindAllPositionHintsCommand();
+    final List<PositionHint> hints = new ArrayList<PositionHint>();
+    PositionHint hint = new PositionHint();
+    hint.setHintText("TOP-RIGHT");
+    hint.setId(2L);
+    hints.add(hint);
     
     context.checking(new Expectations() { { 
-      oneOf(commandService).newCommand(FindAllBuildingsCommand.class);
+      oneOf(commandService).newCommand(FindAllPositionHintsCommand.class);
       will(returnValue(command));
       oneOf(commandService).invoke(command);
-      will(returnValue(buildings));
+      will(returnValue(hints));
     } });
     
-    BuildingsModel buildingsModel = service.getAllBuildings();
+    PositionHintsModel hintsModel = service.getAllPositionHints();
     context.assertIsSatisfied();
-    assertNotNull(buildingsModel);
-    assertEquals(buildings.size(), buildingsModel.getBuildings().length);
-    BuildingModel buildingModel = buildingsModel.getBuildings()[0];
-    assertEquals(building.getAbbreviation(), buildingModel.getAbbreviation());
-    assertEquals(building.getId(), buildingModel.getId());
-    assertEquals(building.getName(), buildingModel.getName());
+    assertNotNull(hintsModel);
+    assertEquals(hints.size(), hintsModel.getPositionHints().length);
+    assertEquals(hint.getHintText(), hintsModel.getPositionHints()[0]);
   }
+  
 }

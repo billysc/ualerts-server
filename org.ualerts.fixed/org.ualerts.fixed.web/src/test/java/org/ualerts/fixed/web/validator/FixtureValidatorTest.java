@@ -28,7 +28,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.Errors;
-import org.ualerts.fixed.web.model.FixtureModel;
+import org.ualerts.fixed.service.api.model.FixtureModel;
 import org.ualerts.fixed.web.validator.fixture.FixtureValidationRule;
 
 /**

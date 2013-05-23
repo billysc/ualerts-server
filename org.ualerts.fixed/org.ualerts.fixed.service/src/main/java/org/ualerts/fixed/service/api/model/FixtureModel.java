@@ -16,7 +16,7 @@
  * limitations under the License.
  *
  */
-package org.ualerts.fixed.web.model;
+package org.ualerts.fixed.service.api.model;
 
 import org.ualerts.fixed.Fixture;
 import org.ualerts.fixed.Room;

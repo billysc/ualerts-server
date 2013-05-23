@@ -31,8 +31,8 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.ualerts.fixed.web.model.FixtureModel;
-import org.ualerts.fixed.web.service.FixtureService;
+import org.ualerts.fixed.service.api.FixtureService;
+import org.ualerts.fixed.service.api.model.FixtureModel;
 
 /**
  * Test case for the {@link IndexController} class.

@@ -35,8 +35,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.ualerts.fixed.web.model.FixtureModel;
-import org.ualerts.fixed.web.service.FixtureService;
+import org.ualerts.fixed.service.api.FixtureService;
+import org.ualerts.fixed.service.api.model.FixtureModel;
 
 /**
  * Test case for the {@link ManualEnrollmentController} class.

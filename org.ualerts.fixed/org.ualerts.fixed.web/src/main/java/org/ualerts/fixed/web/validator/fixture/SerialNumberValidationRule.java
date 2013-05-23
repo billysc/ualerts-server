@@ -24,7 +24,7 @@ import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import org.ualerts.fixed.repository.AssetRepository;
-import org.ualerts.fixed.web.model.FixtureModel;
+import org.ualerts.fixed.service.api.model.FixtureModel;
 
 /**
  * A FixtureValidationRule that validates the serial number for a Fixture.
