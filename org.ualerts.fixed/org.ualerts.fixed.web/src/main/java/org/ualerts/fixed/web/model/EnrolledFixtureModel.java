@@ -34,6 +34,7 @@ public class EnrolledFixtureModel {
   private String room;
   private Date enrolledOn;
   private String macAddress;
+  private String ipAddress;
   private String installedBy;
   
   /**
@@ -116,6 +117,22 @@ public class EnrolledFixtureModel {
     this.macAddress = macAddress;
   }
   
+  /**
+   * Gets the {@code ipAddress} property.
+   * @return property value
+   */
+  public String getIpAddress() {
+    return ipAddress;
+  }
+
+  /**
+   * Sets the {@code ipAddress} property.
+   * @param ipAddress the value to set
+   */
+  public void setIpAddress(String ipAddress) {
+    this.ipAddress = ipAddress;
+  }
+
   /**
    * Gets the {@code installedBy} property.
    * @return property value

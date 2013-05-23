@@ -35,7 +35,6 @@ public class DiscoveredAssetModel {
   private String ipAddress;
   private Date dateCreated;
   private Date dateModified;
-  private String discoveryHint;
   private String serialNumber;
   private String inventoryNumber;
   
@@ -133,22 +132,6 @@ public class DiscoveredAssetModel {
    */
   public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
-  }
-  
-  /**
-   * Gets the {@code discoveryHint} property.
-   * @return property value
-   */
-  public String getDiscoveryHint() {
-    return discoveryHint;
-  }
-  
-  /**
-   * Sets the {@code discoveryHint} property.
-   * @param discoveryHint the value to set
-   */
-  public void setDiscoveryHint(String discoveryHint) {
-    this.discoveryHint = discoveryHint;
   }
   
   /**
