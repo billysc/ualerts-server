@@ -41,6 +41,9 @@ ModalViewController.prototype.whenModalTriggered = function(source, event) {
   // Remove any lingering click handlers
   var $primaryButton = $target.find(".btn-primary").unbind("click");
   var $cancelButton = $target.find(".btn.cancel").unbind("click");
+  $cancelButton.on('click', function() {
+    $target.modal('hide'); 
+  });
   
   $target.unbind("hidden");
   $target.unbind("loaded").on('loaded', function() {

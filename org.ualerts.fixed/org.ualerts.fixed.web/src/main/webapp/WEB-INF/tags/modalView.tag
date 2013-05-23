@@ -6,7 +6,7 @@
   </div>
   <div id="modalBody" class="modal-body"></div>
   <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button class="btn cancel" aria-hidden="true">Cancel</button>
     <button class="btn btn-primary"></button>
   </div>
 </div>
