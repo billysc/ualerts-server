@@ -25,12 +25,12 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.ualerts.fixed.web.model.BuildingsModel;
-import org.ualerts.fixed.web.model.PositionHintsModel;
-import org.ualerts.fixed.web.model.RoomsModel;
-import org.ualerts.fixed.web.service.BuildingService;
-import org.ualerts.fixed.web.service.PositionHintService;
-import org.ualerts.fixed.web.service.RoomService;
+import org.ualerts.fixed.service.api.BuildingService;
+import org.ualerts.fixed.service.api.PositionHintService;
+import org.ualerts.fixed.service.api.RoomService;
+import org.ualerts.fixed.service.api.model.BuildingsModel;
+import org.ualerts.fixed.service.api.model.PositionHintsModel;
+import org.ualerts.fixed.service.api.model.RoomsModel;
 
 /**
  * Test case for RestController

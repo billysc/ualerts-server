@@ -17,7 +17,7 @@
  *
  */
 
-package org.ualerts.fixed.web.service;
+package org.ualerts.fixed.service.api;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +27,9 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.ualerts.fixed.Building;
 import org.ualerts.fixed.service.CommandService;
+import org.ualerts.fixed.service.api.model.BuildingModel;
+import org.ualerts.fixed.service.api.model.BuildingsModel;
 import org.ualerts.fixed.service.commands.FindAllBuildingsCommand;
-import org.ualerts.fixed.web.model.BuildingModel;
-import org.ualerts.fixed.web.model.BuildingsModel;
 
 /**
  * Implementation of the BuildingService that uses commands to provide all

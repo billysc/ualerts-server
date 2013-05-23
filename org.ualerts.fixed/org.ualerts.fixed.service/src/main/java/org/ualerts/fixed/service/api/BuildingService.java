@@ -1,5 +1,5 @@
 /*
- * File created on May 17, 2013
+ * File created on May 15, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -17,22 +17,22 @@
  *
  */
 
-package org.ualerts.fixed.web.service;
+package org.ualerts.fixed.service.api;
 
-import org.ualerts.fixed.web.model.PositionHintsModel;
+import org.ualerts.fixed.service.api.model.BuildingsModel;
 
 /**
- * A service to interact with Position Hints.
+ * A service to provide interaction with Building data.
  *
  * @author Michael Irwin
  */
-public interface PositionHintService {
+public interface BuildingService {
 
   /**
-   * Retrieve all position hints
-   * @return All of the known position hints
-   * @throws Exception Any exception that can occur
+   * Get all known buildings.
+   * @return All of the buildings
+   * @throws Exception Any exception that occurs during retrieval of buildings
    */
-  PositionHintsModel getAllPositionHints() throws Exception;
+  BuildingsModel getAllBuildings() throws Exception;
   
 }

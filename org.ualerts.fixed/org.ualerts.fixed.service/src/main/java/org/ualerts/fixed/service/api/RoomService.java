@@ -1,5 +1,5 @@
 /*
- * File created on May 15, 2013
+ * File created on May 20, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -17,22 +17,23 @@
  *
  */
 
-package org.ualerts.fixed.web.service;
+package org.ualerts.fixed.service.api;
 
-import org.ualerts.fixed.web.model.BuildingsModel;
+import org.ualerts.fixed.service.api.model.RoomsModel;
 
 /**
- * A service to provide interaction with Building data.
+ * A service to interact with rooms
  *
  * @author Michael Irwin
  */
-public interface BuildingService {
+public interface RoomService {
 
   /**
-   * Get all known buildings.
-   * @return All of the buildings
-   * @throws Exception Any exception that occurs during retrieval of buildings
+   * Retrieve all known rooms for a particular building.
+   * @param buildingId The id of the building to retrieve rooms for.
+   * @return A model containing all of the rooms
+   * @throws Exception Any exception that can be thrown
    */
-  BuildingsModel getAllBuildings() throws Exception;
+  RoomsModel getRoomsForBuilding(String buildingId) throws Exception;
   
 }

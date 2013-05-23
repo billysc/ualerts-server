@@ -17,7 +17,7 @@
  *
  */
 
-package org.ualerts.fixed.web.model;
+package org.ualerts.fixed.service.api.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

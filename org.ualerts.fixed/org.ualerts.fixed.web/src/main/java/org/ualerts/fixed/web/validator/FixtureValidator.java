@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import org.ualerts.fixed.web.model.FixtureModel;
+import org.ualerts.fixed.service.api.model.FixtureModel;
 import org.ualerts.fixed.web.validator.fixture.FixtureValidationRule;
 
 /**

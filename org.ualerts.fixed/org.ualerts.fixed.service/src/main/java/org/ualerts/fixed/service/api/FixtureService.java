@@ -16,11 +16,11 @@
  * limitations under the License.
  *
  */
-package org.ualerts.fixed.web.service;
+package org.ualerts.fixed.service.api;
 
 import java.util.List;
 
-import org.ualerts.fixed.web.model.FixtureModel;
+import org.ualerts.fixed.service.api.model.FixtureModel;
 
 /**
  * A service object that helps in the standard create, update, retrieve, and

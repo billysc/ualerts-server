@@ -1,5 +1,5 @@
 /*
- * File created on May 20, 2013
+ * File created on May 17, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -17,23 +17,22 @@
  *
  */
 
-package org.ualerts.fixed.web.service;
+package org.ualerts.fixed.service.api;
 
-import org.ualerts.fixed.web.model.RoomsModel;
+import org.ualerts.fixed.service.api.model.PositionHintsModel;
 
 /**
- * A service to interact with rooms
+ * A service to interact with Position Hints.
  *
  * @author Michael Irwin
  */
-public interface RoomService {
+public interface PositionHintService {
 
   /**
-   * Retrieve all known rooms for a particular building.
-   * @param buildingId The id of the building to retrieve rooms for.
-   * @return A model containing all of the rooms
-   * @throws Exception Any exception that can be thrown
+   * Retrieve all position hints
+   * @return All of the known position hints
+   * @throws Exception Any exception that can occur
    */
-  RoomsModel getRoomsForBuilding(String buildingId) throws Exception;
+  PositionHintsModel getAllPositionHints() throws Exception;
   
 }

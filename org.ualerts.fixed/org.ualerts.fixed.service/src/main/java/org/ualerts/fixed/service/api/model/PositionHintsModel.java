@@ -1,5 +1,5 @@
 /*
- * File created on May 20, 2013
+ * File created on May 17, 2013
  *
  * Copyright 2008-2013 Virginia Polytechnic Institute and State University
  *
@@ -17,7 +17,7 @@
  *
  */
 
-package org.ualerts.fixed.web.model;
+package org.ualerts.fixed.service.api.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,45 +25,45 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * A model that contains a collection of room strings.
+ * A model that holds position hints.
  *
  * @author Michael Irwin
  */
-@XmlRootElement(name = "rooms")
+@XmlRootElement(name = "positionHints")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class RoomsModel {
+public class PositionHintsModel {
 
-  private String[] rooms;
+  private String[] positionHints;
   
   /**
    * Constructs a new instance.
    */
-  public RoomsModel() {
+  public PositionHintsModel() {
   }
   
   /**
-   * Constructs a new instance with the provided room data
-   * @param rooms The rooms to populate the model with
+   * Constructs a new instance.
+   * @param positionHints position hints to wrap
    */
-  public RoomsModel(String[] rooms) {
-    this.rooms = rooms;
+  public PositionHintsModel(String[] positionHints) {
+    this.positionHints = positionHints;
   }
   
   /**
-   * Gets the {@code rooms} property.
+   * Gets the {@code positionHints} property.
    * @return property value
    */
-  @XmlElement(name = "room")
-  public String[] getRooms() {
-    return rooms;
+  @XmlElement(name = "positionHint")
+  public String[] getPositionHints() {
+    return positionHints;
   }
   
   /**
-   * Sets the {@code rooms} property.
-   * @param rooms the value to set
+   * Sets the {@code positionHints} property.
+   * @param positionHints the value to set
    */
-  public void setRooms(String[] rooms) {
-    this.rooms = rooms;
+  public void setPositionHints(String[] positionHints) {
+    this.positionHints = positionHints;
   }
   
 }
