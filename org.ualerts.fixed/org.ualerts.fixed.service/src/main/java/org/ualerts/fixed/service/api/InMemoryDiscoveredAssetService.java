@@ -27,6 +27,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.ualerts.fixed.repository.EntityNotFoundException;
+import org.ualerts.fixed.service.DateTimeService;
 import org.ualerts.fixed.service.api.model.DiscoveredAssetModel;
 import org.ualerts.fixed.service.api.model.EnrolledFixtureModel;
 
@@ -42,6 +43,7 @@ public class InMemoryDiscoveredAssetService implements DiscoveredAssetService {
       new ArrayList<DiscoveredAssetModel>();
   private List<EnrolledFixtureModel> enrolledFixtures =
       new ArrayList<EnrolledFixtureModel>();
+  private DateTimeService dateTimeService;
   
   /**
    * {@inheritDoc}
@@ -73,6 +75,7 @@ public class InMemoryDiscoveredAssetService implements DiscoveredAssetService {
             + requiredStatus + " state");
     }
     match.setStatus(newStatus);
+    match.setDateModified(dateTimeService.getCurrentDate());
   }
   
   /**
@@ -94,10 +97,10 @@ public class InMemoryDiscoveredAssetService implements DiscoveredAssetService {
    * {@inheritDoc}
    */
   @Override
-  public List<DiscoveredAssetModel> getNew() {
+  public List<DiscoveredAssetModel> getByStatus(String status) {
     List<DiscoveredAssetModel> results = new ArrayList<DiscoveredAssetModel>();
     for (DiscoveredAssetModel m : discoveredAssets) {
-      if (m.getStatus().equals("NEW")) {
+      if (m.getStatus().equals(status)) {
         results.add(m);
       }
     }
@@ -134,6 +137,15 @@ public class InMemoryDiscoveredAssetService implements DiscoveredAssetService {
   @Resource(name = "inMemoryEnrolledFixtures")
   public void setEnrolledFixtures(List<EnrolledFixtureModel> enrolledFixtures) {
     this.enrolledFixtures = enrolledFixtures;
+  }
+
+  /**
+   * Sets the {@code dateTimeService} property.
+   * @param dateTimeService the value to set
+   */
+  @Resource
+  public void setDateTimeService(DateTimeService dateTimeService) {
+    this.dateTimeService = dateTimeService;
   }
 
 }

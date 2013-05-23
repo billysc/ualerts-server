@@ -69,10 +69,11 @@ public interface DiscoveredAssetService {
   DiscoveredAssetModel getDiscoveredAsset(Long id);
   
   /**
-   * Get all of the Discovered Assets that are in the NEW state.
-   * @return All Discovered Assets in NEW state.
+   * Get all of the Discovered Assets that are in the specified status.
+   * @param status the status of the Discovered Assets to retrieve.
+   * @return All Discovered Assets in specified status.
    */
-  List<DiscoveredAssetModel> getNew();
+  List<DiscoveredAssetModel> getByStatus(String status);
   
   /**
    * Get all fixtures that have been enrolled since the provided date.
